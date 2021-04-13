@@ -1,0 +1,11 @@
+book_filename: "Analisis_de_ensayos"
+output_dir: "docs"
+new_session: false
+delete_merged_file: true
+
+rmd_files: [
+  "index.Rmd",
+  "1-import.Rmd",
+  "2-control.Rmd",
+  "3-rinde.Rmd"
+  ]

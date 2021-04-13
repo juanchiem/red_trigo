@@ -1,0 +1,93 @@
+# Rendimiento 
+
+```{r}
+pacman::p_load(tidyverse, lme4, emmeans, multcomp, googlesheets4)
+# gs4_auth(email = "edwardsmolina@gmail.com")
+# googledrive::drive_auth(email = "edwardsmolina@gmail.com")
+# nova_tr <- gs4_get(gs4_find("NOVA_trigo_2020")$id)
+# assum_lm <- "https://github.com/juanchiem/R-sources-Juan/blob/master/lm_assumptions.R?raw=TRUE"
+# devtools::source_url(assum_lm)
+load(here::here("data/nova_trigo.Rdata"))
+source(here::here('theme_juan.R'))
+```
+
+```{r}
+glimpse(cosecha)
+```
+
+Unificamos trt ya que incluimos 2 testigos por bloque 
+
+```{r}
+dat <- 
+  cosecha %>%
+  group_by(trt, bk) %>% 
+  summarise(bk =first(bk),
+            rinde = mean(kg_ha, na.rm =T)) %>% 
+  ungroup() %>% 
+  droplevels
+  # purrr::modify_if(., ~is.numeric(.), ~round(., 1))# %>%
+  # sheet_write(ss = nova_tr, sheet = "cosecha")
+```
+
+
+```{r}
+m_y = lmer(rinde ~ trt + (1|bk), data = dat)
+plot(m_y)
+car::Anova(m_y)
+summary(m_y)
+pred = emmeans(m_y, ~ trt, type = "response")
+res <- cld(pred, Letters = letters, alpha = .05, type = "response", reversed = T)
+dat1 = dat %>% rename("emmean" =rinde)%>% 
+  drop_na(trt)%>%
+  mutate(trt = fct_reorder(trt, emmean, .fun='mean' ))
+
+plot(res, alpha =0.5) + 
+  geom_vline(xintercept = filter(res, trt==1) %>% pull(emmean), 
+             linetype = 2, col ="gray50")+
+  geom_point(data = dat1 , #%>% mutate(trt = fct_reorder(trt, emmean, .fun='mean')),
+             aes(y = trt, x = emmean),
+             pch=21,
+             position=position_dodge(width=1), size = 2) +
+  geom_text(data = res, angle=90, vjust=-0.7,
+            aes(x = emmean,
+                y = trt,
+                label = .group),
+            size = 4)+
+  geom_text(data = res %>% filter(trt==1) %>% as_tibble(),
+            label = "Testigo", vjust=-0.2,
+            aes(x = emmean,
+                y = 1.5),
+            size = 4)+
+  coord_flip()+
+  labs(x="Rinde (kg/ha)",
+       y = "Tratamiento")+    
+  theme_juan(9, "bottom")+
+  scale_x_continuous(breaks=scales::pretty_breaks())
+
+# ggsave("plots/trigo_NOVA_rinde_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
+# 
+# drive_upload(path = as_dribble("fina_2020/NOVA"), "plots/trigo_NOVA_rinde_model.jpg", overwrite = TRUE)
+```
+
+
+```{r}
+res_fin <- res %>% as_tibble() %>% rename(kg_ha = emmean) %>%
+  mutate(
+    dif_kg = (kg_ha- filter(res, trt==1) %>% pull(emmean)),
+    `dif_%` = (kg_ha/filter(res, trt==1) %>% pull(emmean)- 1) * 100)
+res_fin
+
+res_fin %>%
+  mutate(
+    'IC_95%'=paste0(round(lower.CL,0),";",
+                    round(upper.CL,0))) %>%
+  dplyr::select(Trat =trt,
+                # Rinde_medio= emmean,
+                `Tukey_5%` = .group,
+                `IC_95%`, dif_kg, `dif_%`,
+                -df, -SE, -lower.CL, -upper.CL) #%>%
+  # purrr::modify_if(., ~is.numeric(.), ~round(., 0)) %>% 
+  # arrange(Trat) %>% 
+  # write_sheet(ss=nova_tr, sheet = "anova_rend")
+```
+

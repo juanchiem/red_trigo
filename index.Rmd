@@ -1,0 +1,35 @@
+---
+title: "Análisis de ensayo de protección"
+author: "[Juan Edwards](https://github.com/juanchiem)"
+url: 'juanchiem.github.io/trial_analysis/'
+github-repo: "juanchiem/trial_analysis"
+link-citations: true
+site: bookdown::bookdown_site
+---
+
+```{r include=FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, 
+               warning = FALSE, 
+               message = FALSE, 
+               eval=FALSE, 
+               fig.width = 6,
+               fig.height = 4)
+
+options(width = 90)
+```
+
+# Intro {-}
+
+Este es un análisis de rutina de un ensayo de microparcelas de test de eficiencia de fungicidas. 
+
+Las variables recabadas a campo son: 
+
+* Area foliar (nivel de hoja, muestras de 10 hj/plot ) 
+  - AF activa
+  - Severidad de enfermedades presentes (de esta se desprenden incidencia y severidad media)
+  
+* Rendimiento (nivel de parcela)
+  - Peso de las parcelas (g) y su humedad
+
+
