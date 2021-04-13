@@ -912,79 +912,79 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="rendimiento" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Rendimiento</h1>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="3-rinde.html#cb24-1"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse, lme4, emmeans, multcomp, googlesheets4)</span>
-<span id="cb24-2"><a href="3-rinde.html#cb24-2"></a><span class="co"># gs4_auth(email = &quot;edwardsmolina@gmail.com&quot;)</span></span>
-<span id="cb24-3"><a href="3-rinde.html#cb24-3"></a><span class="co"># googledrive::drive_auth(email = &quot;edwardsmolina@gmail.com&quot;)</span></span>
-<span id="cb24-4"><a href="3-rinde.html#cb24-4"></a><span class="co"># nova_tr &lt;- gs4_get(gs4_find(&quot;NOVA_trigo_2020&quot;)$id)</span></span>
-<span id="cb24-5"><a href="3-rinde.html#cb24-5"></a><span class="co"># assum_lm &lt;- &quot;https://github.com/juanchiem/R-sources-Juan/blob/master/lm_assumptions.R?raw=TRUE&quot;</span></span>
-<span id="cb24-6"><a href="3-rinde.html#cb24-6"></a><span class="co"># devtools::source_url(assum_lm)</span></span>
-<span id="cb24-7"><a href="3-rinde.html#cb24-7"></a><span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;data/nova_trigo.Rdata&quot;</span>))</span>
-<span id="cb24-8"><a href="3-rinde.html#cb24-8"></a><span class="kw">source</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&#39;theme_juan.R&#39;</span>))</span></code></pre></div>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="3-rinde.html#cb25-1"></a><span class="kw">glimpse</span>(cosecha)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="3-rinde.html#cb1-1"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse, lme4, emmeans, multcomp, googlesheets4)</span>
+<span id="cb1-2"><a href="3-rinde.html#cb1-2"></a><span class="co"># gs4_auth(email = &quot;edwardsmolina@gmail.com&quot;)</span></span>
+<span id="cb1-3"><a href="3-rinde.html#cb1-3"></a><span class="co"># googledrive::drive_auth(email = &quot;edwardsmolina@gmail.com&quot;)</span></span>
+<span id="cb1-4"><a href="3-rinde.html#cb1-4"></a><span class="co"># nova_tr &lt;- gs4_get(gs4_find(&quot;NOVA_trigo_2020&quot;)$id)</span></span>
+<span id="cb1-5"><a href="3-rinde.html#cb1-5"></a><span class="co"># assum_lm &lt;- &quot;https://github.com/juanchiem/R-sources-Juan/blob/master/lm_assumptions.R?raw=TRUE&quot;</span></span>
+<span id="cb1-6"><a href="3-rinde.html#cb1-6"></a><span class="co"># devtools::source_url(assum_lm)</span></span>
+<span id="cb1-7"><a href="3-rinde.html#cb1-7"></a><span class="kw">load</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;data/nova_trigo.Rdata&quot;</span>))</span>
+<span id="cb1-8"><a href="3-rinde.html#cb1-8"></a><span class="kw">source</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&#39;theme_juan.R&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="3-rinde.html#cb2-1"></a><span class="kw">glimpse</span>(cosecha)</span></code></pre></div>
 <p>Unificamos trt ya que incluimos 2 testigos por bloque</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="3-rinde.html#cb26-1"></a>dat &lt;-<span class="st"> </span></span>
-<span id="cb26-2"><a href="3-rinde.html#cb26-2"></a><span class="st">  </span>cosecha <span class="op">%&gt;%</span></span>
-<span id="cb26-3"><a href="3-rinde.html#cb26-3"></a><span class="st">  </span><span class="kw">group_by</span>(trt, bk) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-4"><a href="3-rinde.html#cb26-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">bk =</span><span class="kw">first</span>(bk),</span>
-<span id="cb26-5"><a href="3-rinde.html#cb26-5"></a>            <span class="dt">rinde =</span> <span class="kw">mean</span>(kg_ha, <span class="dt">na.rm =</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-6"><a href="3-rinde.html#cb26-6"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb26-7"><a href="3-rinde.html#cb26-7"></a><span class="st">  </span>droplevels</span>
-<span id="cb26-8"><a href="3-rinde.html#cb26-8"></a>  <span class="co"># purrr::modify_if(., ~is.numeric(.), ~round(., 1))# %&gt;%</span></span>
-<span id="cb26-9"><a href="3-rinde.html#cb26-9"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;cosecha&quot;)</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="3-rinde.html#cb27-1"></a>m_y =<span class="st"> </span><span class="kw">lmer</span>(rinde <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>bk), <span class="dt">data =</span> dat)</span>
-<span id="cb27-2"><a href="3-rinde.html#cb27-2"></a><span class="kw">plot</span>(m_y)</span>
-<span id="cb27-3"><a href="3-rinde.html#cb27-3"></a>car<span class="op">::</span><span class="kw">Anova</span>(m_y)</span>
-<span id="cb27-4"><a href="3-rinde.html#cb27-4"></a><span class="kw">summary</span>(m_y)</span>
-<span id="cb27-5"><a href="3-rinde.html#cb27-5"></a>pred =<span class="st"> </span><span class="kw">emmeans</span>(m_y, <span class="op">~</span><span class="st"> </span>trt, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
-<span id="cb27-6"><a href="3-rinde.html#cb27-6"></a>res &lt;-<span class="st"> </span><span class="kw">cld</span>(pred, <span class="dt">Letters =</span> letters, <span class="dt">alpha =</span> <span class="fl">.05</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">reversed =</span> T)</span>
-<span id="cb27-7"><a href="3-rinde.html#cb27-7"></a>dat1 =<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="st">&quot;emmean&quot;</span> =rinde)<span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb27-8"><a href="3-rinde.html#cb27-8"></a><span class="st">  </span><span class="kw">drop_na</span>(trt)<span class="op">%&gt;%</span></span>
-<span id="cb27-9"><a href="3-rinde.html#cb27-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">trt =</span> <span class="kw">fct_reorder</span>(trt, emmean, <span class="dt">.fun=</span><span class="st">&#39;mean&#39;</span> ))</span>
-<span id="cb27-10"><a href="3-rinde.html#cb27-10"></a></span>
-<span id="cb27-11"><a href="3-rinde.html#cb27-11"></a><span class="kw">plot</span>(res, <span class="dt">alpha =</span><span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb27-12"><a href="3-rinde.html#cb27-12"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">filter</span>(res, trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean), </span>
-<span id="cb27-13"><a href="3-rinde.html#cb27-13"></a>             <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">col =</span><span class="st">&quot;gray50&quot;</span>)<span class="op">+</span></span>
-<span id="cb27-14"><a href="3-rinde.html#cb27-14"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> dat1 , <span class="co">#%&gt;% mutate(trt = fct_reorder(trt, emmean, .fun=&#39;mean&#39;)),</span></span>
-<span id="cb27-15"><a href="3-rinde.html#cb27-15"></a>             <span class="kw">aes</span>(<span class="dt">y =</span> trt, <span class="dt">x =</span> emmean),</span>
-<span id="cb27-16"><a href="3-rinde.html#cb27-16"></a>             <span class="dt">pch=</span><span class="dv">21</span>,</span>
-<span id="cb27-17"><a href="3-rinde.html#cb27-17"></a>             <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></span>
-<span id="cb27-18"><a href="3-rinde.html#cb27-18"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> res, <span class="dt">angle=</span><span class="dv">90</span>, <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.7</span>,</span>
-<span id="cb27-19"><a href="3-rinde.html#cb27-19"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> emmean,</span>
-<span id="cb27-20"><a href="3-rinde.html#cb27-20"></a>                <span class="dt">y =</span> trt,</span>
-<span id="cb27-21"><a href="3-rinde.html#cb27-21"></a>                <span class="dt">label =</span> .group),</span>
-<span id="cb27-22"><a href="3-rinde.html#cb27-22"></a>            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></span>
-<span id="cb27-23"><a href="3-rinde.html#cb27-23"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> res <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>(),</span>
-<span id="cb27-24"><a href="3-rinde.html#cb27-24"></a>            <span class="dt">label =</span> <span class="st">&quot;Testigo&quot;</span>, <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.2</span>,</span>
-<span id="cb27-25"><a href="3-rinde.html#cb27-25"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> emmean,</span>
-<span id="cb27-26"><a href="3-rinde.html#cb27-26"></a>                <span class="dt">y =</span> <span class="fl">1.5</span>),</span>
-<span id="cb27-27"><a href="3-rinde.html#cb27-27"></a>            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></span>
-<span id="cb27-28"><a href="3-rinde.html#cb27-28"></a><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></span>
-<span id="cb27-29"><a href="3-rinde.html#cb27-29"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Rinde (kg/ha)&quot;</span>,</span>
-<span id="cb27-30"><a href="3-rinde.html#cb27-30"></a>       <span class="dt">y =</span> <span class="st">&quot;Tratamiento&quot;</span>)<span class="op">+</span><span class="st">    </span></span>
-<span id="cb27-31"><a href="3-rinde.html#cb27-31"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">9</span>, <span class="st">&quot;bottom&quot;</span>)<span class="op">+</span></span>
-<span id="cb27-32"><a href="3-rinde.html#cb27-32"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span>
-<span id="cb27-33"><a href="3-rinde.html#cb27-33"></a></span>
-<span id="cb27-34"><a href="3-rinde.html#cb27-34"></a><span class="co"># ggsave(&quot;plots/trigo_NOVA_rinde_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
-<span id="cb27-35"><a href="3-rinde.html#cb27-35"></a><span class="co"># </span></span>
-<span id="cb27-36"><a href="3-rinde.html#cb27-36"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;plots/trigo_NOVA_rinde_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="3-rinde.html#cb28-1"></a>res_fin &lt;-<span class="st"> </span>res <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">kg_ha =</span> emmean) <span class="op">%&gt;%</span></span>
-<span id="cb28-2"><a href="3-rinde.html#cb28-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb28-3"><a href="3-rinde.html#cb28-3"></a>    <span class="dt">dif_kg =</span> (kg_ha<span class="op">-</span><span class="st"> </span><span class="kw">filter</span>(res, trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean)),</span>
-<span id="cb28-4"><a href="3-rinde.html#cb28-4"></a>    <span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span> =<span class="st"> </span>(kg_ha<span class="op">/</span><span class="kw">filter</span>(res, trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean)<span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)</span>
-<span id="cb28-5"><a href="3-rinde.html#cb28-5"></a>res_fin</span>
-<span id="cb28-6"><a href="3-rinde.html#cb28-6"></a></span>
-<span id="cb28-7"><a href="3-rinde.html#cb28-7"></a>res_fin <span class="op">%&gt;%</span></span>
-<span id="cb28-8"><a href="3-rinde.html#cb28-8"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb28-9"><a href="3-rinde.html#cb28-9"></a>    <span class="st">&#39;IC_95%&#39;</span>=<span class="kw">paste0</span>(<span class="kw">round</span>(lower.CL,<span class="dv">0</span>),<span class="st">&quot;;&quot;</span>,</span>
-<span id="cb28-10"><a href="3-rinde.html#cb28-10"></a>                    <span class="kw">round</span>(upper.CL,<span class="dv">0</span>))) <span class="op">%&gt;%</span></span>
-<span id="cb28-11"><a href="3-rinde.html#cb28-11"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">Trat =</span>trt,</span>
-<span id="cb28-12"><a href="3-rinde.html#cb28-12"></a>                <span class="co"># Rinde_medio= emmean,</span></span>
-<span id="cb28-13"><a href="3-rinde.html#cb28-13"></a>                <span class="st">`</span><span class="dt">Tukey_5%</span><span class="st">`</span> =<span class="st"> </span>.group,</span>
-<span id="cb28-14"><a href="3-rinde.html#cb28-14"></a>                <span class="st">`</span><span class="dt">IC_95%</span><span class="st">`</span>, dif_kg, <span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span>,</span>
-<span id="cb28-15"><a href="3-rinde.html#cb28-15"></a>                <span class="op">-</span>df, <span class="op">-</span>SE, <span class="op">-</span>lower.CL, <span class="op">-</span>upper.CL) <span class="co">#%&gt;%</span></span>
-<span id="cb28-16"><a href="3-rinde.html#cb28-16"></a>  <span class="co"># purrr::modify_if(., ~is.numeric(.), ~round(., 0)) %&gt;% </span></span>
-<span id="cb28-17"><a href="3-rinde.html#cb28-17"></a>  <span class="co"># arrange(Trat) %&gt;% </span></span>
-<span id="cb28-18"><a href="3-rinde.html#cb28-18"></a>  <span class="co"># write_sheet(ss=nova_tr, sheet = &quot;anova_rend&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="3-rinde.html#cb3-1"></a>dat &lt;-<span class="st"> </span></span>
+<span id="cb3-2"><a href="3-rinde.html#cb3-2"></a><span class="st">  </span>cosecha <span class="op">%&gt;%</span></span>
+<span id="cb3-3"><a href="3-rinde.html#cb3-3"></a><span class="st">  </span><span class="kw">group_by</span>(trt, bk) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-4"><a href="3-rinde.html#cb3-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">bk =</span><span class="kw">first</span>(bk),</span>
+<span id="cb3-5"><a href="3-rinde.html#cb3-5"></a>            <span class="dt">rinde =</span> <span class="kw">mean</span>(kg_ha, <span class="dt">na.rm =</span>T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-6"><a href="3-rinde.html#cb3-6"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-7"><a href="3-rinde.html#cb3-7"></a><span class="st">  </span>droplevels</span>
+<span id="cb3-8"><a href="3-rinde.html#cb3-8"></a>  <span class="co"># purrr::modify_if(., ~is.numeric(.), ~round(., 1))# %&gt;%</span></span>
+<span id="cb3-9"><a href="3-rinde.html#cb3-9"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;cosecha&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="3-rinde.html#cb4-1"></a>m_y =<span class="st"> </span><span class="kw">lmer</span>(rinde <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>bk), <span class="dt">data =</span> dat)</span>
+<span id="cb4-2"><a href="3-rinde.html#cb4-2"></a><span class="kw">plot</span>(m_y)</span>
+<span id="cb4-3"><a href="3-rinde.html#cb4-3"></a>car<span class="op">::</span><span class="kw">Anova</span>(m_y)</span>
+<span id="cb4-4"><a href="3-rinde.html#cb4-4"></a><span class="kw">summary</span>(m_y)</span>
+<span id="cb4-5"><a href="3-rinde.html#cb4-5"></a>pred =<span class="st"> </span><span class="kw">emmeans</span>(m_y, <span class="op">~</span><span class="st"> </span>trt, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb4-6"><a href="3-rinde.html#cb4-6"></a>res &lt;-<span class="st"> </span><span class="kw">cld</span>(pred, <span class="dt">Letters =</span> letters, <span class="dt">alpha =</span> <span class="fl">.05</span>, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">reversed =</span> T)</span>
+<span id="cb4-7"><a href="3-rinde.html#cb4-7"></a>dat1 =<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="st">&quot;emmean&quot;</span> =rinde)<span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-8"><a href="3-rinde.html#cb4-8"></a><span class="st">  </span><span class="kw">drop_na</span>(trt)<span class="op">%&gt;%</span></span>
+<span id="cb4-9"><a href="3-rinde.html#cb4-9"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">trt =</span> <span class="kw">fct_reorder</span>(trt, emmean, <span class="dt">.fun=</span><span class="st">&#39;mean&#39;</span> ))</span>
+<span id="cb4-10"><a href="3-rinde.html#cb4-10"></a></span>
+<span id="cb4-11"><a href="3-rinde.html#cb4-11"></a><span class="kw">plot</span>(res, <span class="dt">alpha =</span><span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb4-12"><a href="3-rinde.html#cb4-12"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">filter</span>(res, trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean), </span>
+<span id="cb4-13"><a href="3-rinde.html#cb4-13"></a>             <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">col =</span><span class="st">&quot;gray50&quot;</span>)<span class="op">+</span></span>
+<span id="cb4-14"><a href="3-rinde.html#cb4-14"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> dat1 , <span class="co">#%&gt;% mutate(trt = fct_reorder(trt, emmean, .fun=&#39;mean&#39;)),</span></span>
+<span id="cb4-15"><a href="3-rinde.html#cb4-15"></a>             <span class="kw">aes</span>(<span class="dt">y =</span> trt, <span class="dt">x =</span> emmean),</span>
+<span id="cb4-16"><a href="3-rinde.html#cb4-16"></a>             <span class="dt">pch=</span><span class="dv">21</span>,</span>
+<span id="cb4-17"><a href="3-rinde.html#cb4-17"></a>             <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb4-18"><a href="3-rinde.html#cb4-18"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> res, <span class="dt">angle=</span><span class="dv">90</span>, <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.7</span>,</span>
+<span id="cb4-19"><a href="3-rinde.html#cb4-19"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> emmean,</span>
+<span id="cb4-20"><a href="3-rinde.html#cb4-20"></a>                <span class="dt">y =</span> trt,</span>
+<span id="cb4-21"><a href="3-rinde.html#cb4-21"></a>                <span class="dt">label =</span> .group),</span>
+<span id="cb4-22"><a href="3-rinde.html#cb4-22"></a>            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></span>
+<span id="cb4-23"><a href="3-rinde.html#cb4-23"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> res <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>(),</span>
+<span id="cb4-24"><a href="3-rinde.html#cb4-24"></a>            <span class="dt">label =</span> <span class="st">&quot;Testigo&quot;</span>, <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.2</span>,</span>
+<span id="cb4-25"><a href="3-rinde.html#cb4-25"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> emmean,</span>
+<span id="cb4-26"><a href="3-rinde.html#cb4-26"></a>                <span class="dt">y =</span> <span class="fl">1.5</span>),</span>
+<span id="cb4-27"><a href="3-rinde.html#cb4-27"></a>            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></span>
+<span id="cb4-28"><a href="3-rinde.html#cb4-28"></a><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></span>
+<span id="cb4-29"><a href="3-rinde.html#cb4-29"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;Rinde (kg/ha)&quot;</span>,</span>
+<span id="cb4-30"><a href="3-rinde.html#cb4-30"></a>       <span class="dt">y =</span> <span class="st">&quot;Tratamiento&quot;</span>)<span class="op">+</span><span class="st">    </span></span>
+<span id="cb4-31"><a href="3-rinde.html#cb4-31"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">9</span>, <span class="st">&quot;bottom&quot;</span>)<span class="op">+</span></span>
+<span id="cb4-32"><a href="3-rinde.html#cb4-32"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span>
+<span id="cb4-33"><a href="3-rinde.html#cb4-33"></a></span>
+<span id="cb4-34"><a href="3-rinde.html#cb4-34"></a><span class="co"># ggsave(&quot;plots/trigo_NOVA_rinde_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
+<span id="cb4-35"><a href="3-rinde.html#cb4-35"></a><span class="co"># </span></span>
+<span id="cb4-36"><a href="3-rinde.html#cb4-36"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;plots/trigo_NOVA_rinde_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="3-rinde.html#cb5-1"></a>res_fin &lt;-<span class="st"> </span>res <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">kg_ha =</span> emmean) <span class="op">%&gt;%</span></span>
+<span id="cb5-2"><a href="3-rinde.html#cb5-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb5-3"><a href="3-rinde.html#cb5-3"></a>    <span class="dt">dif_kg =</span> (kg_ha<span class="op">-</span><span class="st"> </span><span class="kw">filter</span>(res, trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean)),</span>
+<span id="cb5-4"><a href="3-rinde.html#cb5-4"></a>    <span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span> =<span class="st"> </span>(kg_ha<span class="op">/</span><span class="kw">filter</span>(res, trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean)<span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>)</span>
+<span id="cb5-5"><a href="3-rinde.html#cb5-5"></a>res_fin</span>
+<span id="cb5-6"><a href="3-rinde.html#cb5-6"></a></span>
+<span id="cb5-7"><a href="3-rinde.html#cb5-7"></a>res_fin <span class="op">%&gt;%</span></span>
+<span id="cb5-8"><a href="3-rinde.html#cb5-8"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb5-9"><a href="3-rinde.html#cb5-9"></a>    <span class="st">&#39;IC_95%&#39;</span>=<span class="kw">paste0</span>(<span class="kw">round</span>(lower.CL,<span class="dv">0</span>),<span class="st">&quot;;&quot;</span>,</span>
+<span id="cb5-10"><a href="3-rinde.html#cb5-10"></a>                    <span class="kw">round</span>(upper.CL,<span class="dv">0</span>))) <span class="op">%&gt;%</span></span>
+<span id="cb5-11"><a href="3-rinde.html#cb5-11"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">Trat =</span>trt,</span>
+<span id="cb5-12"><a href="3-rinde.html#cb5-12"></a>                <span class="co"># Rinde_medio= emmean,</span></span>
+<span id="cb5-13"><a href="3-rinde.html#cb5-13"></a>                <span class="st">`</span><span class="dt">Tukey_5%</span><span class="st">`</span> =<span class="st"> </span>.group,</span>
+<span id="cb5-14"><a href="3-rinde.html#cb5-14"></a>                <span class="st">`</span><span class="dt">IC_95%</span><span class="st">`</span>, dif_kg, <span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span>,</span>
+<span id="cb5-15"><a href="3-rinde.html#cb5-15"></a>                <span class="op">-</span>df, <span class="op">-</span>SE, <span class="op">-</span>lower.CL, <span class="op">-</span>upper.CL) <span class="co">#%&gt;%</span></span>
+<span id="cb5-16"><a href="3-rinde.html#cb5-16"></a>  <span class="co"># purrr::modify_if(., ~is.numeric(.), ~round(., 0)) %&gt;% </span></span>
+<span id="cb5-17"><a href="3-rinde.html#cb5-17"></a>  <span class="co"># arrange(Trat) %&gt;% </span></span>
+<span id="cb5-18"><a href="3-rinde.html#cb5-18"></a>  <span class="co"># write_sheet(ss=nova_tr, sheet = &quot;anova_rend&quot;)</span></span></code></pre></div>
 
 </div>
             </section>
@@ -1044,20 +1044,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

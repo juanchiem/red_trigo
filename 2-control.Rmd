@@ -5,8 +5,8 @@
 pacman::p_load(tidyverse)
 load("data/nova_trigo.Rdata")
 source(here::here('theme_juan.R'))
-assum_lm <- "https://github.com/juanchiem/R-sources-Juan/blob/master/lm_assumptions.R?raw=TRUE"
-devtools::source_url(assum_lm)
+# assum_lm <- "https://github.com/juanchiem/R-sources-Juan/blob/master/lm_assumptions.R?raw=TRUE"
+# devtools::source_url(assum_lm)
 ```
 
 ## Presion en los testigos de enf_2

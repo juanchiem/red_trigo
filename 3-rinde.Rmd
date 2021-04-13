@@ -1,6 +1,6 @@
 # Rendimiento 
 
-```{r}
+```{r eval=FALSE}
 pacman::p_load(tidyverse, lme4, emmeans, multcomp, googlesheets4)
 # gs4_auth(email = "edwardsmolina@gmail.com")
 # googledrive::drive_auth(email = "edwardsmolina@gmail.com")
@@ -11,13 +11,13 @@ load(here::here("data/nova_trigo.Rdata"))
 source(here::here('theme_juan.R'))
 ```
 
-```{r}
+```{r, eval=FALSE}
 glimpse(cosecha)
 ```
 
 Unificamos trt ya que incluimos 2 testigos por bloque 
 
-```{r}
+```{r eval = FALSE}
 dat <- 
   cosecha %>%
   group_by(trt, bk) %>% 
@@ -30,7 +30,7 @@ dat <-
 ```
 
 
-```{r}
+```{r eval = FALSE}
 m_y = lmer(rinde ~ trt + (1|bk), data = dat)
 plot(m_y)
 car::Anova(m_y)
@@ -70,7 +70,7 @@ plot(res, alpha =0.5) +
 ```
 
 
-```{r}
+```{r eval = FALSE}
 res_fin <- res %>% as_tibble() %>% rename(kg_ha = emmean) %>%
   mutate(
     dif_kg = (kg_ha- filter(res, trt==1) %>% pull(emmean)),
