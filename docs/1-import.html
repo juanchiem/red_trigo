@@ -974,11 +974,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-19"><a href="1-import.html#cb6-19"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> cosecha, </span>
 <span id="cb6-20"><a href="1-import.html#cb6-20"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> col, fila,</span>
 <span id="cb6-21"><a href="1-import.html#cb6-21"></a>            <span class="dt">label =</span> <span class="kw">paste</span>(trt, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="kw">round</span>(plot,<span class="dv">1</span>), <span class="st">&quot;&quot;</span>)), </span>
-<span id="cb6-22"><a href="1-import.html#cb6-22"></a>            <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>) </span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="1-import.html#cb7-1"></a><span class="co"># ggsave(last_plot(), file = &quot;nova/nova_trigo/mapa_parcelas.png&quot;, w=6.5, h=7)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="1-import.html#cb8-1"></a><span class="co"># dat %&gt;% write_sheet(ss=nova_ceb, sheet = &quot;clean&quot;)</span></span>
-<span id="cb8-2"><a href="1-import.html#cb8-2"></a><span class="kw">save</span>(dat, cosecha, <span class="dt">file =</span> <span class="st">&quot;data/nova_trigo.Rdata&quot;</span>)</span></code></pre></div>
+<span id="cb6-22"><a href="1-import.html#cb6-22"></a>            <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>) </span>
+<span id="cb6-23"><a href="1-import.html#cb6-23"></a></span>
+<span id="cb6-24"><a href="1-import.html#cb6-24"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/mapa_parcelas.png&quot;, w=6.5, h=7)</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="1-import.html#cb7-1"></a><span class="co"># dat %&gt;% write_sheet(ss=nova_ceb, sheet = &quot;clean&quot;)</span></span>
+<span id="cb7-2"><a href="1-import.html#cb7-2"></a><span class="kw">save</span>(dat, cosecha, <span class="dt">file =</span> <span class="st">&quot;data/nova_trigo.Rdata&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>
@@ -1039,6 +1039,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
