@@ -50,15 +50,15 @@ dat %>%
                aes(col=var, group=var)) +
   scale_color_manual(labels = c(
     "AF activa",  "Sev media RE(%)"),
-    values = c("green", "red")) +
+    values = c("green3", "red3")) +
   theme_juan(12, "top")+
   labs(title = "Evolución área foliar",
        y = "%", x = "Días desde aplicado", 
        col = "",
        caption = 
-       "AF activa = Promedio de score 0-4 de cada hoja evaluada\n(Según verdor: 0=0%; 1=1-25%; 2=25-50%; 3=50-75%; 4=75-100%\nSeveridad media (considera los 0%)")
+       "AF activa = Proporción de hojas con >50% de verdor\nSeveridad media (considera los 0%)")
   
-# ggsave(last_plot(), file = "plots/evol_AF.png", w=6.5, h=7)
+ggsave(last_plot(), file = "plots/evol_AF.png", w=6.5, h=7)
 # drive_upload(path = as_dribble("fina_2020/NOVA"), "nova/nova_trigo/evol_AF_tr.png", overwrite = TRUE)
 
 ```
@@ -86,7 +86,7 @@ dat %>%
        "AF_sana = AF_activa - Severidad media roya estriada)")+
   theme_juan(12, "top")
 
-# ggsave(last_plot(), file = "plots/AF_sana.png", w=7, h=6)
+ggsave(last_plot(), file = "plots/AF_sana.png", w=7, h=6)
 # drive_upload(path = as_dribble("fina_2020/NOVA"), "nova/nova_trigo/AF.png", overwrite = TRUE)
 
 ```
@@ -125,7 +125,7 @@ dat %>%
        y = "%", x = "Días desde aplicado")+
   theme_juan(12, "top")
 
-# ggsave(last_plot(), file = "plots/incidencia_RE.png", w=7, h=6)
+ggsave(last_plot(), file = "plots/incidencia_RE.png", w=7, h=6)
 # drive_upload(path = as_dribble("fina_2020/NOVA"), "nova/nova_trigo/incidencia_RE.png", overwrite = TRUE)
 
 ```
@@ -148,7 +148,7 @@ dat %>%
        y = "%", x = "Días desde aplicado")+
   theme_juan(12, "top")
 
-# ggsave(last_plot(), file = "plots/severidad_RE.png", w=7, h=6)
+ggsave(last_plot(), file = "plots/severidad_RE.png", w=7, h=6)
 # drive_upload(path = as_dribble("fina_2020/NOVA"), "nova/nova_trigo/severidad_RE.png", overwrite = TRUE)
 
 ```
@@ -205,7 +205,7 @@ plot(res_e0, alpha =0.5) +
   theme_juan(9, "bottom")+
   scale_x_continuous(breaks=scales::pretty_breaks())
 
-# ggsave("plots/abc_AFsana_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
+ggsave("plots/abc_AFsana_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
 # 
 # drive_upload(path = as_dribble("fina_2020/NOVA"), "nova_trigo/abc_AFsana_model.jpg", overwrite = TRUE)
 ```
@@ -256,7 +256,7 @@ plot(res1, alpha =0.5) +
   theme_juan(9, "bottom")+
   scale_x_continuous(breaks=scales::pretty_breaks())
 
-# ggsave("plots/abc_RE_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
+ggsave("plots/abc_RE_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
 # 
 # drive_upload(path = as_dribble("fina_2020/NOVA"), "plots/abc_RE_model.jpg", overwrite = TRUE)
 ```

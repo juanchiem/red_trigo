@@ -869,11 +869,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Inicio</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Intro</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Inicio</a></li>
 <li class="chapter" data-level="1" data-path="1-import.html"><a href="1-import.html"><i class="fa fa-check"></i><b>1</b> Importación de datos</a>
 <ul>
-<li class="chapter" data-level="1.1" data-path="1-import.html"><a href="1-import.html#sanidad"><i class="fa fa-check"></i><b>1.1</b> Sanidad</a></li>
-<li class="chapter" data-level="1.2" data-path="1-import.html"><a href="1-import.html#cosecha"><i class="fa fa-check"></i><b>1.2</b> Cosecha</a></li>
+<li class="chapter" data-level="1.1" data-path="1-import.html"><a href="1-import.html#datos-de-sanidad"><i class="fa fa-check"></i><b>1.1</b> Datos de sanidad</a></li>
+<li class="chapter" data-level="1.2" data-path="1-import.html"><a href="1-import.html#datos-de-cosecha"><i class="fa fa-check"></i><b>1.2</b> Datos de cosecha</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="2-control.html"><a href="2-control.html"><i class="fa fa-check"></i><b>2</b> Control</a>
 <ul>
@@ -931,8 +931,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1     0  100     62.2   5.58
 ## 2    10  100     72.3   6.74
-## 3    19   93.4   71.1  12.1 
-## 4    31   62.1   56.4   3.79</code></pre>
+## 3    19   80.2   75.0  12.7 
+## 4    31   50.5   69.6   4.85</code></pre>
 </div>
 <div id="area-foliar---evolución" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Area foliar - evolución</h2>
@@ -945,10 +945,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## $ eval    &lt;dbl&gt; 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0,…
 ## $ fecha   &lt;date&gt; 2020-10-31, 2020-11-10, 2020-11-19, 2020-12-01, 2020-10-31, 2…
 ## $ dias    &lt;dbl&gt; 0, 10, 19, 31, 0, 10, 19, 31, 0, 10, 19, 31, 0, 10, 19, 31, 0,…
-## $ verdor  &lt;dbl&gt; 100.00000, 100.00000, 96.00000, 60.86957, 100.00000, 100.00000…
-## $ inc_e2  &lt;dbl&gt; 62.222222, 76.666667, 79.166667, 50.000000, 62.222222, 79.3103…
-## $ int_e2  &lt;dbl&gt; 5.5760684, 6.7977778, 12.2854938, 4.4285714, 5.5760684, 8.4267…
-## $ af_sana &lt;dbl&gt; 94.42393, 93.20222, 83.71451, 56.44099, 94.42393, 91.57328, 71…</code></pre>
+## $ verdor  &lt;dbl&gt; 100.00000, 100.00000, 80.00000, 43.47826, 100.00000, 100.00000…
+## $ inc_e2  &lt;dbl&gt; 62.222222, 76.666667, 86.750000, 70.000000, 62.222222, 79.3103…
+## $ int_e2  &lt;dbl&gt; 5.5760684, 6.7977778, 13.4623148, 6.2000000, 5.5760684, 8.4267…
+## $ af_sana &lt;dbl&gt; 94.42393, 93.20222, 66.53769, 37.27826, 94.42393, 91.57328, 55…</code></pre>
 <p><span class="math inline">\(Verdor - severidad~media~enf_{(i)}\)</span></p>
 </div>
 <div id="area-foliar-activa-y-severidad" class="section level2" number="2.3">
@@ -971,15 +971,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-16"><a href="2-control.html#cb6-16"></a>               <span class="kw">aes</span>(<span class="dt">col=</span>var, <span class="dt">group=</span>var)) <span class="op">+</span></span>
 <span id="cb6-17"><a href="2-control.html#cb6-17"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">labels =</span> <span class="kw">c</span>(</span>
 <span id="cb6-18"><a href="2-control.html#cb6-18"></a>    <span class="st">&quot;AF activa&quot;</span>,  <span class="st">&quot;Sev media RE(%)&quot;</span>),</span>
-<span id="cb6-19"><a href="2-control.html#cb6-19"></a>    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;green&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="op">+</span></span>
+<span id="cb6-19"><a href="2-control.html#cb6-19"></a>    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;green3&quot;</span>, <span class="st">&quot;red3&quot;</span>)) <span class="op">+</span></span>
 <span id="cb6-20"><a href="2-control.html#cb6-20"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
 <span id="cb6-21"><a href="2-control.html#cb6-21"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Evolución área foliar&quot;</span>,</span>
 <span id="cb6-22"><a href="2-control.html#cb6-22"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>, </span>
 <span id="cb6-23"><a href="2-control.html#cb6-23"></a>       <span class="dt">col =</span> <span class="st">&quot;&quot;</span>,</span>
 <span id="cb6-24"><a href="2-control.html#cb6-24"></a>       <span class="dt">caption =</span> </span>
-<span id="cb6-25"><a href="2-control.html#cb6-25"></a>       <span class="st">&quot;AF activa = Promedio de score 0-4 de cada hoja evaluada</span><span class="ch">\n</span><span class="st">(Según verdor: 0=0%; 1=1-25%; 2=25-50%; 3=50-75%; 4=75-100%</span><span class="ch">\n</span><span class="st">Severidad media (considera los 0%)&quot;</span>)</span></code></pre></div>
+<span id="cb6-25"><a href="2-control.html#cb6-25"></a>       <span class="st">&quot;AF activa = Proporción de hojas con &gt;50% de verdor</span><span class="ch">\n</span><span class="st">Severidad media (considera los 0%)&quot;</span>)</span></code></pre></div>
 <p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="2-control.html#cb7-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/evol_AF.png&quot;, w=6.5, h=7)</span></span>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="2-control.html#cb7-1"></a><span class="kw">ggsave</span>(<span class="kw">last_plot</span>(), <span class="dt">file =</span> <span class="st">&quot;plots/evol_AF.png&quot;</span>, <span class="dt">w=</span><span class="fl">6.5</span>, <span class="dt">h=</span><span class="dv">7</span>)</span>
 <span id="cb7-2"><a href="2-control.html#cb7-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/evol_AF_tr.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
 </div>
 <div id="area-foliar-sana" class="section level2" number="2.4">
@@ -1002,7 +1002,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-14"><a href="2-control.html#cb8-14"></a>       <span class="st">&quot;AF_sana = AF_activa - Severidad media roya estriada)&quot;</span>)<span class="op">+</span></span>
 <span id="cb8-15"><a href="2-control.html#cb8-15"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
 <p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="2-control.html#cb9-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/AF_sana.png&quot;, w=7, h=6)</span></span>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="2-control.html#cb9-1"></a><span class="kw">ggsave</span>(<span class="kw">last_plot</span>(), <span class="dt">file =</span> <span class="st">&quot;plots/AF_sana.png&quot;</span>, <span class="dt">w=</span><span class="dv">7</span>, <span class="dt">h=</span><span class="dv">6</span>)</span>
 <span id="cb9-2"><a href="2-control.html#cb9-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/AF.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="2-control.html#cb10-1"></a><span class="co"># Cuando hubiera mas de una enfermedad, probablemente esto ayudaria </span></span>
 <span id="cb10-2"><a href="2-control.html#cb10-2"></a><span class="co"># dat_long &lt;- dat %&gt;% </span></span>
@@ -1034,7 +1034,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-12"><a href="2-control.html#cb11-12"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>)<span class="op">+</span></span>
 <span id="cb11-13"><a href="2-control.html#cb11-13"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
 <p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="2-control.html#cb12-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/incidencia_RE.png&quot;, w=7, h=6)</span></span>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="2-control.html#cb12-1"></a><span class="kw">ggsave</span>(<span class="kw">last_plot</span>(), <span class="dt">file =</span> <span class="st">&quot;plots/incidencia_RE.png&quot;</span>, <span class="dt">w=</span><span class="dv">7</span>, <span class="dt">h=</span><span class="dv">6</span>)</span>
 <span id="cb12-2"><a href="2-control.html#cb12-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/incidencia_RE.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
 </div>
 </div>
@@ -1055,7 +1055,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb13-13"><a href="2-control.html#cb13-13"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>)<span class="op">+</span></span>
 <span id="cb13-14"><a href="2-control.html#cb13-14"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
 <p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="2-control.html#cb14-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/severidad_RE.png&quot;, w=7, h=6)</span></span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="2-control.html#cb14-1"></a><span class="kw">ggsave</span>(<span class="kw">last_plot</span>(), <span class="dt">file =</span> <span class="st">&quot;plots/severidad_RE.png&quot;</span>, <span class="dt">w=</span><span class="dv">7</span>, <span class="dt">h=</span><span class="dv">6</span>)</span>
 <span id="cb14-2"><a href="2-control.html#cb14-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/severidad_RE.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
 </div>
 <div id="abc-de-las-métricas-evaluadas" class="section level2" number="2.7">
@@ -1085,7 +1085,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Response: af_sana
 ##      Chisq Df Pr(&gt;Chisq)    
-## trt 112.65 14  &lt; 2.2e-16 ***
+## trt 137.97 14  &lt; 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="2-control.html#cb23-1"></a><span class="kw">summary</span>(m0)</span></code></pre></div>
@@ -1093,35 +1093,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Formula: af_sana ~ trt + (1 | rep)
 ##    Data: abc_dat
 ## 
-## REML criterion at convergence: 537.6
+## REML criterion at convergence: 555.4
 ## 
 ## Scaled residuals: 
 ##      Min       1Q   Median       3Q      Max 
-## -3.05940 -0.44639  0.04948  0.43748  2.71456 
+## -2.76983 -0.53442  0.09575  0.49062  2.28207 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  rep      (Intercept)  297.9   17.26   
-##  Residual             5466.9   73.94   
+##  rep      (Intercept)  239.1   15.46   
+##  Residual             8244.9   90.80   
 ## Number of obs: 60, groups:  rep, 4
 ## 
 ## Fixed effects:
 ##             Estimate Std. Error t value
-## (Intercept)  2561.78      37.96  67.481
-## trt2          385.50      52.28   7.373
-## trt3          429.69      52.28   8.219
-## trt4          329.41      52.28   6.301
-## trt5          383.81      52.28   7.341
-## trt6          401.88      52.28   7.687
-## trt7          374.46      52.28   7.162
-## trt8          438.40      52.28   8.385
-## trt9          400.80      52.28   7.666
-## trt10         365.15      52.28   6.984
-## trt11         399.58      52.28   7.643
-## trt12         399.36      52.28   7.639
-## trt13         398.51      52.28   7.622
-## trt14         403.21      52.28   7.712
-## trt15         404.22      52.28   7.732</code></pre>
+## (Intercept)  2339.83      46.05  50.806
+## trt2          514.80      64.21   8.018
+## trt3          563.46      64.21   8.776
+## trt4          436.87      64.21   6.804
+## trt5          527.08      64.21   8.209
+## trt6          554.94      64.21   8.643
+## trt7          534.11      64.21   8.319
+## trt8          581.72      64.21   9.060
+## trt9          544.44      64.21   8.480
+## trt10         492.81      64.21   7.675
+## trt11         560.32      64.21   8.727
+## trt12         492.78      64.21   7.675
+## trt13         475.49      64.21   7.406
+## trt14         568.48      64.21   8.854
+## trt15         563.83      64.21   8.782</code></pre>
 <pre><code>## 
 ## Correlation matrix not shown by default, as p = 15 &gt; 12.
 ## Use print(x, correlation=TRUE)  or
@@ -1150,7 +1150,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb27-17"><a href="2-control.html#cb27-17"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">9</span>, <span class="st">&quot;bottom&quot;</span>)<span class="op">+</span></span>
 <span id="cb27-18"><a href="2-control.html#cb27-18"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span></code></pre></div>
 <p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="2-control.html#cb28-1"></a><span class="co"># ggsave(&quot;plots/abc_AFsana_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="2-control.html#cb28-1"></a><span class="kw">ggsave</span>(<span class="st">&quot;plots/abc_AFsana_model.jpg&quot;</span>, <span class="dt">width =</span> <span class="dv">15</span>, <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">units =</span> <span class="st">&quot;cm&quot;</span>, <span class="kw">last_plot</span>(), <span class="dt">dpi =</span> <span class="dv">600</span>)</span>
 <span id="cb28-2"><a href="2-control.html#cb28-2"></a><span class="co"># </span></span>
 <span id="cb28-3"><a href="2-control.html#cb28-3"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova_trigo/abc_AFsana_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="2-control.html#cb29-1"></a>res_e0 <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1166,21 +1166,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb29-11"><a href="2-control.html#cb29-11"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">modify_if</span>(., <span class="op">~</span><span class="kw">is.numeric</span>(.), <span class="op">~</span><span class="kw">round</span>(., <span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb29-12"><a href="2-control.html#cb29-12"></a><span class="st">  </span><span class="kw">arrange</span>(Trat) <span class="co">#%&gt;% </span></span></code></pre></div>
 <pre><code>##    Trat AF_sana Tukey_5%   dif dif_%    IC_95%
-## 1     1  2561.8        b   0.0   0.0 2485;2638
-## 2     2  2947.3       a  385.5  15.0 2871;3024
-## 3     3  2991.5       a  429.7  16.8 2915;3068
-## 4     4  2891.2       a  329.4  12.9 2815;2968
-## 5     5  2945.6       a  383.8  15.0 2869;3022
-## 6     6  2963.7       a  401.9  15.7 2887;3040
-## 7     7  2936.2       a  374.5  14.6 2860;3013
-## 8     8  3000.2       a  438.4  17.1 2924;3077
-## 9     9  2962.6       a  400.8  15.6 2886;3039
-## 10   10  2926.9       a  365.2  14.3 2850;3003
-## 11   11  2961.4       a  399.6  15.6 2885;3038
-## 12   12  2961.1       a  399.4  15.6 2885;3038
-## 13   13  2960.3       a  398.5  15.6 2884;3037
-## 14   14  2965.0       a  403.2  15.7 2888;3042
-## 15   15  2966.0       a  404.2  15.8 2889;3043</code></pre>
+## 1     1  2339.8        b   0.0   0.0 2247;2433
+## 2     2  2854.6       a  514.8  22.0 2762;2947
+## 3     3  2903.3       a  563.5  24.1 2811;2996
+## 4     4  2776.7       a  436.9  18.7 2684;2869
+## 5     5  2866.9       a  527.1  22.5 2774;2960
+## 6     6  2894.8       a  554.9  23.7 2802;2988
+## 7     7  2873.9       a  534.1  22.8 2781;2967
+## 8     8  2921.5       a  581.7  24.9 2829;3014
+## 9     9  2884.3       a  544.4  23.3 2791;2977
+## 10   10  2832.6       a  492.8  21.1 2740;2925
+## 11   11  2900.1       a  560.3  23.9 2807;2993
+## 12   12  2832.6       a  492.8  21.1 2740;2925
+## 13   13  2815.3       a  475.5  20.3 2723;2908
+## 14   14  2908.3       a  568.5  24.3 2816;3001
+## 15   15  2903.7       a  563.8  24.1 2811;2996</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="2-control.html#cb31-1"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;anova_AFsana&quot;)</span></span></code></pre></div>
 </div>
 <div id="abc-de-severidad-media-de-e2---modelo" class="section level3" number="2.7.2">
@@ -1192,42 +1192,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Response: int_e2
 ##      Chisq Df Pr(&gt;Chisq)    
-## trt 349.04 14  &lt; 2.2e-16 ***
+## trt 391.09 14  &lt; 2.2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
 ## Formula: int_e2 ~ trt + (1 | rep)
 ##    Data: abc_dat
 ## 
-## REML criterion at convergence: 421.7
+## REML criterion at convergence: 422.5
 ## 
 ## Scaled residuals: 
 ##     Min      1Q  Median      3Q     Max 
-## -3.5643 -0.5393  0.0071  0.4969  2.1489 
+## -3.8348 -0.5274  0.0508  0.4699  1.9524 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  rep      (Intercept) 106.9    10.34   
-##  Residual             388.1    19.70   
+##  rep      (Intercept) 114.4    10.70   
+##  Residual             394.0    19.85   
 ## Number of obs: 60, groups:  rep, 4
 ## 
 ## Fixed effects:
 ##             Estimate Std. Error t value
-## (Intercept)   241.79      11.12   21.73
-## trt2         -193.05      13.93  -13.86
-## trt3         -180.65      13.93  -12.97
-## trt4         -165.28      13.93  -11.87
-## trt5         -201.94      13.93  -14.50
-## trt6         -188.08      13.93  -13.50
-## trt7         -202.89      13.93  -14.56
-## trt8         -189.68      13.93  -13.62
-## trt9         -194.20      13.93  -13.94
-## trt10        -176.60      13.93  -12.68
-## trt11        -186.18      13.93  -13.37
-## trt12        -173.99      13.93  -12.49
-## trt13        -179.00      13.93  -12.85
-## trt14        -181.64      13.93  -13.04
-## trt15        -193.99      13.93  -13.93</code></pre>
+## (Intercept)   254.52      11.27   22.58
+## trt2         -206.09      14.04  -14.68
+## trt3         -193.70      14.04  -13.80
+## trt4         -178.77      14.04  -12.74
+## trt5         -214.84      14.04  -15.30
+## trt6         -200.81      14.04  -14.31
+## trt7         -215.91      14.04  -15.38
+## trt8         -202.51      14.04  -14.43
+## trt9         -207.28      14.04  -14.77
+## trt10        -189.64      14.04  -13.51
+## trt11        -199.01      14.04  -14.18
+## trt12        -187.88      14.04  -13.38
+## trt13        -192.79      14.04  -13.73
+## trt14        -194.37      14.04  -13.85
+## trt15        -207.03      14.04  -14.75</code></pre>
 <pre><code>## 
 ## Correlation matrix not shown by default, as p = 15 &gt; 12.
 ## Use print(x, correlation=TRUE)  or
@@ -1253,7 +1253,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb37-16"><a href="2-control.html#cb37-16"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">9</span>, <span class="st">&quot;bottom&quot;</span>)<span class="op">+</span></span>
 <span id="cb37-17"><a href="2-control.html#cb37-17"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span></code></pre></div>
 <p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="2-control.html#cb38-1"></a><span class="co"># ggsave(&quot;plots/abc_RE_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="2-control.html#cb38-1"></a><span class="kw">ggsave</span>(<span class="st">&quot;plots/abc_RE_model.jpg&quot;</span>, <span class="dt">width =</span> <span class="dv">15</span>, <span class="dt">height =</span> <span class="dv">10</span>, <span class="dt">units =</span> <span class="st">&quot;cm&quot;</span>, <span class="kw">last_plot</span>(), <span class="dt">dpi =</span> <span class="dv">600</span>)</span>
 <span id="cb38-2"><a href="2-control.html#cb38-2"></a><span class="co"># </span></span>
 <span id="cb38-3"><a href="2-control.html#cb38-3"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;plots/abc_RE_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="2-control.html#cb39-1"></a>res1 <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1267,21 +1267,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb39-9"><a href="2-control.html#cb39-9"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">modify_if</span>(., <span class="op">~</span><span class="kw">is.numeric</span>(.), <span class="op">~</span><span class="kw">round</span>(., <span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
 <span id="cb39-10"><a href="2-control.html#cb39-10"></a><span class="st">  </span><span class="kw">arrange</span>(Trat) <span class="co">#%&gt;% </span></span></code></pre></div>
 <pre><code>##    Trat ABC_Sev Tukey_5% control(%)
-## 1     1   241.8        b        0.0
-## 2     2    48.7       a       -79.8
-## 3     3    61.1       a       -74.7
-## 4     4    76.5       a       -68.4
-## 5     5    39.8       a       -83.5
-## 6     6    53.7       a       -77.8
-## 7     7    38.9       a       -83.9
-## 8     8    52.1       a       -78.4
-## 9     9    47.6       a       -80.3
-## 10   10    65.2       a       -73.0
-## 11   11    55.6       a       -77.0
-## 12   12    67.8       a       -72.0
-## 13   13    62.8       a       -74.0
-## 14   14    60.2       a       -75.1
-## 15   15    47.8       a       -80.2</code></pre>
+## 1     1   254.5        b        0.0
+## 2     2    48.4       a       -81.0
+## 3     3    60.8       a       -76.1
+## 4     4    75.8       a       -70.2
+## 5     5    39.7       a       -84.4
+## 6     6    53.7       a       -78.9
+## 7     7    38.6       a       -84.8
+## 8     8    52.0       a       -79.6
+## 9     9    47.2       a       -81.4
+## 10   10    64.9       a       -74.5
+## 11   11    55.5       a       -78.2
+## 12   12    66.6       a       -73.8
+## 13   13    61.7       a       -75.7
+## 14   14    60.2       a       -76.4
+## 15   15    47.5       a       -81.3</code></pre>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="2-control.html#cb41-1"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;anova_RE&quot;)</span></span></code></pre></div>
 
 </div>

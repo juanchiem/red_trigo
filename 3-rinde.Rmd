@@ -1,6 +1,6 @@
 # Rendimiento 
 
-```{r eval=FALSE}
+```{r eval=T}
 pacman::p_load(tidyverse, lme4, emmeans, multcomp, googlesheets4)
 # gs4_auth(email = "edwardsmolina@gmail.com")
 # googledrive::drive_auth(email = "edwardsmolina@gmail.com")
@@ -17,7 +17,7 @@ glimpse(cosecha)
 
 Unificamos trt ya que incluimos 2 testigos por bloque 
 
-```{r eval = FALSE}
+```{r eval = T}
 dat <- 
   cosecha %>%
   group_by(trt, bk) %>% 
@@ -30,13 +30,17 @@ dat <-
 ```
 
 
-```{r eval = FALSE}
+```{r eval = T}
 m_y = lmer(rinde ~ trt + (1|bk), data = dat)
 plot(m_y)
 car::Anova(m_y)
 summary(m_y)
 pred = emmeans(m_y, ~ trt, type = "response")
 res <- cld(pred, Letters = letters, alpha = .05, type = "response", reversed = T)
+```
+
+
+```{r eval = T}
 dat1 = dat %>% rename("emmean" =rinde)%>% 
   drop_na(trt)%>%
   mutate(trt = fct_reorder(trt, emmean, .fun='mean' ))
@@ -64,11 +68,10 @@ plot(res, alpha =0.5) +
   theme_juan(9, "bottom")+
   scale_x_continuous(breaks=scales::pretty_breaks())
 
-# ggsave("plots/trigo_NOVA_rinde_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
+ggsave("plots/trigo_NOVA_rinde_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
 # 
 # drive_upload(path = as_dribble("fina_2020/NOVA"), "plots/trigo_NOVA_rinde_model.jpg", overwrite = TRUE)
 ```
-
 
 ```{r eval = FALSE}
 res_fin <- res %>% as_tibble() %>% rename(kg_ha = emmean) %>%

@@ -12,13 +12,16 @@ nova_tr <- gs4_get(gs4_find("NOVA_trigo_2020")$id)
 
 ```{r, eval=TRUE}
 pacman::p_load(tidyverse)
-source(here::here('theme_juan.R'))
 load("data/nova_trigo.Rdata")
 ```
 
-## Sanidad 
+## Datos de sanidad 
 
-Interesante que es un dataset con 2 filas de encabezados
+> Interesante que se trata de un dataset con 2 filas de encabezados
+
+La primer fila es una inclusión extra para faciltar el proceso.
+
+Fila 2 y 3 contienen la info de nuestro interés, y debemos fusionar. 
 
 ```{r eval=FALSE}
 data_head <- read_sheet(nova_tr, sheet="full", n_max = 2) 
@@ -30,6 +33,7 @@ new_names <- data_head %>%
   pull(name)
 ```
 
+Luego, leemos el cuerpo del dataset, pero indicamos los nuevos nombres
 
 ```{r, eval=FALSE}
 dat_full <- read_sheet(nova_tr, sheet="full", skip = 3, col_names = new_names) 
@@ -47,7 +51,7 @@ dat <- dat_full %>%
 # dat %>% view
 ```
 
-## Cosecha
+## Datos de cosecha
 
 ```{r,  eval=F}
 cosecha <- read_sheet(nova_tr, sheet="cosecha") %>% 
@@ -57,25 +61,23 @@ cosecha
 
 * Mapa de parcelas
 
-```{r}
-heat1 <- ggplot()+
+```{r eval=TRUE}
+ggplot()+
   geom_point(aes(x = 1:16, y = rep(4.5,16)), size=0.1) +
   scale_x_continuous(breaks=scales::pretty_breaks(n = 16)) +
   scale_y_continuous(breaks=scales::pretty_breaks(n = 4)) +
   cowplot::theme_minimal_grid()+
   # geom_hline(yintercept = 4.5)+
-  geom_hline(yintercept = 2.5, linetype = "dashed")+
-  geom_segment(aes(x=8.5, y=0.5, xend=8.5, yend=4.5), linetype = "dashed", size =0.3) +
   # geom_segment(aes(x=4.5, y=4.5, xend=4.5, yend=4.5), linetype = "dashed", size =0.3) +
   # geom_segment(aes(x=8.5, y=4.5, xend=8.5, yend=7.5), linetype = "dashed", size =0.3) +
   # geom_segment(aes(x=12.5, y=4.5, xend=12.5, yend=7.5), linetype = "dashed", size =0.3)+
   viridis::scale_fill_viridis(discrete=FALSE, direction = -1)+
   labs(x="col", 
        y="fila", 
-       fill = "Rendimiento\n(kg/ha)" )
-
-heat1 + 
+       fill = "Rendimiento\n(kg/ha)")+
   geom_tile(data = cosecha, aes(col, fila, fill= kg_ha), alpha =0.9) +
+  geom_hline(yintercept = 2.5, linetype = "dashed")+
+  geom_segment(aes(x=8.5, y=0.5, xend=8.5, yend=4.5), linetype = "dashed", size =0.8) +
   geom_text(data = cosecha, 
             aes(x = col, fila,
             label = paste(trt, "\n", round(plot,1), "")), 
