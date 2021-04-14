@@ -19,8 +19,6 @@ opts_chunk$set(echo = TRUE,
 options(width = 90)
 ```
 
-# Inicio {-}
-
 Código para el análisis de tests de eficiencia de fungicidas en microparcelas. 
 
 Las variables registradas a campo son: 

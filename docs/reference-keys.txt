@@ -1,6 +1,6 @@
 importación-de-datos
-sanidad
-cosecha
+datos-de-sanidad
+datos-de-cosecha
 control
 presion-en-los-testigos-de-enf_2
 area-foliar---evolución
@@ -13,5 +13,3 @@ abc-de-las-métricas-evaluadas
 abc-de-af-sana---modelo
 abc-de-severidad-media-de-e2---modelo
 rendimiento
-datos-de-sanidad
-datos-de-cosecha
