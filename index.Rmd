@@ -19,17 +19,19 @@ opts_chunk$set(echo = TRUE,
 options(width = 90)
 ```
 
-# Intro {-}
+# Inicio {-}
 
-Este es un análisis de rutina de un ensayo de microparcelas de test de eficiencia de fungicidas. 
+Código para el análisis de tests de eficiencia de fungicidas en microparcelas. 
 
-Las variables recabadas a campo son: 
+Las variables registradas a campo son: 
 
 * Area foliar (nivel de hoja, muestras de 10 hj/plot ) 
-  - AF activa
+  - AF activa^[proporción de 1/tot, donde: 0:<50% verde; 1=50%< verde]
   - Severidad de enfermedades presentes (de esta se desprenden incidencia y severidad media)
   
 * Rendimiento (nivel de parcela)
   - Peso de las parcelas (g) y su humedad
 
-
+:::{#box1 .green-box}
+La planilla excel asociada a este análisis esta en https://docs.google.com/spreadsheets/d/1t60Eq-h-c0n-eP0TBTzdX_aF_8qOIq5utb8lpSG6lwo/edit?usp=sharing
+:::
