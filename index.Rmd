@@ -13,8 +13,8 @@ opts_chunk$set(echo = TRUE,
                warning = FALSE, 
                message = FALSE, 
                eval=FALSE, 
-               fig.width = 6,
-               fig.height = 4)
+               fig.width = 8,
+               fig.height = 6)
 
 options(width = 90)
 ```

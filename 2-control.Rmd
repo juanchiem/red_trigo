@@ -110,7 +110,7 @@ dat %>%
 
 ### Incidencia e2
 
-```{r}
+```{r eval=T}
 dat %>% 
   ggplot()+
   aes(x=dias, y=inc_e2)+
@@ -132,7 +132,7 @@ dat %>%
 
 ## Severidad media e2
 
-```{r}
+```{r eval=T}
 dat %>% 
   ggplot()+
   aes(x=dias, y=int_e2 
