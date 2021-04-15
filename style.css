@@ -19,6 +19,10 @@ body {
   text-align: justify;
 }
 
+.title {
+  color: #117ABE;
+}
+
 h1,h2,h3,h4,h5 {
   text-align: left;
 }
@@ -32,6 +36,13 @@ h1,h2,h3,h4,h5 {
 
 .green-box {
   background-color: #96ff89;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.green2-box {
+  background-color: #4AB534;
   border-radius: 5px;
   padding: 20px;
   margin-bottom: 10px;

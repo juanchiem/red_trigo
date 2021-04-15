@@ -105,3 +105,19 @@ ggplot()+
 # dat %>% write_sheet(ss=nova_ceb, sheet = "clean")
 save(dat_full, dat, cosecha, file = "data/nova_trigo.Rdata")
 ```
+
+
+Para exportar todos los graficos generados al drive: 
+
+```{r eval=F}
+all_images <- list.files(path = here::here("plots"), 
+                         pattern = ".png", 
+                         all.files = TRUE, full.names = TRUE)
+all_images
+all_images %>% 
+  map(~ drive_upload(.,
+                     path = as_dribble("fina_2020/NOVA/trigo"),
+                     overwrite = TRUE)
+  )
+```
+

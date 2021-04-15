@@ -68,9 +68,9 @@ plot(res, alpha =0.5) +
   theme_juan(9, "bottom")+
   scale_x_continuous(breaks=scales::pretty_breaks())
 
-ggsave("plots/trigo_NOVA_rinde_model.jpg", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
+ggsave("plots/trigo_NOVA_rinde_model.png", width = 15, height = 10, units = "cm", last_plot(), dpi = 600)
 # 
-# drive_upload(path = as_dribble("fina_2020/NOVA"), "plots/trigo_NOVA_rinde_model.jpg", overwrite = TRUE)
+# drive_upload(path = as_dribble("fina_2020/NOVA"), "plots/trigo_NOVA_rinde_model.png", overwrite = TRUE)
 ```
 
 ```{r eval = FALSE}
