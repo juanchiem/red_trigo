@@ -37,19 +37,31 @@ Luego, leemos el cuerpo del dataset, pero indicamos los nuevos nombres
 
 ```{r, eval=FALSE}
 dat_full <- read_sheet(nova_tr, sheet="full", skip = 3, col_names = new_names) 
+```
 
+* Verificamos la presión de enfermedades (% incidencia en los testigos) 
+
+```{r}
+dat_full %>% 
+  filter(trt == 1) %>% 
+  group_by(dias) %>%
+  summarise(across(c("verdor", matches("inc")), ~ mean(.x, na.rm = TRUE))) %>% 
+  drop_na()
+```
+
+La incidencia de e1 es baja a lo largo del periodo de evaluación, por lo tanto no la incluimos en el análisis posterior.
+
+```{r}
 dat <- dat_full %>%  
   filter(!trt == 16)%>% 
   mutate(fecha = lubridate::ymd(fecha))%>% 
   drop_na(fecha) %>% 
-  # mutate(dias = factor(dias)) %>% 
-  # mutate(af_sana= verdor-e_int) %>% 
-  dplyr::select(id:verdor, matches("e2"), -contains("ABC")) %>% 
-  select(-matches("sev")) %>% 
+  dplyr::select(id:verdor, matches("e2"), -contains("ABC")) %>%
+  dplyr::select(-matches("sev")) %>% 
   mutate(af_sana = verdor - int_e2)
-
 # dat %>% view
 ```
+
 
 ## Datos de cosecha
 
@@ -90,5 +102,5 @@ ggplot()+
 
 ```{r, eval=FALSE}
 # dat %>% write_sheet(ss=nova_ceb, sheet = "clean")
-save(dat, cosecha, file = "data/nova_trigo.Rdata")
+save(dat_full, dat, cosecha, file = "data/nova_trigo.Rdata")
 ```
