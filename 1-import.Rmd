@@ -46,8 +46,8 @@ dat_full %>%
   filter(trt == 1) %>% 
   group_by(dias) %>%
   summarise(across(c("verdor", matches("inc")), ~ mean(.x, na.rm = TRUE))) %>% 
-  drop_na() %>% 
-  write_sheet(ss=nova_tr, sheet = "dis_press")
+  drop_na() #%>% 
+  # write_sheet(ss=nova_tr, sheet = "dis_press")
 
 ```
 

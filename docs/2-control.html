@@ -908,105 +908,80 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="control" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Control</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="2-control.html#cb1-1"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse)</span>
-<span id="cb1-2"><a href="2-control.html#cb1-2"></a><span class="kw">load</span>(<span class="st">&quot;data/nova_trigo.Rdata&quot;</span>)</span>
-<span id="cb1-3"><a href="2-control.html#cb1-3"></a><span class="kw">source</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&#39;theme_juan.R&#39;</span>))</span>
-<span id="cb1-4"><a href="2-control.html#cb1-4"></a><span class="co"># assum_lm &lt;- &quot;https://github.com/juanchiem/R-sources-Juan/blob/master/lm_assumptions.R?raw=TRUE&quot;</span></span>
-<span id="cb1-5"><a href="2-control.html#cb1-5"></a><span class="co"># devtools::source_url(assum_lm)</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="2-control.html#cb11-1"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse)</span>
+<span id="cb11-2"><a href="2-control.html#cb11-2"></a><span class="kw">load</span>(<span class="st">&quot;data/nova_trigo.Rdata&quot;</span>)</span>
+<span id="cb11-3"><a href="2-control.html#cb11-3"></a><span class="kw">source</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&#39;theme_juan.R&#39;</span>))</span>
+<span id="cb11-4"><a href="2-control.html#cb11-4"></a><span class="co"># assum_lm &lt;- &quot;https://github.com/juanchiem/R-sources-Juan/blob/master/lm_assumptions.R?raw=TRUE&quot;</span></span>
+<span id="cb11-5"><a href="2-control.html#cb11-5"></a><span class="co"># devtools::source_url(assum_lm)</span></span></code></pre></div>
 <div id="area-foliar" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Area foliar</h2>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="2-control.html#cb2-1"></a><span class="kw">glimpse</span>(dat)</span></code></pre></div>
-<pre><code>## Rows: 240
-## Columns: 23
-## $ id       &lt;chr&gt; &quot;1.1&quot;, &quot;1.1&quot;, &quot;1.1&quot;, &quot;1.1&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.2&quot;, &quot;1.3&quot;…
-## $ trt      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2…
-## $ rep      &lt;dbl&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 1, 1, 1, 1, 2…
-## $ eval     &lt;dbl&gt; 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0…
-## $ fecha    &lt;date&gt; 2020-10-31, 2020-11-10, 2020-11-19, 2020-12-01, 2020-10-31, …
-## $ dias     &lt;dbl&gt; 0, 10, 19, 31, 0, 10, 19, 31, 0, 10, 19, 31, 0, 10, 19, 31, 0…
-## $ verdor   &lt;dbl&gt; 100.00000, 100.00000, 80.00000, 43.47826, 100.00000, 100.0000…
-## $ inc_e1   &lt;dbl&gt; 4.444444, 3.333333, 5.000000, 10.000000, 4.444444, 3.448276, …
-## $ inc_e2   &lt;dbl&gt; 62.222222, 76.666667, 86.750000, 70.000000, 62.222222, 79.310…
-## $ inc_e3   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ inc_e4   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ inc_e5   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ int_e1   &lt;dbl&gt; 0.44444444, 0.33333333, 0.15000000, 0.10000000, 0.44444444, 0…
-## $ int_e2   &lt;dbl&gt; 5.5760684, 6.7977778, 13.4623148, 6.2000000, 5.5760684, 8.426…
-## $ int_e3   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ int_e4   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ int_e5   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ ABC_verd &lt;dbl&gt; 0.0000, 1000.0000, 810.0000, 740.8696, 0.0000, 1000.0000, 761…
-## $ ABC_e1   &lt;dbl&gt; 0.0000000, 3.8888889, 2.1750000, 1.5000000, 0.0000000, 2.3946…
-## $ ABC_e2   &lt;dbl&gt; 0.000000, 61.869231, 91.170417, 117.973889, 0.000000, 70.0139…
-## $ ABC_e3   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ ABC_e4   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ af_sana  &lt;dbl&gt; 94.42393, 93.20222, 66.53769, 37.27826, 94.42393, 91.57328, 5…</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="2-control.html#cb12-1"></a><span class="kw">glimpse</span>(dat)</span></code></pre></div>
 <p><span class="math inline">\(Verdor - severidad~media~enf_{(i)}\)</span></p>
 <ul>
 <li>Area foliar activa y severidad</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="2-control.html#cb4-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-2"><a href="2-control.html#cb4-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;e1&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-3"><a href="2-control.html#cb4-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(</span>
-<span id="cb4-4"><a href="2-control.html#cb4-4"></a>    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;verdor&quot;</span>, <span class="st">&quot;int_e2&quot;</span>), </span>
-<span id="cb4-5"><a href="2-control.html#cb4-5"></a>    <span class="dt">names_to =</span> <span class="st">&quot;var&quot;</span>, </span>
-<span id="cb4-6"><a href="2-control.html#cb4-6"></a>    <span class="dt">values_to =</span> <span class="st">&quot;val&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-7"><a href="2-control.html#cb4-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">var =</span> <span class="kw">factor</span>(var),</span>
-<span id="cb4-8"><a href="2-control.html#cb4-8"></a>    <span class="dt">var =</span> <span class="kw">fct_relevel</span>(var, <span class="st">&quot;verdor&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-9"><a href="2-control.html#cb4-9"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
-<span id="cb4-10"><a href="2-control.html#cb4-10"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>val, <span class="dt">col =</span> var)<span class="op">+</span></span>
-<span id="cb4-11"><a href="2-control.html#cb4-11"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
-<span id="cb4-12"><a href="2-control.html#cb4-12"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
-<span id="cb4-13"><a href="2-control.html#cb4-13"></a>               <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">width =</span> <span class="fl">0.5</span>)<span class="op">+</span></span>
-<span id="cb4-14"><a href="2-control.html#cb4-14"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha=</span><span class="fl">0.3</span>) <span class="op">+</span></span>
-<span id="cb4-15"><a href="2-control.html#cb4-15"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun=</span>mean, <span class="dt">geom=</span><span class="st">&quot;line&quot;</span>, <span class="dt">size=</span><span class="fl">0.7</span>, </span>
-<span id="cb4-16"><a href="2-control.html#cb4-16"></a>               <span class="kw">aes</span>(<span class="dt">col=</span>var, <span class="dt">group=</span>var)) <span class="op">+</span></span>
-<span id="cb4-17"><a href="2-control.html#cb4-17"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">labels =</span> <span class="kw">c</span>(</span>
-<span id="cb4-18"><a href="2-control.html#cb4-18"></a>    <span class="st">&quot;AF activa&quot;</span>,  <span class="st">&quot;Sev media RE(%)&quot;</span>),</span>
-<span id="cb4-19"><a href="2-control.html#cb4-19"></a>    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;green3&quot;</span>, <span class="st">&quot;red3&quot;</span>)) <span class="op">+</span></span>
-<span id="cb4-20"><a href="2-control.html#cb4-20"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
-<span id="cb4-21"><a href="2-control.html#cb4-21"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Evolución área foliar&quot;</span>,</span>
-<span id="cb4-22"><a href="2-control.html#cb4-22"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>, </span>
-<span id="cb4-23"><a href="2-control.html#cb4-23"></a>       <span class="dt">col =</span> <span class="st">&quot;&quot;</span>,</span>
-<span id="cb4-24"><a href="2-control.html#cb4-24"></a>       <span class="dt">caption =</span> </span>
-<span id="cb4-25"><a href="2-control.html#cb4-25"></a>       <span class="st">&quot;AF activa = Proporción de hojas con &gt;50% de verdor</span><span class="ch">\n</span><span class="st">Severidad media (considera los 0%)&quot;</span>)</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="2-control.html#cb5-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/evol_AF.png&quot;, w=6.5, h=7)</span></span>
-<span id="cb5-2"><a href="2-control.html#cb5-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/evol_AF_tr.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="2-control.html#cb13-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb13-2"><a href="2-control.html#cb13-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;e1&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb13-3"><a href="2-control.html#cb13-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(</span>
+<span id="cb13-4"><a href="2-control.html#cb13-4"></a>    <span class="dt">cols =</span> <span class="kw">c</span>(<span class="st">&quot;verdor&quot;</span>, <span class="st">&quot;int_e2&quot;</span>), </span>
+<span id="cb13-5"><a href="2-control.html#cb13-5"></a>    <span class="dt">names_to =</span> <span class="st">&quot;var&quot;</span>, </span>
+<span id="cb13-6"><a href="2-control.html#cb13-6"></a>    <span class="dt">values_to =</span> <span class="st">&quot;val&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb13-7"><a href="2-control.html#cb13-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">var =</span> <span class="kw">factor</span>(var),</span>
+<span id="cb13-8"><a href="2-control.html#cb13-8"></a>    <span class="dt">var =</span> <span class="kw">fct_relevel</span>(var, <span class="st">&quot;verdor&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb13-9"><a href="2-control.html#cb13-9"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
+<span id="cb13-10"><a href="2-control.html#cb13-10"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>val, <span class="dt">col =</span> var)<span class="op">+</span></span>
+<span id="cb13-11"><a href="2-control.html#cb13-11"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
+<span id="cb13-12"><a href="2-control.html#cb13-12"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;crossbar&quot;</span>, </span>
+<span id="cb13-13"><a href="2-control.html#cb13-13"></a>               <span class="dt">size =</span> <span class="fl">0.1</span>, <span class="dt">width =</span> <span class="fl">0.5</span>)<span class="op">+</span></span>
+<span id="cb13-14"><a href="2-control.html#cb13-14"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha=</span><span class="fl">0.3</span>) <span class="op">+</span></span>
+<span id="cb13-15"><a href="2-control.html#cb13-15"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun=</span>mean, <span class="dt">geom=</span><span class="st">&quot;line&quot;</span>, <span class="dt">size=</span><span class="fl">0.7</span>, </span>
+<span id="cb13-16"><a href="2-control.html#cb13-16"></a>               <span class="kw">aes</span>(<span class="dt">col=</span>var, <span class="dt">group=</span>var)) <span class="op">+</span></span>
+<span id="cb13-17"><a href="2-control.html#cb13-17"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">labels =</span> <span class="kw">c</span>(</span>
+<span id="cb13-18"><a href="2-control.html#cb13-18"></a>    <span class="st">&quot;AF activa&quot;</span>,  <span class="st">&quot;Sev media RE(%)&quot;</span>),</span>
+<span id="cb13-19"><a href="2-control.html#cb13-19"></a>    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;green3&quot;</span>, <span class="st">&quot;red3&quot;</span>)) <span class="op">+</span></span>
+<span id="cb13-20"><a href="2-control.html#cb13-20"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)<span class="op">+</span></span>
+<span id="cb13-21"><a href="2-control.html#cb13-21"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Evolución área foliar&quot;</span>,</span>
+<span id="cb13-22"><a href="2-control.html#cb13-22"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>, </span>
+<span id="cb13-23"><a href="2-control.html#cb13-23"></a>       <span class="dt">col =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb13-24"><a href="2-control.html#cb13-24"></a>       <span class="dt">caption =</span> </span>
+<span id="cb13-25"><a href="2-control.html#cb13-25"></a>       <span class="st">&quot;AF activa = Proporción de hojas con &gt;50% de verdor</span><span class="ch">\n</span><span class="st">Severidad media (considera los 0%)&quot;</span>)</span></code></pre></div>
+<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-13-1.png" width="768" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="2-control.html#cb14-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/evol_AF.png&quot;, w=6.5, h=7)</span></span>
+<span id="cb14-2"><a href="2-control.html#cb14-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/evol_AF_tr.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
 <ul>
 <li>Area foliar Sana</li>
 </ul>
 <p><span class="math inline">\(Area foliar activa - severidad media de las enfermedades presentes\)</span></p>
 <p>Es una represntación indirecta del área fotisintéticamente activa</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="2-control.html#cb6-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-2"><a href="2-control.html#cb6-2"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
-<span id="cb6-3"><a href="2-control.html#cb6-3"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>af_sana)<span class="op">+</span></span>
-<span id="cb6-4"><a href="2-control.html#cb6-4"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb6-5"><a href="2-control.html#cb6-5"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;line&quot;</span>)<span class="op">+</span></span>
-<span id="cb6-6"><a href="2-control.html#cb6-6"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>,</span>
-<span id="cb6-7"><a href="2-control.html#cb6-7"></a>               <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>,</span>
-<span id="cb6-8"><a href="2-control.html#cb6-8"></a>               <span class="dt">alpha =</span> <span class="fl">.3</span>) <span class="op">+</span></span>
-<span id="cb6-9"><a href="2-control.html#cb6-9"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
-<span id="cb6-10"><a href="2-control.html#cb6-10"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Área foliar sana&quot;</span>, </span>
-<span id="cb6-11"><a href="2-control.html#cb6-11"></a>       <span class="dt">col =</span> <span class="st">&quot;Bloque&quot;</span>, </span>
-<span id="cb6-12"><a href="2-control.html#cb6-12"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>, </span>
-<span id="cb6-13"><a href="2-control.html#cb6-13"></a>  <span class="dt">caption =</span> </span>
-<span id="cb6-14"><a href="2-control.html#cb6-14"></a>       <span class="st">&quot;AF_sana = AF_activa - Severidad media roya estriada)&quot;</span>)<span class="op">+</span></span>
-<span id="cb6-15"><a href="2-control.html#cb6-15"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="2-control.html#cb7-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/AF_sana.png&quot;, w=7, h=6)</span></span>
-<span id="cb7-2"><a href="2-control.html#cb7-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/AF.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="2-control.html#cb8-1"></a><span class="co"># Cuando hubiera mas de una enfermedad, probablemente esto ayudaria </span></span>
-<span id="cb8-2"><a href="2-control.html#cb8-2"></a><span class="co"># dat_long &lt;- dat %&gt;% </span></span>
-<span id="cb8-3"><a href="2-control.html#cb8-3"></a><span class="co">#   select(trt, rep, dias, matches(&quot;e2&quot;), -contains(&quot;ABC&quot;))%&gt;%</span></span>
-<span id="cb8-4"><a href="2-control.html#cb8-4"></a><span class="co">#   pivot_longer(</span></span>
-<span id="cb8-5"><a href="2-control.html#cb8-5"></a><span class="co">#     cols = matches(&quot;e2&quot;), </span></span>
-<span id="cb8-6"><a href="2-control.html#cb8-6"></a><span class="co">#     names_to = &quot;var&quot;, </span></span>
-<span id="cb8-7"><a href="2-control.html#cb8-7"></a><span class="co">#     values_to = &quot;val&quot;) %&gt;% </span></span>
-<span id="cb8-8"><a href="2-control.html#cb8-8"></a><span class="co">#   separate(var, c(&#39;metric&#39;, &#39;enf&#39;), sep = &#39;_&#39;, convert = TRUE) %&gt;% </span></span>
-<span id="cb8-9"><a href="2-control.html#cb8-9"></a><span class="co">#   mutate(enf_lab = factor(case_when(</span></span>
-<span id="cb8-10"><a href="2-control.html#cb8-10"></a><span class="co">#           enf == &quot;e1&quot;~ &quot;Mancha amarilla&quot;,</span></span>
-<span id="cb8-11"><a href="2-control.html#cb8-11"></a><span class="co">#           enf == &quot;e2&quot;~ &quot;Roya estriada&quot;))) </span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="2-control.html#cb15-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb15-2"><a href="2-control.html#cb15-2"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
+<span id="cb15-3"><a href="2-control.html#cb15-3"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>af_sana)<span class="op">+</span></span>
+<span id="cb15-4"><a href="2-control.html#cb15-4"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb15-5"><a href="2-control.html#cb15-5"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;line&quot;</span>)<span class="op">+</span></span>
+<span id="cb15-6"><a href="2-control.html#cb15-6"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>,</span>
+<span id="cb15-7"><a href="2-control.html#cb15-7"></a>               <span class="dt">fill =</span> <span class="st">&quot;green&quot;</span>,</span>
+<span id="cb15-8"><a href="2-control.html#cb15-8"></a>               <span class="dt">alpha =</span> <span class="fl">.3</span>) <span class="op">+</span></span>
+<span id="cb15-9"><a href="2-control.html#cb15-9"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
+<span id="cb15-10"><a href="2-control.html#cb15-10"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Área foliar sana&quot;</span>, </span>
+<span id="cb15-11"><a href="2-control.html#cb15-11"></a>       <span class="dt">col =</span> <span class="st">&quot;Bloque&quot;</span>, </span>
+<span id="cb15-12"><a href="2-control.html#cb15-12"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>, </span>
+<span id="cb15-13"><a href="2-control.html#cb15-13"></a>  <span class="dt">caption =</span> </span>
+<span id="cb15-14"><a href="2-control.html#cb15-14"></a>       <span class="st">&quot;AF_sana = AF_activa - Severidad media roya estriada)&quot;</span>)<span class="op">+</span></span>
+<span id="cb15-15"><a href="2-control.html#cb15-15"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
+<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-14-1.png" width="768" /></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="2-control.html#cb16-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/AF_sana.png&quot;, w=7, h=6)</span></span>
+<span id="cb16-2"><a href="2-control.html#cb16-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/AF.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="2-control.html#cb17-1"></a><span class="co"># Cuando hubiera mas de una enfermedad, probablemente esto ayudaria </span></span>
+<span id="cb17-2"><a href="2-control.html#cb17-2"></a><span class="co"># dat_long &lt;- dat %&gt;% </span></span>
+<span id="cb17-3"><a href="2-control.html#cb17-3"></a><span class="co">#   select(trt, rep, dias, matches(&quot;e2&quot;), -contains(&quot;ABC&quot;))%&gt;%</span></span>
+<span id="cb17-4"><a href="2-control.html#cb17-4"></a><span class="co">#   pivot_longer(</span></span>
+<span id="cb17-5"><a href="2-control.html#cb17-5"></a><span class="co">#     cols = matches(&quot;e2&quot;), </span></span>
+<span id="cb17-6"><a href="2-control.html#cb17-6"></a><span class="co">#     names_to = &quot;var&quot;, </span></span>
+<span id="cb17-7"><a href="2-control.html#cb17-7"></a><span class="co">#     values_to = &quot;val&quot;) %&gt;% </span></span>
+<span id="cb17-8"><a href="2-control.html#cb17-8"></a><span class="co">#   separate(var, c(&#39;metric&#39;, &#39;enf&#39;), sep = &#39;_&#39;, convert = TRUE) %&gt;% </span></span>
+<span id="cb17-9"><a href="2-control.html#cb17-9"></a><span class="co">#   mutate(enf_lab = factor(case_when(</span></span>
+<span id="cb17-10"><a href="2-control.html#cb17-10"></a><span class="co">#           enf == &quot;e1&quot;~ &quot;Mancha amarilla&quot;,</span></span>
+<span id="cb17-11"><a href="2-control.html#cb17-11"></a><span class="co">#           enf == &quot;e2&quot;~ &quot;Roya estriada&quot;))) </span></span></code></pre></div>
 </div>
 <div id="enfermedades" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Enfermedades</h2>
@@ -1015,118 +990,67 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Incidencia e2</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="2-control.html#cb9-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb9-2"><a href="2-control.html#cb9-2"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
-<span id="cb9-3"><a href="2-control.html#cb9-3"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>inc_e2)<span class="op">+</span></span>
-<span id="cb9-4"><a href="2-control.html#cb9-4"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb9-5"><a href="2-control.html#cb9-5"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;line&quot;</span>)<span class="op">+</span></span>
-<span id="cb9-6"><a href="2-control.html#cb9-6"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>,</span>
-<span id="cb9-7"><a href="2-control.html#cb9-7"></a>               <span class="dt">fill =</span> <span class="st">&quot;#EB5286&quot;</span>,</span>
-<span id="cb9-8"><a href="2-control.html#cb9-8"></a>               <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span></span>
-<span id="cb9-9"><a href="2-control.html#cb9-9"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
-<span id="cb9-10"><a href="2-control.html#cb9-10"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Incidencia roya estriada&quot;</span>, </span>
-<span id="cb9-11"><a href="2-control.html#cb9-11"></a>       <span class="co"># col = &quot;&quot;, </span></span>
-<span id="cb9-12"><a href="2-control.html#cb9-12"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>)<span class="op">+</span></span>
-<span id="cb9-13"><a href="2-control.html#cb9-13"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="2-control.html#cb10-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/incidencia_RE.png&quot;, w=7, h=6)</span></span>
-<span id="cb10-2"><a href="2-control.html#cb10-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/incidencia_RE.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="2-control.html#cb18-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-2"><a href="2-control.html#cb18-2"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
+<span id="cb18-3"><a href="2-control.html#cb18-3"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>inc_e2)<span class="op">+</span></span>
+<span id="cb18-4"><a href="2-control.html#cb18-4"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb18-5"><a href="2-control.html#cb18-5"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span><span class="st">&quot;line&quot;</span>)<span class="op">+</span></span>
+<span id="cb18-6"><a href="2-control.html#cb18-6"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>,</span>
+<span id="cb18-7"><a href="2-control.html#cb18-7"></a>               <span class="dt">fill =</span> <span class="st">&quot;#EB5286&quot;</span>,</span>
+<span id="cb18-8"><a href="2-control.html#cb18-8"></a>               <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span></span>
+<span id="cb18-9"><a href="2-control.html#cb18-9"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
+<span id="cb18-10"><a href="2-control.html#cb18-10"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Incidencia roya estriada&quot;</span>, </span>
+<span id="cb18-11"><a href="2-control.html#cb18-11"></a>       <span class="co"># col = &quot;&quot;, </span></span>
+<span id="cb18-12"><a href="2-control.html#cb18-12"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>)<span class="op">+</span></span>
+<span id="cb18-13"><a href="2-control.html#cb18-13"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
+<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="2-control.html#cb19-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/incidencia_RE.png&quot;, w=7, h=6)</span></span>
+<span id="cb19-2"><a href="2-control.html#cb19-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/incidencia_RE.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
 <ul>
 <li>Severidad media e2</li>
 </ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="2-control.html#cb11-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb11-2"><a href="2-control.html#cb11-2"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
-<span id="cb11-3"><a href="2-control.html#cb11-3"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>int_e2 </span>
-<span id="cb11-4"><a href="2-control.html#cb11-4"></a>      <span class="co"># col=enf_lab</span></span>
-<span id="cb11-5"><a href="2-control.html#cb11-5"></a>      )<span class="op">+</span></span>
-<span id="cb11-6"><a href="2-control.html#cb11-6"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
-<span id="cb11-7"><a href="2-control.html#cb11-7"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span> <span class="st">&quot;line&quot;</span>)<span class="op">+</span></span>
-<span id="cb11-8"><a href="2-control.html#cb11-8"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>,</span>
-<span id="cb11-9"><a href="2-control.html#cb11-9"></a>               <span class="dt">fill =</span> <span class="st">&quot;#EB5286&quot;</span>,</span>
-<span id="cb11-10"><a href="2-control.html#cb11-10"></a>               <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span></span>
-<span id="cb11-11"><a href="2-control.html#cb11-11"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
-<span id="cb11-12"><a href="2-control.html#cb11-12"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Severidad media roya estriada&quot;</span>, </span>
-<span id="cb11-13"><a href="2-control.html#cb11-13"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>)<span class="op">+</span></span>
-<span id="cb11-14"><a href="2-control.html#cb11-14"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="2-control.html#cb12-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/severidad_RE.png&quot;, w=7, h=6)</span></span>
-<span id="cb12-2"><a href="2-control.html#cb12-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/severidad_RE.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="2-control.html#cb20-1"></a>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb20-2"><a href="2-control.html#cb20-2"></a><span class="st">  </span><span class="kw">ggplot</span>()<span class="op">+</span></span>
+<span id="cb20-3"><a href="2-control.html#cb20-3"></a><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x=</span>dias, <span class="dt">y=</span>int_e2 </span>
+<span id="cb20-4"><a href="2-control.html#cb20-4"></a>      <span class="co"># col=enf_lab</span></span>
+<span id="cb20-5"><a href="2-control.html#cb20-5"></a>      )<span class="op">+</span></span>
+<span id="cb20-6"><a href="2-control.html#cb20-6"></a><span class="st">  </span><span class="kw">geom_point</span>()<span class="op">+</span></span>
+<span id="cb20-7"><a href="2-control.html#cb20-7"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span><span class="st">&quot;mean&quot;</span>, <span class="dt">geom=</span> <span class="st">&quot;line&quot;</span>)<span class="op">+</span></span>
+<span id="cb20-8"><a href="2-control.html#cb20-8"></a><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;area&quot;</span>,</span>
+<span id="cb20-9"><a href="2-control.html#cb20-9"></a>               <span class="dt">fill =</span> <span class="st">&quot;#EB5286&quot;</span>,</span>
+<span id="cb20-10"><a href="2-control.html#cb20-10"></a>               <span class="dt">alpha =</span> <span class="fl">.5</span>) <span class="op">+</span></span>
+<span id="cb20-11"><a href="2-control.html#cb20-11"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="st">&quot;trt&quot;</span>)<span class="op">+</span></span>
+<span id="cb20-12"><a href="2-control.html#cb20-12"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Severidad media roya estriada&quot;</span>, </span>
+<span id="cb20-13"><a href="2-control.html#cb20-13"></a>       <span class="dt">y =</span> <span class="st">&quot;%&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;Días desde aplicado&quot;</span>)<span class="op">+</span></span>
+<span id="cb20-14"><a href="2-control.html#cb20-14"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">12</span>, <span class="st">&quot;top&quot;</span>)</span></code></pre></div>
+<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-17-1.png" width="768" /></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="2-control.html#cb21-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/severidad_RE.png&quot;, w=7, h=6)</span></span>
+<span id="cb21-2"><a href="2-control.html#cb21-2"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova/nova_trigo/severidad_RE.png&quot;, overwrite = TRUE)</span></span></code></pre></div>
 </div>
 </div>
 <div id="abc-de-las-métricas-evaluadas" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> ABC de las métricas evaluadas</h2>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="2-control.html#cb13-1"></a>abc_dat &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-2"><a href="2-control.html#cb13-2"></a><span class="st">  </span><span class="kw">group_by</span>(trt, rep, <span class="dt">.drop=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-3"><a href="2-control.html#cb13-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">across</span>(<span class="kw">c</span>(<span class="st">&quot;verdor&quot;</span>, <span class="st">&quot;int_e2&quot;</span>, <span class="st">&quot;af_sana&quot;</span>), <span class="op">~</span>MESS<span class="op">::</span><span class="kw">auc</span>(dias,.x, <span class="dt">type =</span> <span class="st">&quot;linear&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-4"><a href="2-control.html#cb13-4"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(trt, rep), as.factor)</span></code></pre></div>
-<pre><code>## `summarise()` has grouped output by &#39;trt&#39;. You can override using the `.groups` argument.</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="2-control.html#cb15-1"></a><span class="co"># abc_dat %&gt;% </span></span>
-<span id="cb15-2"><a href="2-control.html#cb15-2"></a><span class="co">#   purrr::modify_if(., ~is.numeric(.), ~round(., 1)) %&gt;%</span></span>
-<span id="cb15-3"><a href="2-control.html#cb15-3"></a><span class="co">#   write_sheet(ss=nova_tr, sheet = &quot;ABC&quot;)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="2-control.html#cb16-1"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(lme4, emmeans, multcomp)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="2-control.html#cb22-1"></a>abc_dat &lt;-<span class="st"> </span>dat <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-2"><a href="2-control.html#cb22-2"></a><span class="st">  </span><span class="kw">group_by</span>(trt, rep, <span class="dt">.drop=</span><span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-3"><a href="2-control.html#cb22-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">across</span>(<span class="kw">c</span>(<span class="st">&quot;verdor&quot;</span>, <span class="st">&quot;int_e2&quot;</span>, <span class="st">&quot;af_sana&quot;</span>), <span class="op">~</span>MESS<span class="op">::</span><span class="kw">auc</span>(dias,.x, <span class="dt">type =</span> <span class="st">&quot;linear&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-4"><a href="2-control.html#cb22-4"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(trt, rep), as.factor)</span>
+<span id="cb22-5"><a href="2-control.html#cb22-5"></a></span>
+<span id="cb22-6"><a href="2-control.html#cb22-6"></a><span class="co"># abc_dat %&gt;% </span></span>
+<span id="cb22-7"><a href="2-control.html#cb22-7"></a><span class="co">#   purrr::modify_if(., ~is.numeric(.), ~round(., 1)) %&gt;%</span></span>
+<span id="cb22-8"><a href="2-control.html#cb22-8"></a><span class="co">#   write_sheet(ss=nova_tr, sheet = &quot;ABC&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="2-control.html#cb23-1"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(lme4, emmeans, multcomp)</span></code></pre></div>
 <ul>
 <li>ABC de AF sana - modelo</li>
 </ul>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="2-control.html#cb17-1"></a>m0 =<span class="st"> </span><span class="kw">lmer</span>(af_sana <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>rep), <span class="dt">data =</span> abc_dat)</span>
-<span id="cb17-2"><a href="2-control.html#cb17-2"></a><span class="kw">plot</span>(m0)</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="2-control.html#cb18-1"></a>car<span class="op">::</span><span class="kw">Anova</span>(m0)</span></code></pre></div>
-<pre><code>## Registered S3 methods overwritten by &#39;car&#39;:
-##   method                          from
-##   influence.merMod                lme4
-##   cooks.distance.influence.merMod lme4
-##   dfbeta.influence.merMod         lme4
-##   dfbetas.influence.merMod        lme4</code></pre>
-<pre><code>## Analysis of Deviance Table (Type II Wald chisquare tests)
-## 
-## Response: af_sana
-##      Chisq Df Pr(&gt;Chisq)    
-## trt 137.97 14  &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="2-control.html#cb21-1"></a><span class="kw">summary</span>(m0)</span></code></pre></div>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
-## Formula: af_sana ~ trt + (1 | rep)
-##    Data: abc_dat
-## 
-## REML criterion at convergence: 555.4
-## 
-## Scaled residuals: 
-##      Min       1Q   Median       3Q      Max 
-## -2.76983 -0.53442  0.09575  0.49062  2.28207 
-## 
-## Random effects:
-##  Groups   Name        Variance Std.Dev.
-##  rep      (Intercept)  239.1   15.46   
-##  Residual             8244.9   90.80   
-## Number of obs: 60, groups:  rep, 4
-## 
-## Fixed effects:
-##             Estimate Std. Error t value
-## (Intercept)  2339.83      46.05  50.806
-## trt2          514.80      64.21   8.018
-## trt3          563.46      64.21   8.776
-## trt4          436.87      64.21   6.804
-## trt5          527.08      64.21   8.209
-## trt6          554.94      64.21   8.643
-## trt7          534.11      64.21   8.319
-## trt8          581.72      64.21   9.060
-## trt9          544.44      64.21   8.480
-## trt10         492.81      64.21   7.675
-## trt11         560.32      64.21   8.727
-## trt12         492.78      64.21   7.675
-## trt13         475.49      64.21   7.406
-## trt14         568.48      64.21   8.854
-## trt15         563.83      64.21   8.782</code></pre>
-<pre><code>## 
-## Correlation matrix not shown by default, as p = 15 &gt; 12.
-## Use print(x, correlation=TRUE)  or
-##     vcov(x)        if you need it</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="2-control.html#cb24-1"></a>pred_e0 =<span class="st"> </span><span class="kw">emmeans</span>(m0, <span class="op">~</span><span class="st"> </span>trt, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
-<span id="cb24-2"><a href="2-control.html#cb24-2"></a>res_e0 &lt;-<span class="st"> </span><span class="kw">cld</span>(pred_e0, </span>
-<span id="cb24-3"><a href="2-control.html#cb24-3"></a>              <span class="dt">Letters =</span> letters, <span class="dt">alpha =</span> <span class="fl">.05</span>, </span>
-<span id="cb24-4"><a href="2-control.html#cb24-4"></a>              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>, </span>
-<span id="cb24-5"><a href="2-control.html#cb24-5"></a>              <span class="dt">reversed =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="2-control.html#cb24-1"></a>m0 =<span class="st"> </span><span class="kw">lmer</span>(af_sana <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>rep), <span class="dt">data =</span> abc_dat)</span>
+<span id="cb24-2"><a href="2-control.html#cb24-2"></a><span class="kw">plot</span>(m0)</span>
+<span id="cb24-3"><a href="2-control.html#cb24-3"></a>car<span class="op">::</span><span class="kw">Anova</span>(m0)</span>
+<span id="cb24-4"><a href="2-control.html#cb24-4"></a><span class="kw">summary</span>(m0)</span>
+<span id="cb24-5"><a href="2-control.html#cb24-5"></a>pred_e0 =<span class="st"> </span><span class="kw">emmeans</span>(m0, <span class="op">~</span><span class="st"> </span>trt, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb24-6"><a href="2-control.html#cb24-6"></a>res_e0 &lt;-<span class="st"> </span><span class="kw">cld</span>(pred_e0, </span>
+<span id="cb24-7"><a href="2-control.html#cb24-7"></a>              <span class="dt">Letters =</span> letters, <span class="dt">alpha =</span> <span class="fl">.05</span>, </span>
+<span id="cb24-8"><a href="2-control.html#cb24-8"></a>              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>, </span>
+<span id="cb24-9"><a href="2-control.html#cb24-9"></a>              <span class="dt">reversed =</span> T)</span></code></pre></div>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="2-control.html#cb25-1"></a><span class="kw">plot</span>(res_e0, <span class="dt">alpha =</span><span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb25-2"><a href="2-control.html#cb25-2"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> res_e0 <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb25-3"><a href="2-control.html#cb25-3"></a><span class="st">               </span><span class="kw">filter</span>(trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1144,141 +1068,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb25-15"><a href="2-control.html#cb25-15"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;ABC AF sana&quot;</span>, </span>
 <span id="cb25-16"><a href="2-control.html#cb25-16"></a>       <span class="dt">y =</span> <span class="st">&quot;Tratamiento&quot;</span>)<span class="op">+</span><span class="st">    </span></span>
 <span id="cb25-17"><a href="2-control.html#cb25-17"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">9</span>, <span class="st">&quot;bottom&quot;</span>)<span class="op">+</span></span>
-<span id="cb25-18"><a href="2-control.html#cb25-18"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="2-control.html#cb26-1"></a><span class="co"># ggsave(&quot;plots/abc_AFsana_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
-<span id="cb26-2"><a href="2-control.html#cb26-2"></a><span class="co"># </span></span>
-<span id="cb26-3"><a href="2-control.html#cb26-3"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova_trigo/abc_AFsana_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="2-control.html#cb27-1"></a>res_e0 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb27-2"><a href="2-control.html#cb27-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb27-3"><a href="2-control.html#cb27-3"></a>    <span class="st">&#39;IC_95%&#39;</span>=<span class="kw">paste0</span>(<span class="kw">round</span>(lower.CL,<span class="dv">0</span>),<span class="st">&quot;;&quot;</span>,</span>
-<span id="cb27-4"><a href="2-control.html#cb27-4"></a>                    <span class="kw">round</span>(upper.CL,<span class="dv">0</span>)),</span>
-<span id="cb27-5"><a href="2-control.html#cb27-5"></a>    <span class="dt">dif=</span>(emmean<span class="op">-</span><span class="kw">filter</span>(res_e0,trt<span class="op">==</span><span class="dv">1</span>)<span class="op">%&gt;%</span><span class="kw">pull</span>(emmean)),</span>
-<span id="cb27-6"><a href="2-control.html#cb27-6"></a>    <span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span>=(emmean<span class="op">/</span><span class="kw">filter</span>(res_e0,trt<span class="op">==</span><span class="dv">1</span>)<span class="op">%&gt;%</span><span class="kw">pull</span>(emmean)<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">   </span></span>
-<span id="cb27-7"><a href="2-control.html#cb27-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">Trat=</span>trt, </span>
-<span id="cb27-8"><a href="2-control.html#cb27-8"></a>                <span class="dt">AF_sana=</span> emmean, </span>
-<span id="cb27-9"><a href="2-control.html#cb27-9"></a>                <span class="st">`</span><span class="dt">Tukey_5%</span><span class="st">`</span> =<span class="st"> </span>.group, </span>
-<span id="cb27-10"><a href="2-control.html#cb27-10"></a>                dif,<span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span>, <span class="st">&#39;IC_95%&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb27-11"><a href="2-control.html#cb27-11"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">modify_if</span>(., <span class="op">~</span><span class="kw">is.numeric</span>(.), <span class="op">~</span><span class="kw">round</span>(., <span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb27-12"><a href="2-control.html#cb27-12"></a><span class="st">  </span><span class="kw">arrange</span>(Trat) <span class="co">#%&gt;% </span></span></code></pre></div>
-<pre><code>##    Trat AF_sana Tukey_5%   dif dif_%    IC_95%
-## 1     1  2339.8        b   0.0   0.0 2247;2433
-## 2     2  2854.6       a  514.8  22.0 2762;2947
-## 3     3  2903.3       a  563.5  24.1 2811;2996
-## 4     4  2776.7       a  436.9  18.7 2684;2869
-## 5     5  2866.9       a  527.1  22.5 2774;2960
-## 6     6  2894.8       a  554.9  23.7 2802;2988
-## 7     7  2873.9       a  534.1  22.8 2781;2967
-## 8     8  2921.5       a  581.7  24.9 2829;3014
-## 9     9  2884.3       a  544.4  23.3 2791;2977
-## 10   10  2832.6       a  492.8  21.1 2740;2925
-## 11   11  2900.1       a  560.3  23.9 2807;2993
-## 12   12  2832.6       a  492.8  21.1 2740;2925
-## 13   13  2815.3       a  475.5  20.3 2723;2908
-## 14   14  2908.3       a  568.5  24.3 2816;3001
-## 15   15  2903.7       a  563.8  24.1 2811;2996</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="2-control.html#cb29-1"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;anova_AFsana&quot;)</span></span></code></pre></div>
+<span id="cb25-18"><a href="2-control.html#cb25-18"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span>
+<span id="cb25-19"><a href="2-control.html#cb25-19"></a></span>
+<span id="cb25-20"><a href="2-control.html#cb25-20"></a><span class="co"># ggsave(&quot;plots/abc_AFsana_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
+<span id="cb25-21"><a href="2-control.html#cb25-21"></a><span class="co"># </span></span>
+<span id="cb25-22"><a href="2-control.html#cb25-22"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;nova_trigo/abc_AFsana_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="2-control.html#cb26-1"></a>res_e0 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb26-2"><a href="2-control.html#cb26-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb26-3"><a href="2-control.html#cb26-3"></a>    <span class="st">&#39;IC_95%&#39;</span>=<span class="kw">paste0</span>(<span class="kw">round</span>(lower.CL,<span class="dv">0</span>),<span class="st">&quot;;&quot;</span>,</span>
+<span id="cb26-4"><a href="2-control.html#cb26-4"></a>                    <span class="kw">round</span>(upper.CL,<span class="dv">0</span>)),</span>
+<span id="cb26-5"><a href="2-control.html#cb26-5"></a>    <span class="dt">dif=</span>(emmean<span class="op">-</span><span class="kw">filter</span>(res_e0,trt<span class="op">==</span><span class="dv">1</span>)<span class="op">%&gt;%</span><span class="kw">pull</span>(emmean)),</span>
+<span id="cb26-6"><a href="2-control.html#cb26-6"></a>    <span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span>=(emmean<span class="op">/</span><span class="kw">filter</span>(res_e0,trt<span class="op">==</span><span class="dv">1</span>)<span class="op">%&gt;%</span><span class="kw">pull</span>(emmean)<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">   </span></span>
+<span id="cb26-7"><a href="2-control.html#cb26-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">Trat=</span>trt, </span>
+<span id="cb26-8"><a href="2-control.html#cb26-8"></a>                <span class="dt">AF_sana=</span> emmean, </span>
+<span id="cb26-9"><a href="2-control.html#cb26-9"></a>                <span class="st">`</span><span class="dt">Tukey_5%</span><span class="st">`</span> =<span class="st"> </span>.group, </span>
+<span id="cb26-10"><a href="2-control.html#cb26-10"></a>                dif,<span class="st">`</span><span class="dt">dif_%</span><span class="st">`</span>, <span class="st">&#39;IC_95%&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb26-11"><a href="2-control.html#cb26-11"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">modify_if</span>(., <span class="op">~</span><span class="kw">is.numeric</span>(.), <span class="op">~</span><span class="kw">round</span>(., <span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb26-12"><a href="2-control.html#cb26-12"></a><span class="st">  </span><span class="kw">arrange</span>(Trat) <span class="co">#%&gt;% </span></span>
+<span id="cb26-13"><a href="2-control.html#cb26-13"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;anova_AFsana&quot;)</span></span></code></pre></div>
 <ul>
 <li>ABC de severidad media de e2 - modelo</li>
 </ul>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="2-control.html#cb30-1"></a>m1 =<span class="st"> </span><span class="kw">lmer</span>(int_e2 <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>rep), <span class="dt">data =</span> abc_dat)</span>
-<span id="cb30-2"><a href="2-control.html#cb30-2"></a><span class="kw">plot</span>(m1); car<span class="op">::</span><span class="kw">Anova</span>(m1); <span class="kw">summary</span>(m1)</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<pre><code>## Analysis of Deviance Table (Type II Wald chisquare tests)
-## 
-## Response: int_e2
-##      Chisq Df Pr(&gt;Chisq)    
-## trt 391.09 14  &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
-## Formula: int_e2 ~ trt + (1 | rep)
-##    Data: abc_dat
-## 
-## REML criterion at convergence: 422.5
-## 
-## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -3.8348 -0.5274  0.0508  0.4699  1.9524 
-## 
-## Random effects:
-##  Groups   Name        Variance Std.Dev.
-##  rep      (Intercept) 114.4    10.70   
-##  Residual             394.0    19.85   
-## Number of obs: 60, groups:  rep, 4
-## 
-## Fixed effects:
-##             Estimate Std. Error t value
-## (Intercept)   254.52      11.27   22.58
-## trt2         -206.09      14.04  -14.68
-## trt3         -193.70      14.04  -13.80
-## trt4         -178.77      14.04  -12.74
-## trt5         -214.84      14.04  -15.30
-## trt6         -200.81      14.04  -14.31
-## trt7         -215.91      14.04  -15.38
-## trt8         -202.51      14.04  -14.43
-## trt9         -207.28      14.04  -14.77
-## trt10        -189.64      14.04  -13.51
-## trt11        -199.01      14.04  -14.18
-## trt12        -187.88      14.04  -13.38
-## trt13        -192.79      14.04  -13.73
-## trt14        -194.37      14.04  -13.85
-## trt15        -207.03      14.04  -14.75</code></pre>
-<pre><code>## 
-## Correlation matrix not shown by default, as p = 15 &gt; 12.
-## Use print(x, correlation=TRUE)  or
-##     vcov(x)        if you need it</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="2-control.html#cb34-1"></a><span class="kw">emmeans</span>(m1, <span class="op">~</span><span class="st"> </span>trt, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb34-2"><a href="2-control.html#cb34-2"></a><span class="st">  </span>multcomp<span class="op">::</span><span class="kw">cld</span>(., <span class="dt">Letters =</span> letters, <span class="dt">alpha =</span> <span class="fl">.05</span>, </span>
-<span id="cb34-3"><a href="2-control.html#cb34-3"></a>                <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">reversed =</span> F) -&gt;res1 </span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="2-control.html#cb35-1"></a><span class="kw">plot</span>(res1, <span class="dt">alpha =</span><span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb35-2"><a href="2-control.html#cb35-2"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> res1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb35-3"><a href="2-control.html#cb35-3"></a><span class="st">               </span><span class="kw">filter</span>(trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb35-4"><a href="2-control.html#cb35-4"></a><span class="st">               </span><span class="kw">pull</span>(emmean), </span>
-<span id="cb35-5"><a href="2-control.html#cb35-5"></a>             <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">col =</span><span class="st">&quot;gray50&quot;</span>)<span class="op">+</span></span>
-<span id="cb35-6"><a href="2-control.html#cb35-6"></a><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></span>
-<span id="cb35-7"><a href="2-control.html#cb35-7"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> abc_dat, <span class="kw">aes</span>(<span class="dt">x =</span> int_e2, <span class="dt">y =</span> trt), <span class="dt">pch=</span><span class="dv">21</span>, </span>
-<span id="cb35-8"><a href="2-control.html#cb35-8"></a>             <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></span>
-<span id="cb35-9"><a href="2-control.html#cb35-9"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> res1, <span class="dt">angle=</span><span class="dv">90</span>, <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.7</span>,</span>
-<span id="cb35-10"><a href="2-control.html#cb35-10"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> emmean,</span>
-<span id="cb35-11"><a href="2-control.html#cb35-11"></a>                <span class="dt">y =</span> trt,</span>
-<span id="cb35-12"><a href="2-control.html#cb35-12"></a>                <span class="dt">label =</span> .group),</span>
-<span id="cb35-13"><a href="2-control.html#cb35-13"></a>            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></span>
-<span id="cb35-14"><a href="2-control.html#cb35-14"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;ABC roya estriada&quot;</span>, </span>
-<span id="cb35-15"><a href="2-control.html#cb35-15"></a>       <span class="dt">y =</span> <span class="st">&quot;Tratamiento&quot;</span>)<span class="op">+</span><span class="st">    </span></span>
-<span id="cb35-16"><a href="2-control.html#cb35-16"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">9</span>, <span class="st">&quot;bottom&quot;</span>)<span class="op">+</span></span>
-<span id="cb35-17"><a href="2-control.html#cb35-17"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="2-control.html#cb36-1"></a><span class="co"># ggsave(&quot;plots/abc_RE_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
-<span id="cb36-2"><a href="2-control.html#cb36-2"></a><span class="co"># </span></span>
-<span id="cb36-3"><a href="2-control.html#cb36-3"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;plots/abc_RE_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="2-control.html#cb37-1"></a>res1 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb37-2"><a href="2-control.html#cb37-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
-<span id="cb37-3"><a href="2-control.html#cb37-3"></a>    <span class="co"># &#39;IC_95%&#39;=paste0(round(lower.CL,0),&quot;;&quot;,round(upper.CL,0)),</span></span>
-<span id="cb37-4"><a href="2-control.html#cb37-4"></a>    <span class="co"># dif = (emmean-filter(res1, trt==1)%&gt;%pull(emmean)),</span></span>
-<span id="cb37-5"><a href="2-control.html#cb37-5"></a>    <span class="st">`</span><span class="dt">control(%)</span><span class="st">`</span>=(emmean<span class="op">/</span><span class="kw">filter</span>(res1, trt<span class="op">==</span><span class="dv">1</span>)<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean)<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span>) <span class="op">%&gt;%</span></span>
-<span id="cb37-6"><a href="2-control.html#cb37-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">Trat=</span>trt, <span class="dt">ABC_Sev=</span> emmean, </span>
-<span id="cb37-7"><a href="2-control.html#cb37-7"></a>                <span class="st">`</span><span class="dt">Tukey_5%</span><span class="st">`</span> =<span class="st"> </span>.group, </span>
-<span id="cb37-8"><a href="2-control.html#cb37-8"></a>                <span class="st">`</span><span class="dt">control(%)</span><span class="st">`</span>) <span class="op">%&gt;%</span></span>
-<span id="cb37-9"><a href="2-control.html#cb37-9"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">modify_if</span>(., <span class="op">~</span><span class="kw">is.numeric</span>(.), <span class="op">~</span><span class="kw">round</span>(., <span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb37-10"><a href="2-control.html#cb37-10"></a><span class="st">  </span><span class="kw">arrange</span>(Trat) <span class="co">#%&gt;% </span></span></code></pre></div>
-<pre><code>##    Trat ABC_Sev Tukey_5% control(%)
-## 1     1   254.5        b        0.0
-## 2     2    48.4       a       -81.0
-## 3     3    60.8       a       -76.1
-## 4     4    75.8       a       -70.2
-## 5     5    39.7       a       -84.4
-## 6     6    53.7       a       -78.9
-## 7     7    38.6       a       -84.8
-## 8     8    52.0       a       -79.6
-## 9     9    47.2       a       -81.4
-## 10   10    64.9       a       -74.5
-## 11   11    55.5       a       -78.2
-## 12   12    66.6       a       -73.8
-## 13   13    61.7       a       -75.7
-## 14   14    60.2       a       -76.4
-## 15   15    47.5       a       -81.3</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="2-control.html#cb39-1"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;anova_RE&quot;)</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="2-control.html#cb27-1"></a>m1 =<span class="st"> </span><span class="kw">lmer</span>(int_e2 <span class="op">~</span><span class="st"> </span>trt <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>rep), <span class="dt">data =</span> abc_dat)</span>
+<span id="cb27-2"><a href="2-control.html#cb27-2"></a><span class="kw">plot</span>(m1); car<span class="op">::</span><span class="kw">Anova</span>(m1); <span class="kw">summary</span>(m1)</span>
+<span id="cb27-3"><a href="2-control.html#cb27-3"></a><span class="kw">emmeans</span>(m1, <span class="op">~</span><span class="st"> </span>trt, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb27-4"><a href="2-control.html#cb27-4"></a><span class="st">  </span>multcomp<span class="op">::</span><span class="kw">cld</span>(., <span class="dt">Letters =</span> letters, <span class="dt">alpha =</span> <span class="fl">.05</span>, </span>
+<span id="cb27-5"><a href="2-control.html#cb27-5"></a>                <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>, <span class="dt">reversed =</span> F) -&gt;res1 </span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="2-control.html#cb28-1"></a><span class="kw">plot</span>(res1, <span class="dt">alpha =</span><span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb28-2"><a href="2-control.html#cb28-2"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> res1 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-3"><a href="2-control.html#cb28-3"></a><span class="st">               </span><span class="kw">filter</span>(trt<span class="op">==</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-4"><a href="2-control.html#cb28-4"></a><span class="st">               </span><span class="kw">pull</span>(emmean), </span>
+<span id="cb28-5"><a href="2-control.html#cb28-5"></a>             <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">col =</span><span class="st">&quot;gray50&quot;</span>)<span class="op">+</span></span>
+<span id="cb28-6"><a href="2-control.html#cb28-6"></a><span class="st">  </span><span class="kw">coord_flip</span>()<span class="op">+</span></span>
+<span id="cb28-7"><a href="2-control.html#cb28-7"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> abc_dat, <span class="kw">aes</span>(<span class="dt">x =</span> int_e2, <span class="dt">y =</span> trt), <span class="dt">pch=</span><span class="dv">21</span>, </span>
+<span id="cb28-8"><a href="2-control.html#cb28-8"></a>             <span class="dt">position=</span><span class="kw">position_dodge</span>(<span class="dt">width=</span><span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></span>
+<span id="cb28-9"><a href="2-control.html#cb28-9"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> res1, <span class="dt">angle=</span><span class="dv">90</span>, <span class="dt">vjust=</span><span class="op">-</span><span class="fl">0.7</span>,</span>
+<span id="cb28-10"><a href="2-control.html#cb28-10"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> emmean,</span>
+<span id="cb28-11"><a href="2-control.html#cb28-11"></a>                <span class="dt">y =</span> trt,</span>
+<span id="cb28-12"><a href="2-control.html#cb28-12"></a>                <span class="dt">label =</span> .group),</span>
+<span id="cb28-13"><a href="2-control.html#cb28-13"></a>            <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span></span>
+<span id="cb28-14"><a href="2-control.html#cb28-14"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;ABC roya estriada&quot;</span>, </span>
+<span id="cb28-15"><a href="2-control.html#cb28-15"></a>       <span class="dt">y =</span> <span class="st">&quot;Tratamiento&quot;</span>)<span class="op">+</span><span class="st">    </span></span>
+<span id="cb28-16"><a href="2-control.html#cb28-16"></a><span class="st">  </span><span class="kw">theme_juan</span>(<span class="dv">9</span>, <span class="st">&quot;bottom&quot;</span>)<span class="op">+</span></span>
+<span id="cb28-17"><a href="2-control.html#cb28-17"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>())</span>
+<span id="cb28-18"><a href="2-control.html#cb28-18"></a></span>
+<span id="cb28-19"><a href="2-control.html#cb28-19"></a><span class="co"># ggsave(&quot;plots/abc_RE_model.jpg&quot;, width = 15, height = 10, units = &quot;cm&quot;, last_plot(), dpi = 600)</span></span>
+<span id="cb28-20"><a href="2-control.html#cb28-20"></a><span class="co"># </span></span>
+<span id="cb28-21"><a href="2-control.html#cb28-21"></a><span class="co"># drive_upload(path = as_dribble(&quot;fina_2020/NOVA&quot;), &quot;plots/abc_RE_model.jpg&quot;, overwrite = TRUE)</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="2-control.html#cb29-1"></a>res1 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb29-2"><a href="2-control.html#cb29-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb29-3"><a href="2-control.html#cb29-3"></a>    <span class="co"># &#39;IC_95%&#39;=paste0(round(lower.CL,0),&quot;;&quot;,round(upper.CL,0)),</span></span>
+<span id="cb29-4"><a href="2-control.html#cb29-4"></a>    <span class="co"># dif = (emmean-filter(res1, trt==1)%&gt;%pull(emmean)),</span></span>
+<span id="cb29-5"><a href="2-control.html#cb29-5"></a>    <span class="st">`</span><span class="dt">control(%)</span><span class="st">`</span>=(emmean<span class="op">/</span><span class="kw">filter</span>(res1, trt<span class="op">==</span><span class="dv">1</span>)<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(emmean)<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span><span class="dv">100</span>) <span class="op">%&gt;%</span></span>
+<span id="cb29-6"><a href="2-control.html#cb29-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="dt">Trat=</span>trt, <span class="dt">ABC_Sev=</span> emmean, </span>
+<span id="cb29-7"><a href="2-control.html#cb29-7"></a>                <span class="st">`</span><span class="dt">Tukey_5%</span><span class="st">`</span> =<span class="st"> </span>.group, </span>
+<span id="cb29-8"><a href="2-control.html#cb29-8"></a>                <span class="st">`</span><span class="dt">control(%)</span><span class="st">`</span>) <span class="op">%&gt;%</span></span>
+<span id="cb29-9"><a href="2-control.html#cb29-9"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">modify_if</span>(., <span class="op">~</span><span class="kw">is.numeric</span>(.), <span class="op">~</span><span class="kw">round</span>(., <span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb29-10"><a href="2-control.html#cb29-10"></a><span class="st">  </span><span class="kw">arrange</span>(Trat) <span class="co">#%&gt;% </span></span>
+<span id="cb29-11"><a href="2-control.html#cb29-11"></a>  <span class="co"># sheet_write(ss = nova_tr, sheet = &quot;anova_RE&quot;)</span></span></code></pre></div>
 
 </div>
 </div>

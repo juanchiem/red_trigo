@@ -876,22 +876,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2" data-path="2-control.html"><a href="2-control.html"><i class="fa fa-check"></i><b>2</b> Control</a>
 <ul>
-<li class="chapter" data-level="2.1" data-path="2-control.html"><a href="2-control.html#presion-en-los-testigos-de-enf_2"><i class="fa fa-check"></i><b>2.1</b> Presion en los testigos de enf_2</a></li>
-<li class="chapter" data-level="2.2" data-path="2-control.html"><a href="2-control.html#area-foliar---evolución"><i class="fa fa-check"></i><b>2.2</b> Area foliar - evolución</a></li>
-<li class="chapter" data-level="2.3" data-path="2-control.html"><a href="2-control.html#area-foliar-activa-y-severidad"><i class="fa fa-check"></i><b>2.3</b> Area foliar activa y severidad</a></li>
-<li class="chapter" data-level="2.4" data-path="2-control.html"><a href="2-control.html#area-foliar-sana"><i class="fa fa-check"></i><b>2.4</b> Area foliar Sana</a></li>
-<li class="chapter" data-level="2.5" data-path="2-control.html"><a href="2-control.html#e2"><i class="fa fa-check"></i><b>2.5</b> E2</a>
+<li class="chapter" data-level="2.1" data-path="2-control.html"><a href="2-control.html#area-foliar"><i class="fa fa-check"></i><b>2.1</b> Area foliar</a></li>
+<li class="chapter" data-level="2.2" data-path="2-control.html"><a href="2-control.html#enfermedades"><i class="fa fa-check"></i><b>2.2</b> Enfermedades</a>
 <ul>
-<li class="chapter" data-level="2.5.1" data-path="2-control.html"><a href="2-control.html#incidencia-e2"><i class="fa fa-check"></i><b>2.5.1</b> Incidencia e2</a></li>
+<li class="chapter" data-level="2.2.1" data-path="2-control.html"><a href="2-control.html#e2"><i class="fa fa-check"></i><b>2.2.1</b> E2</a></li>
 </ul></li>
-<li class="chapter" data-level="2.6" data-path="2-control.html"><a href="2-control.html#severidad-media-e2"><i class="fa fa-check"></i><b>2.6</b> Severidad media e2</a></li>
-<li class="chapter" data-level="2.7" data-path="2-control.html"><a href="2-control.html#abc-de-las-métricas-evaluadas"><i class="fa fa-check"></i><b>2.7</b> ABC de las métricas evaluadas</a>
-<ul>
-<li class="chapter" data-level="2.7.1" data-path="2-control.html"><a href="2-control.html#abc-de-af-sana---modelo"><i class="fa fa-check"></i><b>2.7.1</b> ABC de AF sana - modelo</a></li>
-<li class="chapter" data-level="2.7.2" data-path="2-control.html"><a href="2-control.html#abc-de-severidad-media-de-e2---modelo"><i class="fa fa-check"></i><b>2.7.2</b> ABC de severidad media de e2 - modelo</a></li>
-</ul></li>
+<li class="chapter" data-level="2.3" data-path="2-control.html"><a href="2-control.html#abc-de-las-métricas-evaluadas"><i class="fa fa-check"></i><b>2.3</b> ABC de las métricas evaluadas</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="3-rinde.html"><a href="3-rinde.html"><i class="fa fa-check"></i><b>3</b> Rendimiento</a></li>
+<li class="chapter" data-level="4" data-path="4-meteo.html"><a href="4-meteo.html"><i class="fa fa-check"></i><b>4</b> Condiciones meteorológicas</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="4-meteo.html"><a href="4-meteo.html#temperaturas"><i class="fa fa-check"></i><b>4.1</b> Temperaturas</a></li>
+<li class="chapter" data-level="4.2" data-path="4-meteo.html"><a href="4-meteo.html#precipitaciones"><i class="fa fa-check"></i><b>4.2</b> Precipitaciones</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -942,7 +939,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-2"><a href="1-import.html#cb5-2"></a><span class="st">  </span><span class="kw">filter</span>(trt <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb5-3"><a href="1-import.html#cb5-3"></a><span class="st">  </span><span class="kw">group_by</span>(dias) <span class="op">%&gt;%</span></span>
 <span id="cb5-4"><a href="1-import.html#cb5-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="kw">across</span>(<span class="kw">c</span>(<span class="st">&quot;verdor&quot;</span>, <span class="kw">matches</span>(<span class="st">&quot;inc&quot;</span>)), <span class="op">~</span><span class="st"> </span><span class="kw">mean</span>(.x, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb5-5"><a href="1-import.html#cb5-5"></a><span class="st">  </span><span class="kw">drop_na</span>()</span></code></pre></div>
+<span id="cb5-5"><a href="1-import.html#cb5-5"></a><span class="st">  </span><span class="kw">drop_na</span>() <span class="co">#%&gt;% </span></span></code></pre></div>
 <pre><code>## # A tibble: 4 x 7
 ##    dias verdor inc_e1 inc_e2 inc_e3 inc_e4 inc_e5
 ##   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -950,49 +947,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2    10  100     1.70   72.3      0      0      0
 ## 3    19   80.2   4.96   75.0      0      0      0
 ## 4    31   50.5   5.42   69.6      0      0      0</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="1-import.html#cb7-1"></a>  <span class="co"># write_sheet(ss=nova_tr, sheet = &quot;dis_press&quot;)</span></span></code></pre></div>
 <p>La incidencia de e1 es baja a lo largo del periodo de evaluación, por lo tanto no la incluimos en el análisis posterior.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="1-import.html#cb7-1"></a>dat &lt;-<span class="st"> </span>dat_full <span class="op">%&gt;%</span><span class="st">  </span></span>
-<span id="cb7-2"><a href="1-import.html#cb7-2"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>trt <span class="op">==</span><span class="st"> </span><span class="dv">16</span>)<span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-3"><a href="1-import.html#cb7-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fecha =</span> lubridate<span class="op">::</span><span class="kw">ymd</span>(fecha))<span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-4"><a href="1-import.html#cb7-4"></a><span class="st">  </span><span class="kw">drop_na</span>(fecha) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-5"><a href="1-import.html#cb7-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id<span class="op">:</span>verdor, <span class="kw">matches</span>(<span class="st">&quot;e2&quot;</span>), <span class="op">-</span><span class="kw">contains</span>(<span class="st">&quot;ABC&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb7-6"><a href="1-import.html#cb7-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;sev&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-7"><a href="1-import.html#cb7-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">af_sana =</span> verdor <span class="op">-</span><span class="st"> </span>int_e2)</span>
-<span id="cb7-8"><a href="1-import.html#cb7-8"></a></span>
-<span id="cb7-9"><a href="1-import.html#cb7-9"></a><span class="co"># dat %&gt;% view</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="1-import.html#cb8-1"></a>dat &lt;-<span class="st"> </span>dat_full <span class="op">%&gt;%</span><span class="st">  </span></span>
+<span id="cb8-2"><a href="1-import.html#cb8-2"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>trt <span class="op">==</span><span class="st"> </span><span class="dv">16</span>)<span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-3"><a href="1-import.html#cb8-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fecha =</span> lubridate<span class="op">::</span><span class="kw">ymd</span>(fecha))<span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-4"><a href="1-import.html#cb8-4"></a><span class="st">  </span><span class="kw">drop_na</span>(fecha) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-5"><a href="1-import.html#cb8-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id<span class="op">:</span>verdor, <span class="kw">matches</span>(<span class="st">&quot;e2&quot;</span>), <span class="op">-</span><span class="kw">contains</span>(<span class="st">&quot;ABC&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb8-6"><a href="1-import.html#cb8-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span><span class="kw">matches</span>(<span class="st">&quot;sev&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-7"><a href="1-import.html#cb8-7"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">af_sana =</span> verdor <span class="op">-</span><span class="st"> </span>int_e2)</span>
+<span id="cb8-8"><a href="1-import.html#cb8-8"></a><span class="co"># dat %&gt;% view</span></span></code></pre></div>
 </div>
 <div id="datos-de-cosecha" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> Datos de cosecha</h2>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="1-import.html#cb8-1"></a>cosecha &lt;-<span class="st"> </span><span class="kw">read_sheet</span>(nova_tr, <span class="dt">sheet=</span><span class="st">&quot;cosecha&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-2"><a href="1-import.html#cb8-2"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(trt,bk), as.factor)  </span>
-<span id="cb8-3"><a href="1-import.html#cb8-3"></a>cosecha</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="1-import.html#cb9-1"></a>cosecha &lt;-<span class="st"> </span><span class="kw">read_sheet</span>(nova_tr, <span class="dt">sheet=</span><span class="st">&quot;cosecha&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-2"><a href="1-import.html#cb9-2"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(trt,bk), as.factor)  </span>
+<span id="cb9-3"><a href="1-import.html#cb9-3"></a>cosecha</span></code></pre></div>
 <ul>
 <li>Mapa de parcelas</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="1-import.html#cb9-1"></a><span class="kw">ggplot</span>()<span class="op">+</span></span>
-<span id="cb9-2"><a href="1-import.html#cb9-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">16</span>, <span class="dt">y =</span> <span class="kw">rep</span>(<span class="fl">4.5</span>,<span class="dv">16</span>)), <span class="dt">size=</span><span class="fl">0.1</span>) <span class="op">+</span></span>
-<span id="cb9-3"><a href="1-import.html#cb9-3"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>(<span class="dt">n =</span> <span class="dv">16</span>)) <span class="op">+</span></span>
-<span id="cb9-4"><a href="1-import.html#cb9-4"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>(<span class="dt">n =</span> <span class="dv">4</span>)) <span class="op">+</span></span>
-<span id="cb9-5"><a href="1-import.html#cb9-5"></a><span class="st">  </span>cowplot<span class="op">::</span><span class="kw">theme_minimal_grid</span>()<span class="op">+</span></span>
-<span id="cb9-6"><a href="1-import.html#cb9-6"></a><span class="st">  </span><span class="co"># geom_hline(yintercept = 4.5)+</span></span>
-<span id="cb9-7"><a href="1-import.html#cb9-7"></a><span class="st">  </span><span class="co"># geom_segment(aes(x=4.5, y=4.5, xend=4.5, yend=4.5), linetype = &quot;dashed&quot;, size =0.3) +</span></span>
-<span id="cb9-8"><a href="1-import.html#cb9-8"></a><span class="st">  </span><span class="co"># geom_segment(aes(x=8.5, y=4.5, xend=8.5, yend=7.5), linetype = &quot;dashed&quot;, size =0.3) +</span></span>
-<span id="cb9-9"><a href="1-import.html#cb9-9"></a><span class="st">  </span><span class="co"># geom_segment(aes(x=12.5, y=4.5, xend=12.5, yend=7.5), linetype = &quot;dashed&quot;, size =0.3)+</span></span>
-<span id="cb9-10"><a href="1-import.html#cb9-10"></a><span class="st">  </span>viridis<span class="op">::</span><span class="kw">scale_fill_viridis</span>(<span class="dt">discrete=</span><span class="ot">FALSE</span>, <span class="dt">direction =</span> <span class="dv">-1</span>)<span class="op">+</span></span>
-<span id="cb9-11"><a href="1-import.html#cb9-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;col&quot;</span>, </span>
-<span id="cb9-12"><a href="1-import.html#cb9-12"></a>       <span class="dt">y=</span><span class="st">&quot;fila&quot;</span>, </span>
-<span id="cb9-13"><a href="1-import.html#cb9-13"></a>       <span class="dt">fill =</span> <span class="st">&quot;Rendimiento</span><span class="ch">\n</span><span class="st">(kg/ha)&quot;</span>)<span class="op">+</span></span>
-<span id="cb9-14"><a href="1-import.html#cb9-14"></a><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data =</span> cosecha, <span class="kw">aes</span>(col, fila, <span class="dt">fill=</span> kg_ha), <span class="dt">alpha =</span><span class="fl">0.9</span>) <span class="op">+</span></span>
-<span id="cb9-15"><a href="1-import.html#cb9-15"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="fl">2.5</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>)<span class="op">+</span></span>
-<span id="cb9-16"><a href="1-import.html#cb9-16"></a><span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="fl">8.5</span>, <span class="dt">y=</span><span class="fl">0.5</span>, <span class="dt">xend=</span><span class="fl">8.5</span>, <span class="dt">yend=</span><span class="fl">4.5</span>), <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span><span class="fl">0.8</span>) <span class="op">+</span></span>
-<span id="cb9-17"><a href="1-import.html#cb9-17"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> cosecha, </span>
-<span id="cb9-18"><a href="1-import.html#cb9-18"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> col, fila,</span>
-<span id="cb9-19"><a href="1-import.html#cb9-19"></a>            <span class="dt">label =</span> <span class="kw">paste</span>(trt, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="kw">round</span>(plot,<span class="dv">1</span>), <span class="st">&quot;&quot;</span>)), </span>
-<span id="cb9-20"><a href="1-import.html#cb9-20"></a>            <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="1-import.html#cb10-1"></a><span class="kw">ggplot</span>()<span class="op">+</span></span>
+<span id="cb10-2"><a href="1-import.html#cb10-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">16</span>, <span class="dt">y =</span> <span class="kw">rep</span>(<span class="fl">4.5</span>,<span class="dv">16</span>)), <span class="dt">size=</span><span class="fl">0.1</span>) <span class="op">+</span></span>
+<span id="cb10-3"><a href="1-import.html#cb10-3"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>(<span class="dt">n =</span> <span class="dv">16</span>)) <span class="op">+</span></span>
+<span id="cb10-4"><a href="1-import.html#cb10-4"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks=</span>scales<span class="op">::</span><span class="kw">pretty_breaks</span>(<span class="dt">n =</span> <span class="dv">4</span>)) <span class="op">+</span></span>
+<span id="cb10-5"><a href="1-import.html#cb10-5"></a><span class="st">  </span>cowplot<span class="op">::</span><span class="kw">theme_minimal_grid</span>()<span class="op">+</span></span>
+<span id="cb10-6"><a href="1-import.html#cb10-6"></a><span class="st">  </span><span class="co"># geom_hline(yintercept = 4.5)+</span></span>
+<span id="cb10-7"><a href="1-import.html#cb10-7"></a><span class="st">  </span><span class="co"># geom_segment(aes(x=4.5, y=4.5, xend=4.5, yend=4.5), linetype = &quot;dashed&quot;, size =0.3) +</span></span>
+<span id="cb10-8"><a href="1-import.html#cb10-8"></a><span class="st">  </span><span class="co"># geom_segment(aes(x=8.5, y=4.5, xend=8.5, yend=7.5), linetype = &quot;dashed&quot;, size =0.3) +</span></span>
+<span id="cb10-9"><a href="1-import.html#cb10-9"></a><span class="st">  </span><span class="co"># geom_segment(aes(x=12.5, y=4.5, xend=12.5, yend=7.5), linetype = &quot;dashed&quot;, size =0.3)+</span></span>
+<span id="cb10-10"><a href="1-import.html#cb10-10"></a><span class="st">  </span>viridis<span class="op">::</span><span class="kw">scale_fill_viridis</span>(<span class="dt">discrete=</span><span class="ot">FALSE</span>, <span class="dt">direction =</span> <span class="dv">-1</span>)<span class="op">+</span></span>
+<span id="cb10-11"><a href="1-import.html#cb10-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="st">&quot;col&quot;</span>, </span>
+<span id="cb10-12"><a href="1-import.html#cb10-12"></a>       <span class="dt">y=</span><span class="st">&quot;fila&quot;</span>, </span>
+<span id="cb10-13"><a href="1-import.html#cb10-13"></a>       <span class="dt">fill =</span> <span class="st">&quot;Rendimiento</span><span class="ch">\n</span><span class="st">(kg/ha)&quot;</span>)<span class="op">+</span></span>
+<span id="cb10-14"><a href="1-import.html#cb10-14"></a><span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">data =</span> cosecha, <span class="kw">aes</span>(col, fila, <span class="dt">fill=</span> kg_ha), <span class="dt">alpha =</span><span class="fl">0.9</span>) <span class="op">+</span></span>
+<span id="cb10-15"><a href="1-import.html#cb10-15"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="fl">2.5</span>, <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>)<span class="op">+</span></span>
+<span id="cb10-16"><a href="1-import.html#cb10-16"></a><span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="fl">8.5</span>, <span class="dt">y=</span><span class="fl">0.5</span>, <span class="dt">xend=</span><span class="fl">8.5</span>, <span class="dt">yend=</span><span class="fl">4.5</span>), <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">size =</span><span class="fl">0.8</span>) <span class="op">+</span></span>
+<span id="cb10-17"><a href="1-import.html#cb10-17"></a><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> cosecha, </span>
+<span id="cb10-18"><a href="1-import.html#cb10-18"></a>            <span class="kw">aes</span>(<span class="dt">x =</span> col, fila,</span>
+<span id="cb10-19"><a href="1-import.html#cb10-19"></a>            <span class="dt">label =</span> <span class="kw">paste</span>(trt, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>, <span class="kw">round</span>(plot,<span class="dv">1</span>), <span class="st">&quot;&quot;</span>)), </span>
+<span id="cb10-20"><a href="1-import.html#cb10-20"></a>            <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>) </span></code></pre></div>
 <p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="1-import.html#cb10-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/mapa_parcelas.png&quot;, w=6.5, h=7)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="1-import.html#cb11-1"></a><span class="co"># dat %&gt;% write_sheet(ss=nova_ceb, sheet = &quot;clean&quot;)</span></span>
-<span id="cb11-2"><a href="1-import.html#cb11-2"></a><span class="kw">save</span>(dat_full, dat, cosecha, <span class="dt">file =</span> <span class="st">&quot;data/nova_trigo.Rdata&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="1-import.html#cb11-1"></a><span class="co"># ggsave(last_plot(), file = &quot;plots/mapa_parcelas.png&quot;, w=6.5, h=7)</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="1-import.html#cb12-1"></a><span class="co"># dat %&gt;% write_sheet(ss=nova_ceb, sheet = &quot;clean&quot;)</span></span>
+<span id="cb12-2"><a href="1-import.html#cb12-2"></a><span class="kw">save</span>(dat_full, dat, cosecha, <span class="dt">file =</span> <span class="st">&quot;data/nova_trigo.Rdata&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>
