@@ -9,18 +9,8 @@ source(here::here('theme_juan.R'))
 # devtools::source_url(assum_lm)
 ```
 
-## Presion en los testigos de enf_2
 
-* Importante: para evitar confusiones, en esta planilla considero a la *severidad media* (media de las severidades de una muestra incluyendo las hojas sanas), como *intensidad*,  
-
-```{r}
-dat %>% 
-  filter(trt == 1) %>%
-  group_by(dias) %>%
-  summarise(across(c("verdor", "inc_e2", "int_e2"), ~ mean(.x, na.rm = TRUE)))
-```
-
-## Area foliar - evolución 
+## Area foliar
 
 ```{r}
 glimpse(dat)
@@ -29,7 +19,7 @@ glimpse(dat)
 
 $Verdor - severidad~media~enf_{(i)}$
 
-## Area foliar activa y severidad
+* Area foliar activa y severidad
 
 ```{r eval=T}
 dat %>% 
@@ -63,7 +53,7 @@ dat %>%
 
 ```
 
-## Area foliar Sana
+* Area foliar Sana
 
 $Area foliar activa - severidad media de las enfermedades presentes$
 
@@ -106,9 +96,11 @@ dat %>%
 
 ```
 
-## E2
+## Enfermedades
 
-### Incidencia e2
+### E2
+
+* Incidencia e2
 
 ```{r eval=T}
 dat %>% 
@@ -130,7 +122,7 @@ dat %>%
 
 ```
 
-## Severidad media e2
+* Severidad media e2
 
 ```{r eval=T}
 dat %>% 
@@ -171,7 +163,7 @@ abc_dat <- dat %>%
 pacman::p_load(lme4, emmeans, multcomp)
 ```
 
-### ABC de AF sana - modelo
+* ABC de AF sana - modelo
 
 ```{r}
 m0 = lmer(af_sana ~ trt + (1|rep), data = abc_dat)
@@ -226,7 +218,7 @@ res_e0 %>%
   # sheet_write(ss = nova_tr, sheet = "anova_AFsana")
 ```
 
-### ABC de severidad media de e2 - modelo
+* ABC de severidad media de e2 - modelo
 
 ```{r}
 m1 = lmer(int_e2 ~ trt + (1|rep), data = abc_dat)

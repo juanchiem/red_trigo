@@ -46,7 +46,9 @@ dat_full %>%
   filter(trt == 1) %>% 
   group_by(dias) %>%
   summarise(across(c("verdor", matches("inc")), ~ mean(.x, na.rm = TRUE))) %>% 
-  drop_na()
+  drop_na() %>% 
+  write_sheet(ss=nova_tr, sheet = "dis_press")
+
 ```
 
 La incidencia de e1 es baja a lo largo del periodo de evaluación, por lo tanto no la incluimos en el análisis posterior.
@@ -61,7 +63,6 @@ dat <- dat_full %>%
   mutate(af_sana = verdor - int_e2)
 # dat %>% view
 ```
-
 
 ## Datos de cosecha
 

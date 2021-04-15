@@ -7,5 +7,6 @@ rmd_files: [
   "index.Rmd",
   "1-import.Rmd",
   "2-control.Rmd",
-  "3-rinde.Rmd"
+  "3-rinde.Rmd",
+  "4-meteo.Rmd"
   ]
