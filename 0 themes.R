@@ -33,10 +33,12 @@ theme_dens <- theme_bw(base_size = 12) +
     panel.grid.major.y = element_line(linetype =  "dotted"),
     panel.grid.major.x = element_line(linetype =  "dashed"),
     legend.position = "top", legend.justification = "right",
+    plot.caption = element_text(hjust = 0,
+                                color = "gray30", face = "italic"), 
     plot.title = element_text(family = 'Helvetica', 
                               face = 'bold', 
                               hjust = 0, 
-                              vjust = -7),
+                              vjust = 0),
     axis.text.x = element_text(
       hjust = -0.2,
       vjust = 6

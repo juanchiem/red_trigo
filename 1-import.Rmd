@@ -109,7 +109,10 @@ eea <- gs4_get(gs4_find("meteo_eea_serie")$id)
 
 serie <- seq(2000,2020,1) %>% as.character() %>% 
   map_df(~ read_sheet(eea, sheet = .)) %>%
-  bind_rows()
+  bind_rows() %>% 
+  mutate(year = lubridate::year(date),
+         month = lubridate::month(date),
+         julian = lubridate::yday(date))
 ```
 
 
