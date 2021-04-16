@@ -971,105 +971,105 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-8"><a href="4-meteo.html#cb5-8"></a>         <span class="dt">month =</span> <span class="kw">month</span>(date)) <span class="op">%&gt;%</span></span>
 <span id="cb5-9"><a href="4-meteo.html#cb5-9"></a><span class="st">  </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span></span>
 <span id="cb5-10"><a href="4-meteo.html#cb5-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">decada =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb5-11"><a href="4-meteo.html#cb5-11"></a><span class="st">  </span><span class="kw">filter</span>(date <span class="op">&gt;</span><span class="st"> &#39;2020-05-01&#39;</span>, date <span class="op">&lt;</span><span class="st"> &#39;2020-12-31&#39;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="4-meteo.html#cb6-1"></a>c2020 &lt;-<span class="st"> </span><span class="co"># fusionar ambos datasets (serie + campaña)</span></span>
-<span id="cb6-2"><a href="4-meteo.html#cb6-2"></a><span class="st">  </span>c2020 <span class="op">%&gt;%</span></span>
-<span id="cb6-3"><a href="4-meteo.html#cb6-3"></a><span class="st">  </span><span class="kw">left_join</span>(serie20, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;decada&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb6-4"><a href="4-meteo.html#cb6-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.Date</span>(date))</span>
-<span id="cb6-5"><a href="4-meteo.html#cb6-5"></a></span>
-<span id="cb6-6"><a href="4-meteo.html#cb6-6"></a><span class="co"># print(bce_18_19, n=Inf) # Check</span></span>
-<span id="cb6-7"><a href="4-meteo.html#cb6-7"></a><span class="co"># print(bce_serie, n=Inf) # Check</span></span></code></pre></div>
+<span id="cb5-11"><a href="4-meteo.html#cb5-11"></a><span class="st">  </span><span class="kw">filter</span>(date <span class="op">&gt;</span><span class="st"> &#39;2020-05-01&#39;</span>, date <span class="op">&lt;</span><span class="st"> &#39;2020-12-31&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-12"><a href="4-meteo.html#cb5-12"></a><span class="st">  </span><span class="kw">left_join</span>(serie20, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;decada&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb5-13"><a href="4-meteo.html#cb5-13"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.Date</span>(date))</span>
+<span id="cb5-14"><a href="4-meteo.html#cb5-14"></a> <span class="co"># fusionar ambos datasets (serie + campaña)</span></span></code></pre></div>
 <p>3 - Visualizar la serie y sus bandas de 80-percentil, y valores acumulados por década de la última campaña</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="4-meteo.html#cb7-1"></a>c2020 <span class="op">%&gt;%</span></span>
-<span id="cb7-2"><a href="4-meteo.html#cb7-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>date)) <span class="op">+</span></span>
-<span id="cb7-3"><a href="4-meteo.html#cb7-3"></a><span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">y=</span>med, <span class="dt">ymin=</span>lower_<span class="dv">80</span>, <span class="dt">ymax=</span>upper_<span class="dv">80</span>), <span class="dt">fill=</span><span class="st">&#39;white&#39;</span>, <span class="dt">color=</span><span class="st">&#39;deepskyblue&#39;</span>,</span>
-<span id="cb7-4"><a href="4-meteo.html#cb7-4"></a>                    <span class="dt">shape=</span><span class="dv">21</span>, <span class="dt">fatten=</span>.<span class="dv">7</span>, <span class="dt">size=</span><span class="dv">3</span>, <span class="dt">position=</span>(<span class="dt">p5=</span><span class="kw">position_nudge</span>(<span class="dt">x =</span> <span class="dv">5</span>)))<span class="op">+</span></span>
-<span id="cb7-5"><a href="4-meteo.html#cb7-5"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>rain_acum_season), <span class="dt">col =</span><span class="st">&quot;brown1&quot;</span>,</span>
-<span id="cb7-6"><a href="4-meteo.html#cb7-6"></a>               <span class="dt">position=</span>p5) <span class="op">+</span></span>
-<span id="cb7-7"><a href="4-meteo.html#cb7-7"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>rain_acum_season, <span class="dt">group=</span><span class="dv">1</span>), <span class="dt">col =</span><span class="st">&quot;brown1&quot;</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>, <span class="dt">position=</span>p5)<span class="op">+</span></span>
-<span id="cb7-8"><a href="4-meteo.html#cb7-8"></a><span class="st">    </span><span class="co"># scale_y_continuous(limits=c(0, 100), expand=c(0.05, 0))+</span></span>
-<span id="cb7-9"><a href="4-meteo.html#cb7-9"></a><span class="st">    </span><span class="kw">scale_x_date</span>(<span class="dt">date_breaks=</span><span class="st">&quot;1 month&quot;</span>, <span class="dt">date_labels=</span><span class="st">&quot;%b&quot;</span>, <span class="dt">expand=</span><span class="kw">expansion</span>(<span class="fl">0.05</span>,<span class="dv">0</span>))<span class="op">+</span></span>
-<span id="cb7-10"><a href="4-meteo.html#cb7-10"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>,</span>
-<span id="cb7-11"><a href="4-meteo.html#cb7-11"></a>         <span class="dt">title =</span> <span class="st">&quot;Precipitaciones decádicas en Balcarce&quot;</span>,</span>
-<span id="cb7-12"><a href="4-meteo.html#cb7-12"></a>         <span class="dt">subtitle =</span> <span class="st">&quot;- Campaña 2020 (en puntos rojos)</span><span class="ch">\n</span><span class="st">- Serie 2000-2019: mediana (puntos blancos) y rango 80% (barras azules)&quot;</span>,</span>
-<span id="cb7-13"><a href="4-meteo.html#cb7-13"></a>         <span class="co"># &quot;mm acumulados por períodos de 10 días&quot;,</span></span>
-<span id="cb7-14"><a href="4-meteo.html#cb7-14"></a>         <span class="dt">caption =</span> <span class="st">&quot;Datos registrados en la estación meteorológica de la EEA INTA Balcarce&quot;</span>)</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="4-meteo.html#cb8-1"></a><span class="co"># serie %&gt;%</span></span>
-<span id="cb8-2"><a href="4-meteo.html#cb8-2"></a><span class="co">#   filter(year &lt;2020) %&gt;% </span></span>
-<span id="cb8-3"><a href="4-meteo.html#cb8-3"></a><span class="co">#   group_by(year) %&gt;% </span></span>
-<span id="cb8-4"><a href="4-meteo.html#cb8-4"></a><span class="co">#   summarise(cs = cumsum(rain))</span></span>
-<span id="cb8-5"><a href="4-meteo.html#cb8-5"></a></span>
-<span id="cb8-6"><a href="4-meteo.html#cb8-6"></a>c2020 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-7"><a href="4-meteo.html#cb8-7"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(month.y), as.factor)<span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-8"><a href="4-meteo.html#cb8-8"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-9"><a href="4-meteo.html#cb8-9"></a><span class="st">  </span><span class="kw">group_by</span>(month.y) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-10"><a href="4-meteo.html#cb8-10"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb8-11"><a href="4-meteo.html#cb8-11"></a>    <span class="dt">cs =</span> <span class="kw">sum</span>(rain_acum_season),</span>
-<span id="cb8-12"><a href="4-meteo.html#cb8-12"></a>    <span class="dt">cs_med =</span> <span class="kw">sum</span>(med))</span></code></pre></div>
-<pre><code>## # A tibble: 8 x 3
-##   month.y    cs cs_med
-##   &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt;
-## 1 5        52     24.7
-## 2 6        80.5   28.4
-## 3 7        49.7   36.2
-## 4 8        15     27.6
-## 5 9        41.5   48.6
-## 6 10      118.    61.7
-## 7 11       19.8   66  
-## 8 12       30.8   60.6</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="4-meteo.html#cb10-1"></a><span class="co"># 5 - Fenología del cultivo</span></span>
-<span id="cb10-2"><a href="4-meteo.html#cb10-2"></a><span class="co"># z39 = c(as.Date(&quot;2018-12-15&quot;),  as.Date(&quot;2019-01-15&quot;)); diff(r5)</span></span>
-<span id="cb10-3"><a href="4-meteo.html#cb10-3"></a><span class="co"># r6 = c(as.Date(&quot;2019-01-15&quot;),  as.Date(&quot;2019-03-10&quot;)); diff(r6)</span></span>
-<span id="cb10-4"><a href="4-meteo.html#cb10-4"></a><span class="co"># midpoint &lt;- function(interval) { min(interval)+(max(interval)-min(interval))/2 }; midpoint(r5)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="4-meteo.html#cb11-1"></a><span class="co"># (p_final &lt;- # Agregar fenología y anotaciones varias</span></span>
-<span id="cb11-2"><a href="4-meteo.html#cb11-2"></a><span class="co">#     p1 +</span></span>
-<span id="cb11-3"><a href="4-meteo.html#cb11-3"></a><span class="co">#     # Polígonos de floracion y llenado</span></span>
-<span id="cb11-4"><a href="4-meteo.html#cb11-4"></a><span class="co">#     annotate(&quot;rect&quot;, xmin= c(min(r5), min(r6)), xmax=c(max(r5),max(r6)), ymin=70, ymax=90, alpha=0.3, fill=c(&quot;grey80&quot;,&quot;grey60&quot;))+</span></span>
-<span id="cb11-5"><a href="4-meteo.html#cb11-5"></a><span class="co">#     annotate(&quot;text&quot;, x = c(midpoint(r5), midpoint(r6)), y=80,col=&quot;red&quot;, parse=TRUE, size=3,</span></span>
-<span id="cb11-6"><a href="4-meteo.html#cb11-6"></a><span class="co">#              label=c(&#39;bold(&quot;Floración&quot;)&#39;,&#39;bold(&quot;Llenado&quot;)&#39;)) +</span></span>
-<span id="cb11-7"><a href="4-meteo.html#cb11-7"></a><span class="co">#     labs(x=NULL, y=NULL,</span></span>
-<span id="cb11-8"><a href="4-meteo.html#cb11-8"></a><span class="co">#          title = &quot;Precipitaciones decádicas en Balcarce y estadíos reproductivos del girasol&quot;,</span></span>
-<span id="cb11-9"><a href="4-meteo.html#cb11-9"></a><span class="co">#          subtitle = &quot;- Campaña 2018/19 (en puntos rojos)\n- Serie 1971-2017: mediana (puntos blancos) y rango 80% (barras azules)&quot;,</span></span>
-<span id="cb11-10"><a href="4-meteo.html#cb11-10"></a><span class="co">#          # &quot;mm acumulados por períodos de 10 días&quot;,</span></span>
-<span id="cb11-11"><a href="4-meteo.html#cb11-11"></a><span class="co">#          caption = &quot;Datos registrados en la estación meteorológica de la EEA INTA Balcarce&quot;)</span></span>
-<span id="cb11-12"><a href="4-meteo.html#cb11-12"></a><span class="co"># )</span></span>
-<span id="cb11-13"><a href="4-meteo.html#cb11-13"></a><span class="co"># ggsave(file = &quot;plots/bce_lluvias.png&quot;, w=80, h=50, units=&quot;mm&quot;, dpi=300, scale=2) </span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="4-meteo.html#cb6-1"></a>c2020 <span class="op">%&gt;%</span></span>
+<span id="cb6-2"><a href="4-meteo.html#cb6-2"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>date)) <span class="op">+</span></span>
+<span id="cb6-3"><a href="4-meteo.html#cb6-3"></a><span class="st">    </span><span class="kw">geom_pointrange</span>(<span class="kw">aes</span>(<span class="dt">y=</span>med, <span class="dt">ymin=</span>lower_<span class="dv">80</span>, <span class="dt">ymax=</span>upper_<span class="dv">80</span>), <span class="dt">fill=</span><span class="st">&#39;white&#39;</span>, <span class="dt">color=</span><span class="st">&#39;deepskyblue&#39;</span>,</span>
+<span id="cb6-4"><a href="4-meteo.html#cb6-4"></a>                    <span class="dt">shape=</span><span class="dv">21</span>, <span class="dt">fatten=</span>.<span class="dv">7</span>, <span class="dt">size=</span><span class="dv">3</span>, <span class="dt">position=</span>(<span class="dt">p5=</span><span class="kw">position_nudge</span>(<span class="dt">x =</span> <span class="dv">5</span>)))<span class="op">+</span></span>
+<span id="cb6-5"><a href="4-meteo.html#cb6-5"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y=</span>rain_acum_season), <span class="dt">col =</span><span class="st">&quot;brown1&quot;</span>,</span>
+<span id="cb6-6"><a href="4-meteo.html#cb6-6"></a>               <span class="dt">position=</span>p5) <span class="op">+</span></span>
+<span id="cb6-7"><a href="4-meteo.html#cb6-7"></a><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y=</span>rain_acum_season, <span class="dt">group=</span><span class="dv">1</span>), <span class="dt">col =</span><span class="st">&quot;brown1&quot;</span>, <span class="dt">linetype=</span><span class="st">&quot;dashed&quot;</span>, <span class="dt">position=</span>p5)<span class="op">+</span></span>
+<span id="cb6-8"><a href="4-meteo.html#cb6-8"></a><span class="st">    </span><span class="co"># scale_y_continuous(limits=c(0, 100), expand=c(0.05, 0))+</span></span>
+<span id="cb6-9"><a href="4-meteo.html#cb6-9"></a><span class="st">    </span><span class="kw">scale_x_date</span>(<span class="dt">date_breaks=</span><span class="st">&quot;1 month&quot;</span>, <span class="dt">date_labels=</span><span class="st">&quot;%b&quot;</span>, <span class="dt">expand=</span><span class="kw">expansion</span>(<span class="fl">0.05</span>,<span class="dv">0</span>))<span class="op">+</span></span>
+<span id="cb6-10"><a href="4-meteo.html#cb6-10"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>,</span>
+<span id="cb6-11"><a href="4-meteo.html#cb6-11"></a>         <span class="dt">title =</span> <span class="st">&quot;Precipitaciones decádicas en Balcarce&quot;</span>,</span>
+<span id="cb6-12"><a href="4-meteo.html#cb6-12"></a>         <span class="dt">subtitle =</span> <span class="st">&quot;- Campaña 2020 (en puntos rojos)</span><span class="ch">\n</span><span class="st">- Serie 2000-2019: mediana (puntos blancos) y rango 80% (barras azules)&quot;</span>,</span>
+<span id="cb6-13"><a href="4-meteo.html#cb6-13"></a>         <span class="co"># &quot;mm acumulados por períodos de 10 días&quot;,</span></span>
+<span id="cb6-14"><a href="4-meteo.html#cb6-14"></a>         <span class="dt">caption =</span> <span class="st">&quot;Datos registrados en la estación meteorológica de la EEA INTA Balcarce&quot;</span>)</span></code></pre></div>
+<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="4-meteo.html#cb7-1"></a><span class="co"># serie %&gt;%</span></span>
+<span id="cb7-2"><a href="4-meteo.html#cb7-2"></a><span class="co">#   filter(year &lt;2020) %&gt;% </span></span>
+<span id="cb7-3"><a href="4-meteo.html#cb7-3"></a><span class="co">#   group_by(year) %&gt;% </span></span>
+<span id="cb7-4"><a href="4-meteo.html#cb7-4"></a><span class="co">#   summarise(cs = cumsum(rain))</span></span>
+<span id="cb7-5"><a href="4-meteo.html#cb7-5"></a></span>
+<span id="cb7-6"><a href="4-meteo.html#cb7-6"></a>c2020 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-7"><a href="4-meteo.html#cb7-7"></a><span class="st">  </span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(month.y), as.factor)<span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-8"><a href="4-meteo.html#cb7-8"></a><span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-9"><a href="4-meteo.html#cb7-9"></a><span class="st">  </span><span class="kw">group_by</span>(month.y) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-10"><a href="4-meteo.html#cb7-10"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb7-11"><a href="4-meteo.html#cb7-11"></a>    <span class="dt">cs =</span> <span class="kw">sum</span>(rain_acum_season),</span>
+<span id="cb7-12"><a href="4-meteo.html#cb7-12"></a>    <span class="dt">cs_med =</span> <span class="kw">sum</span>(med), </span>
+<span id="cb7-13"><a href="4-meteo.html#cb7-13"></a>    <span class="dt">bal =</span> cs <span class="op">-</span><span class="st"> </span>cs_med)</span></code></pre></div>
+<pre><code>## # A tibble: 8 x 4
+##   month.y    cs cs_med    bal
+##   &lt;fct&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 5        52     24.7  27.3 
+## 2 6        80.5   28.4  52.2 
+## 3 7        49.7   36.2  13.5 
+## 4 8        15     27.6 -12.6 
+## 5 9        41.5   48.6  -7.15
+## 6 10      118.    61.7  56.8 
+## 7 11       19.8   66   -46.2 
+## 8 12       30.8   60.6 -29.8</code></pre>
+<blockquote>
+<p>agosto, septiembre noviembre y diciembre llovio menos que lo normal 2020-2019</p>
+</blockquote>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="4-meteo.html#cb9-1"></a><span class="co"># 5 - Fenología del cultivo</span></span>
+<span id="cb9-2"><a href="4-meteo.html#cb9-2"></a><span class="co"># z39 = c(as.Date(&quot;2018-12-15&quot;),  as.Date(&quot;2019-01-15&quot;)); diff(r5)</span></span>
+<span id="cb9-3"><a href="4-meteo.html#cb9-3"></a><span class="co"># r6 = c(as.Date(&quot;2019-01-15&quot;),  as.Date(&quot;2019-03-10&quot;)); diff(r6)</span></span>
+<span id="cb9-4"><a href="4-meteo.html#cb9-4"></a><span class="co"># midpoint &lt;- function(interval) { min(interval)+(max(interval)-min(interval))/2 }; midpoint(r5)</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="4-meteo.html#cb10-1"></a><span class="co"># (p_final &lt;- # Agregar fenología y anotaciones varias</span></span>
+<span id="cb10-2"><a href="4-meteo.html#cb10-2"></a><span class="co">#     p1 +</span></span>
+<span id="cb10-3"><a href="4-meteo.html#cb10-3"></a><span class="co">#     # Polígonos de floracion y llenado</span></span>
+<span id="cb10-4"><a href="4-meteo.html#cb10-4"></a><span class="co">#     annotate(&quot;rect&quot;, xmin= c(min(r5), min(r6)), xmax=c(max(r5),max(r6)), ymin=70, ymax=90, alpha=0.3, fill=c(&quot;grey80&quot;,&quot;grey60&quot;))+</span></span>
+<span id="cb10-5"><a href="4-meteo.html#cb10-5"></a><span class="co">#     annotate(&quot;text&quot;, x = c(midpoint(r5), midpoint(r6)), y=80,col=&quot;red&quot;, parse=TRUE, size=3,</span></span>
+<span id="cb10-6"><a href="4-meteo.html#cb10-6"></a><span class="co">#              label=c(&#39;bold(&quot;Floración&quot;)&#39;,&#39;bold(&quot;Llenado&quot;)&#39;)) +</span></span>
+<span id="cb10-7"><a href="4-meteo.html#cb10-7"></a><span class="co">#     labs(x=NULL, y=NULL,</span></span>
+<span id="cb10-8"><a href="4-meteo.html#cb10-8"></a><span class="co">#          title = &quot;Precipitaciones decádicas en Balcarce y estadíos reproductivos del girasol&quot;,</span></span>
+<span id="cb10-9"><a href="4-meteo.html#cb10-9"></a><span class="co">#          subtitle = &quot;- Campaña 2018/19 (en puntos rojos)\n- Serie 1971-2017: mediana (puntos blancos) y rango 80% (barras azules)&quot;,</span></span>
+<span id="cb10-10"><a href="4-meteo.html#cb10-10"></a><span class="co">#          # &quot;mm acumulados por períodos de 10 días&quot;,</span></span>
+<span id="cb10-11"><a href="4-meteo.html#cb10-11"></a><span class="co">#          caption = &quot;Datos registrados en la estación meteorológica de la EEA INTA Balcarce&quot;)</span></span>
+<span id="cb10-12"><a href="4-meteo.html#cb10-12"></a><span class="co"># )</span></span>
+<span id="cb10-13"><a href="4-meteo.html#cb10-13"></a><span class="co"># ggsave(file = &quot;plots/bce_lluvias.png&quot;, w=80, h=50, units=&quot;mm&quot;, dpi=300, scale=2) </span></span></code></pre></div>
 </div>
 </div>
 <div id="temperaturas" class="section level2" number="4.2">
 <h2><span class="header-section-number">4.2</span> Temperaturas</h2>
 <div id="calcular-80-percentil-de-tmean-diarias-y-valores-maximos-y-minimos-observados-en-la-serie-histórica" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Calcular 80-percentil de Tmean diarias y valores maximos y minimos observados en la serie histórica</h3>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="4-meteo.html#cb12-1"></a>bce_serie &lt;-</span>
-<span id="cb12-2"><a href="4-meteo.html#cb12-2"></a><span class="st">  </span>serie <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-3"><a href="4-meteo.html#cb12-3"></a><span class="st">  </span><span class="kw">filter</span>(year<span class="op">!=</span><span class="dv">2020</span>) <span class="op">%&gt;%</span></span>
-<span id="cb12-4"><a href="4-meteo.html#cb12-4"></a><span class="st">  </span><span class="kw">group_by</span>(julian) <span class="op">%&gt;%</span></span>
-<span id="cb12-5"><a href="4-meteo.html#cb12-5"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
-<span id="cb12-6"><a href="4-meteo.html#cb12-6"></a>    <span class="dt">month =</span> <span class="kw">first</span>(month),</span>
-<span id="cb12-7"><a href="4-meteo.html#cb12-7"></a>    <span class="dt">avg =</span> <span class="kw">mean</span>(tmean, <span class="fl">.2</span>, <span class="dt">na.rm =</span> T),</span>
-<span id="cb12-8"><a href="4-meteo.html#cb12-8"></a>    <span class="co"># Rango 80% de los años (rango interno)</span></span>
-<span id="cb12-9"><a href="4-meteo.html#cb12-9"></a>    <span class="dt">lower_80=</span><span class="kw">quantile</span>(tmean, <span class="fl">.2</span>, <span class="dt">na.rm =</span> T),</span>
-<span id="cb12-10"><a href="4-meteo.html#cb12-10"></a>    <span class="dt">upper_80=</span><span class="kw">quantile</span>(tmean, <span class="fl">.8</span>, <span class="dt">na.rm =</span> T),</span>
-<span id="cb12-11"><a href="4-meteo.html#cb12-11"></a>    <span class="co"># Min y max de tmean (rango externo)</span></span>
-<span id="cb12-12"><a href="4-meteo.html#cb12-12"></a>    <span class="dt">lower_tmean=</span><span class="kw">min</span>(tmean, <span class="dt">na.rm =</span> T),</span>
-<span id="cb12-13"><a href="4-meteo.html#cb12-13"></a>    <span class="dt">upper_tmean=</span><span class="kw">max</span>(tmean, <span class="dt">na.rm =</span> T)) <span class="op">%&gt;%</span></span>
-<span id="cb12-14"><a href="4-meteo.html#cb12-14"></a><span class="st">  </span><span class="kw">ungroup</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="4-meteo.html#cb13-1"></a>camp &lt;-<span class="st"> </span><span class="co"># Fusionar serie con campaña 18/19</span></span>
-<span id="cb13-2"><a href="4-meteo.html#cb13-2"></a><span class="st">  </span>serie <span class="op">%&gt;%</span></span>
-<span id="cb13-3"><a href="4-meteo.html#cb13-3"></a><span class="st">  </span><span class="kw">filter</span>(date <span class="op">&gt;</span><span class="st"> &#39;2020-05-01&#39;</span>, date <span class="op">&lt;</span><span class="st"> &#39;2020-12-30&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb13-4"><a href="4-meteo.html#cb13-4"></a><span class="st">  </span><span class="kw">left_join</span>(bce_serie, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;julian&quot;</span>, <span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb13-5"><a href="4-meteo.html#cb13-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.Date</span>(date)) <span class="op">%&gt;%</span></span>
-<span id="cb13-6"><a href="4-meteo.html#cb13-6"></a><span class="st">  </span><span class="kw">droplevels</span>()</span>
-<span id="cb13-7"><a href="4-meteo.html#cb13-7"></a></span>
-<span id="cb13-8"><a href="4-meteo.html#cb13-8"></a>camp <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-9"><a href="4-meteo.html#cb13-9"></a><span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb13-10"><a href="4-meteo.html#cb13-10"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">n_days =</span> <span class="kw">n</span>(),</span>
-<span id="cb13-11"><a href="4-meteo.html#cb13-11"></a>            <span class="dt">d_frios =</span> <span class="kw">sum</span>(tmean <span class="op">&lt;</span><span class="st"> </span>avg),</span>
-<span id="cb13-12"><a href="4-meteo.html#cb13-12"></a>            <span class="dt">p_frios =</span> d_frios <span class="op">/</span><span class="st"> </span>n_days,</span>
-<span id="cb13-13"><a href="4-meteo.html#cb13-13"></a>            <span class="dt">d_calidos =</span> <span class="kw">sum</span>(tmean <span class="op">&gt;</span><span class="st"> </span>avg),</span>
-<span id="cb13-14"><a href="4-meteo.html#cb13-14"></a>            <span class="dt">p_calidos =</span> d_calidos <span class="op">/</span><span class="st"> </span>n_days</span>
-<span id="cb13-15"><a href="4-meteo.html#cb13-15"></a>            )</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="4-meteo.html#cb11-1"></a>bce_serie &lt;-</span>
+<span id="cb11-2"><a href="4-meteo.html#cb11-2"></a><span class="st">  </span>serie <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-3"><a href="4-meteo.html#cb11-3"></a><span class="st">  </span><span class="kw">filter</span>(year<span class="op">!=</span><span class="dv">2020</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-4"><a href="4-meteo.html#cb11-4"></a><span class="st">  </span><span class="kw">group_by</span>(julian) <span class="op">%&gt;%</span></span>
+<span id="cb11-5"><a href="4-meteo.html#cb11-5"></a><span class="st">  </span><span class="kw">summarise</span>(</span>
+<span id="cb11-6"><a href="4-meteo.html#cb11-6"></a>    <span class="dt">month =</span> <span class="kw">first</span>(month),</span>
+<span id="cb11-7"><a href="4-meteo.html#cb11-7"></a>    <span class="dt">avg =</span> <span class="kw">mean</span>(tmean, <span class="fl">.2</span>, <span class="dt">na.rm =</span> T),</span>
+<span id="cb11-8"><a href="4-meteo.html#cb11-8"></a>    <span class="co"># Rango 80% de los años (rango interno)</span></span>
+<span id="cb11-9"><a href="4-meteo.html#cb11-9"></a>    <span class="dt">lower_80=</span><span class="kw">quantile</span>(tmean, <span class="fl">.2</span>, <span class="dt">na.rm =</span> T),</span>
+<span id="cb11-10"><a href="4-meteo.html#cb11-10"></a>    <span class="dt">upper_80=</span><span class="kw">quantile</span>(tmean, <span class="fl">.8</span>, <span class="dt">na.rm =</span> T),</span>
+<span id="cb11-11"><a href="4-meteo.html#cb11-11"></a>    <span class="co"># Min y max de tmean (rango externo)</span></span>
+<span id="cb11-12"><a href="4-meteo.html#cb11-12"></a>    <span class="dt">lower_tmean=</span><span class="kw">min</span>(tmean, <span class="dt">na.rm =</span> T),</span>
+<span id="cb11-13"><a href="4-meteo.html#cb11-13"></a>    <span class="dt">upper_tmean=</span><span class="kw">max</span>(tmean, <span class="dt">na.rm =</span> T)) <span class="op">%&gt;%</span></span>
+<span id="cb11-14"><a href="4-meteo.html#cb11-14"></a><span class="st">  </span><span class="kw">ungroup</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="4-meteo.html#cb12-1"></a>camp &lt;-<span class="st"> </span><span class="co"># Fusionar serie con campaña 18/19</span></span>
+<span id="cb12-2"><a href="4-meteo.html#cb12-2"></a><span class="st">  </span>serie <span class="op">%&gt;%</span></span>
+<span id="cb12-3"><a href="4-meteo.html#cb12-3"></a><span class="st">  </span><span class="kw">filter</span>(date <span class="op">&gt;</span><span class="st"> &#39;2020-05-01&#39;</span>, date <span class="op">&lt;</span><span class="st"> &#39;2020-12-30&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-4"><a href="4-meteo.html#cb12-4"></a><span class="st">  </span><span class="kw">left_join</span>(bce_serie, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;julian&quot;</span>, <span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb12-5"><a href="4-meteo.html#cb12-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">as.Date</span>(date)) <span class="op">%&gt;%</span></span>
+<span id="cb12-6"><a href="4-meteo.html#cb12-6"></a><span class="st">  </span><span class="kw">droplevels</span>()</span>
+<span id="cb12-7"><a href="4-meteo.html#cb12-7"></a></span>
+<span id="cb12-8"><a href="4-meteo.html#cb12-8"></a>camp <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb12-9"><a href="4-meteo.html#cb12-9"></a><span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb12-10"><a href="4-meteo.html#cb12-10"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">n_days =</span> <span class="kw">n</span>(),</span>
+<span id="cb12-11"><a href="4-meteo.html#cb12-11"></a>            <span class="dt">d_frios =</span> <span class="kw">sum</span>(tmean <span class="op">&lt;</span><span class="st"> </span>avg),</span>
+<span id="cb12-12"><a href="4-meteo.html#cb12-12"></a>            <span class="dt">p_frios =</span> d_frios <span class="op">/</span><span class="st"> </span>n_days,</span>
+<span id="cb12-13"><a href="4-meteo.html#cb12-13"></a>            <span class="dt">d_calidos =</span> <span class="kw">sum</span>(tmean <span class="op">&gt;</span><span class="st"> </span>avg),</span>
+<span id="cb12-14"><a href="4-meteo.html#cb12-14"></a>            <span class="dt">p_calidos =</span> d_calidos <span class="op">/</span><span class="st"> </span>n_days</span>
+<span id="cb12-15"><a href="4-meteo.html#cb12-15"></a>            )</span></code></pre></div>
 <pre><code>## # A tibble: 8 x 6
 ##   month n_days d_frios p_frios d_calidos p_calidos
 ##   &lt;dbl&gt;  &lt;int&gt;   &lt;int&gt;   &lt;dbl&gt;     &lt;int&gt;     &lt;dbl&gt;
@@ -1081,55 +1081,55 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 6    10     31      19   0.613        12     0.387
 ## 7    11     30       9   0.3          21     0.7  
 ## 8    12     30      15   0.5          15     0.5</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="4-meteo.html#cb15-1"></a>camp <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb15-2"><a href="4-meteo.html#cb15-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(date, avg)) <span class="op">+</span><span class="st">  </span></span>
-<span id="cb15-3"><a href="4-meteo.html#cb15-3"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> tmean, <span class="dt">ymax =</span> <span class="kw">pmin</span>(tmean, avg), <span class="dt">fill =</span> <span class="st">&quot;cálido&quot;</span>),<span class="dt">alpha=</span><span class="fl">0.5</span> ) <span class="op">+</span></span>
-<span id="cb15-4"><a href="4-meteo.html#cb15-4"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> avg, <span class="dt">ymax =</span> <span class="kw">pmin</span>(tmean, avg), <span class="dt">fill =</span> <span class="st">&quot;frío&quot;</span>), <span class="dt">alpha=</span><span class="fl">0.5</span>) <span class="op">+</span></span>
-<span id="cb15-5"><a href="4-meteo.html#cb15-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(date, avg, <span class="dt">linetype =</span> <span class="st">&quot;media 2000-2019 &quot;</span>)) <span class="op">+</span></span>
-<span id="cb15-6"><a href="4-meteo.html#cb15-6"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(date, tmean, <span class="dt">linetype =</span> <span class="st">&quot;campaña 2020&quot;</span>)) <span class="op">+</span></span>
-<span id="cb15-7"><a href="4-meteo.html#cb15-7"></a><span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>)<span class="op">+</span></span>
-<span id="cb15-8"><a href="4-meteo.html#cb15-8"></a><span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">date_breaks=</span><span class="st">&quot;1 month&quot;</span>, <span class="dt">date_labels=</span><span class="st">&quot;%b&quot;</span>, <span class="dt">expand=</span><span class="kw">expansion</span>(<span class="fl">0.01</span>,<span class="dv">0</span>))<span class="op">+</span></span>
-<span id="cb15-9"><a href="4-meteo.html#cb15-9"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill=</span><span class="st">&quot;&quot;</span>, <span class="dt">linetype=</span><span class="st">&quot;&quot;</span>, <span class="dt">x =</span><span class="st">&quot;&quot;</span>, <span class="dt">y =</span><span class="st">&quot;T°&quot;</span>)<span class="op">+</span></span>
-<span id="cb15-10"><a href="4-meteo.html#cb15-10"></a><span class="st">  </span>theme_dens</span></code></pre></div>
-<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="4-meteo.html#cb16-1"></a>rec_frio &lt;-<span class="st"> </span>camp[<span class="kw">which</span>(camp<span class="op">$</span>tmean<span class="op">&lt;</span>camp<span class="op">$</span>lower_tmean),]</span>
-<span id="cb16-2"><a href="4-meteo.html#cb16-2"></a>rec_cal &lt;-<span class="st"> </span>camp[<span class="kw">which</span>(camp<span class="op">$</span>tmean<span class="op">&gt;</span>camp<span class="op">$</span>upper_tmean),]</span>
-<span id="cb16-3"><a href="4-meteo.html#cb16-3"></a></span>
-<span id="cb16-4"><a href="4-meteo.html#cb16-4"></a><span class="kw">library</span>(ggrepel); <span class="kw">options</span>(<span class="dt">repr.plot.width =</span> <span class="dv">2</span>, <span class="dt">repr.plot.height =</span> <span class="dv">2</span>)</span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="4-meteo.html#cb14-1"></a>camp <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb14-2"><a href="4-meteo.html#cb14-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(date, avg)) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb14-3"><a href="4-meteo.html#cb14-3"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> tmean, <span class="dt">ymax =</span> <span class="kw">pmin</span>(tmean, avg), <span class="dt">fill =</span> <span class="st">&quot;cálido&quot;</span>),<span class="dt">alpha=</span><span class="fl">0.5</span> ) <span class="op">+</span></span>
+<span id="cb14-4"><a href="4-meteo.html#cb14-4"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> avg, <span class="dt">ymax =</span> <span class="kw">pmin</span>(tmean, avg), <span class="dt">fill =</span> <span class="st">&quot;frío&quot;</span>), <span class="dt">alpha=</span><span class="fl">0.5</span>) <span class="op">+</span></span>
+<span id="cb14-5"><a href="4-meteo.html#cb14-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(date, avg, <span class="dt">linetype =</span> <span class="st">&quot;media 2000-2019 &quot;</span>)) <span class="op">+</span></span>
+<span id="cb14-6"><a href="4-meteo.html#cb14-6"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(date, tmean, <span class="dt">linetype =</span> <span class="st">&quot;campaña 2020&quot;</span>)) <span class="op">+</span></span>
+<span id="cb14-7"><a href="4-meteo.html#cb14-7"></a><span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>)<span class="op">+</span></span>
+<span id="cb14-8"><a href="4-meteo.html#cb14-8"></a><span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">date_breaks=</span><span class="st">&quot;1 month&quot;</span>, <span class="dt">date_labels=</span><span class="st">&quot;%b&quot;</span>, <span class="dt">expand=</span><span class="kw">expansion</span>(<span class="fl">0.01</span>,<span class="dv">0</span>))<span class="op">+</span></span>
+<span id="cb14-9"><a href="4-meteo.html#cb14-9"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">fill=</span><span class="st">&quot;&quot;</span>, <span class="dt">linetype=</span><span class="st">&quot;&quot;</span>, <span class="dt">x =</span><span class="st">&quot;&quot;</span>, <span class="dt">y =</span><span class="st">&quot;T°&quot;</span>)<span class="op">+</span></span>
+<span id="cb14-10"><a href="4-meteo.html#cb14-10"></a><span class="st">  </span>theme_dens</span></code></pre></div>
+<p><img src="Analisis_de_ensayos_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="4-meteo.html#cb15-1"></a>rec_frio &lt;-<span class="st"> </span>camp[<span class="kw">which</span>(camp<span class="op">$</span>tmean<span class="op">&lt;</span>camp<span class="op">$</span>lower_tmean),]</span>
+<span id="cb15-2"><a href="4-meteo.html#cb15-2"></a>rec_cal &lt;-<span class="st"> </span>camp[<span class="kw">which</span>(camp<span class="op">$</span>tmean<span class="op">&gt;</span>camp<span class="op">$</span>upper_tmean),]</span>
+<span id="cb15-3"><a href="4-meteo.html#cb15-3"></a></span>
+<span id="cb15-4"><a href="4-meteo.html#cb15-4"></a><span class="kw">library</span>(ggrepel); <span class="kw">options</span>(<span class="dt">repr.plot.width =</span> <span class="dv">2</span>, <span class="dt">repr.plot.height =</span> <span class="dv">2</span>)</span>
+<span id="cb15-5"><a href="4-meteo.html#cb15-5"></a></span>
+<span id="cb15-6"><a href="4-meteo.html#cb15-6"></a></span>
+<span id="cb15-7"><a href="4-meteo.html#cb15-7"></a>p2 &lt;-<span class="st"> </span>p1 <span class="op">+</span></span>
+<span id="cb15-8"><a href="4-meteo.html#cb15-8"></a><span class="st">  </span><span class="co"># Agregar medias record frío</span></span>
+<span id="cb15-9"><a href="4-meteo.html#cb15-9"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> rec_frio, <span class="kw">aes</span>(date, <span class="dt">y =</span> tmean), <span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb15-10"><a href="4-meteo.html#cb15-10"></a><span class="st">  </span><span class="kw">geom_text_repel</span>(<span class="dt">data=</span>rec_frio[<span class="dv">1</span>,], <span class="kw">aes</span>(<span class="dt">y=</span>tmean, <span class="dt">label=</span><span class="st">&quot;Récord fríos&quot;</span>), <span class="dt">size=</span><span class="dv">3</span>,</span>
+<span id="cb15-11"><a href="4-meteo.html#cb15-11"></a>                  <span class="dt">min.segment.length =</span> <span class="kw">unit</span>(<span class="dv">0</span>, <span class="st">&#39;lines&#39;</span>), <span class="dt">nudge_y =</span> <span class="dv">-2</span>, <span class="dt">segment.color=</span><span class="st">&quot;grey50&quot;</span>)<span class="op">+</span></span>
+<span id="cb15-12"><a href="4-meteo.html#cb15-12"></a><span class="st">  </span><span class="co"># Agregar medias record cálido</span></span>
+<span id="cb15-13"><a href="4-meteo.html#cb15-13"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span>rec_cal, <span class="kw">aes</span>(date, <span class="dt">y=</span>tmean), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></span>
+<span id="cb15-14"><a href="4-meteo.html#cb15-14"></a><span class="st">  </span><span class="kw">geom_text_repel</span>(<span class="dt">data =</span> rec_cal, <span class="kw">aes</span>(<span class="dt">y=</span>tmean, <span class="dt">label=</span><span class="st">&quot;Récord cálido&quot;</span>), <span class="dt">size=</span><span class="dv">3</span>,</span>
+<span id="cb15-15"><a href="4-meteo.html#cb15-15"></a>                  <span class="dt">min.segment.length =</span> <span class="kw">unit</span>(<span class="dv">0</span>, <span class="st">&#39;lines&#39;</span>), <span class="dt">nudge_y=</span><span class="dv">2</span>, <span class="dt">segment.color=</span><span class="st">&quot;grey50&quot;</span>)<span class="op">+</span></span>
+<span id="cb15-16"><a href="4-meteo.html#cb15-16"></a><span class="st">  </span><span class="co"># Agregar heladas meteorologicas y agronomicas</span></span>
+<span id="cb15-17"><a href="4-meteo.html#cb15-17"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> camp[<span class="kw">which</span>(camp<span class="op">$</span>tmin<span class="op">&lt;</span><span class="dv">1</span>),],</span>
+<span id="cb15-18"><a href="4-meteo.html#cb15-18"></a>             <span class="kw">aes</span>(date, <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb15-19"><a href="4-meteo.html#cb15-19"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> camp[<span class="kw">which</span>(camp<span class="op">$</span>tmin<span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>camp<span class="op">$</span>tmin<span class="op">&lt;</span><span class="fl">3.6</span>),],</span>
+<span id="cb15-20"><a href="4-meteo.html#cb15-20"></a>             <span class="kw">aes</span>(date, <span class="dt">y=</span><span class="fl">3.5</span>), <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">col=</span><span class="st">&quot;chartreuse&quot;</span>)<span class="co">#+</span></span>
+<span id="cb15-21"><a href="4-meteo.html#cb15-21"></a>p2</span>
+<span id="cb15-22"><a href="4-meteo.html#cb15-22"></a><span class="co"># annotate(&quot;text&quot;, x=-Inf, y=c(0,3.5),</span></span>
+<span id="cb15-23"><a href="4-meteo.html#cb15-23"></a>  <span class="co">#          label=c(&quot;Helada meteorológica&quot;,&quot;Heladas\nagronómicas&quot;), size=3, hjust=0))</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="4-meteo.html#cb16-1"></a><span class="co"># Fenología del girasol</span></span>
+<span id="cb16-2"><a href="4-meteo.html#cb16-2"></a>r5 =<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.Date</span>(<span class="st">&quot;2018-12-15&quot;</span>),  <span class="kw">as.Date</span>(<span class="st">&quot;2019-01-15&quot;</span>)); <span class="kw">diff</span>(r5)</span>
+<span id="cb16-3"><a href="4-meteo.html#cb16-3"></a>r6 =<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.Date</span>(<span class="st">&quot;2019-01-15&quot;</span>),  <span class="kw">as.Date</span>(<span class="st">&quot;2019-03-10&quot;</span>)); <span class="kw">diff</span>(r6)</span>
+<span id="cb16-4"><a href="4-meteo.html#cb16-4"></a>midpoint &lt;-<span class="st"> </span><span class="cf">function</span>(interval) { <span class="kw">min</span>(interval)<span class="op">+</span>(<span class="kw">max</span>(interval)<span class="op">-</span><span class="kw">min</span>(interval))<span class="op">/</span><span class="dv">2</span> }; <span class="kw">midpoint</span>(r5)</span>
 <span id="cb16-5"><a href="4-meteo.html#cb16-5"></a></span>
-<span id="cb16-6"><a href="4-meteo.html#cb16-6"></a></span>
-<span id="cb16-7"><a href="4-meteo.html#cb16-7"></a>p2 &lt;-<span class="st"> </span>p1 <span class="op">+</span></span>
-<span id="cb16-8"><a href="4-meteo.html#cb16-8"></a><span class="st">  </span><span class="co"># Agregar medias record frío</span></span>
-<span id="cb16-9"><a href="4-meteo.html#cb16-9"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> rec_frio, <span class="kw">aes</span>(date, <span class="dt">y =</span> tmean), <span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
-<span id="cb16-10"><a href="4-meteo.html#cb16-10"></a><span class="st">  </span><span class="kw">geom_text_repel</span>(<span class="dt">data=</span>rec_frio[<span class="dv">1</span>,], <span class="kw">aes</span>(<span class="dt">y=</span>tmean, <span class="dt">label=</span><span class="st">&quot;Récord fríos&quot;</span>), <span class="dt">size=</span><span class="dv">3</span>,</span>
-<span id="cb16-11"><a href="4-meteo.html#cb16-11"></a>                  <span class="dt">min.segment.length =</span> <span class="kw">unit</span>(<span class="dv">0</span>, <span class="st">&#39;lines&#39;</span>), <span class="dt">nudge_y =</span> <span class="dv">-2</span>, <span class="dt">segment.color=</span><span class="st">&quot;grey50&quot;</span>)<span class="op">+</span></span>
-<span id="cb16-12"><a href="4-meteo.html#cb16-12"></a><span class="st">  </span><span class="co"># Agregar medias record cálido</span></span>
-<span id="cb16-13"><a href="4-meteo.html#cb16-13"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span>rec_cal, <span class="kw">aes</span>(date, <span class="dt">y=</span>tmean), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)<span class="op">+</span></span>
-<span id="cb16-14"><a href="4-meteo.html#cb16-14"></a><span class="st">  </span><span class="kw">geom_text_repel</span>(<span class="dt">data =</span> rec_cal, <span class="kw">aes</span>(<span class="dt">y=</span>tmean, <span class="dt">label=</span><span class="st">&quot;Récord cálido&quot;</span>), <span class="dt">size=</span><span class="dv">3</span>,</span>
-<span id="cb16-15"><a href="4-meteo.html#cb16-15"></a>                  <span class="dt">min.segment.length =</span> <span class="kw">unit</span>(<span class="dv">0</span>, <span class="st">&#39;lines&#39;</span>), <span class="dt">nudge_y=</span><span class="dv">2</span>, <span class="dt">segment.color=</span><span class="st">&quot;grey50&quot;</span>)<span class="op">+</span></span>
-<span id="cb16-16"><a href="4-meteo.html#cb16-16"></a><span class="st">  </span><span class="co"># Agregar heladas meteorologicas y agronomicas</span></span>
-<span id="cb16-17"><a href="4-meteo.html#cb16-17"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> camp[<span class="kw">which</span>(camp<span class="op">$</span>tmin<span class="op">&lt;</span><span class="dv">1</span>),],</span>
-<span id="cb16-18"><a href="4-meteo.html#cb16-18"></a>             <span class="kw">aes</span>(date, <span class="dt">y=</span><span class="dv">0</span>), <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
-<span id="cb16-19"><a href="4-meteo.html#cb16-19"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> camp[<span class="kw">which</span>(camp<span class="op">$</span>tmin<span class="op">&gt;</span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>camp<span class="op">$</span>tmin<span class="op">&lt;</span><span class="fl">3.6</span>),],</span>
-<span id="cb16-20"><a href="4-meteo.html#cb16-20"></a>             <span class="kw">aes</span>(date, <span class="dt">y=</span><span class="fl">3.5</span>), <span class="dt">shape=</span><span class="dv">8</span>, <span class="dt">col=</span><span class="st">&quot;chartreuse&quot;</span>)<span class="co">#+</span></span>
-<span id="cb16-21"><a href="4-meteo.html#cb16-21"></a>p2</span>
-<span id="cb16-22"><a href="4-meteo.html#cb16-22"></a><span class="co"># annotate(&quot;text&quot;, x=-Inf, y=c(0,3.5),</span></span>
-<span id="cb16-23"><a href="4-meteo.html#cb16-23"></a>  <span class="co">#          label=c(&quot;Helada meteorológica&quot;,&quot;Heladas\nagronómicas&quot;), size=3, hjust=0))</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="4-meteo.html#cb17-1"></a><span class="co"># Fenología del girasol</span></span>
-<span id="cb17-2"><a href="4-meteo.html#cb17-2"></a>r5 =<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.Date</span>(<span class="st">&quot;2018-12-15&quot;</span>),  <span class="kw">as.Date</span>(<span class="st">&quot;2019-01-15&quot;</span>)); <span class="kw">diff</span>(r5)</span>
-<span id="cb17-3"><a href="4-meteo.html#cb17-3"></a>r6 =<span class="st"> </span><span class="kw">c</span>(<span class="kw">as.Date</span>(<span class="st">&quot;2019-01-15&quot;</span>),  <span class="kw">as.Date</span>(<span class="st">&quot;2019-03-10&quot;</span>)); <span class="kw">diff</span>(r6)</span>
-<span id="cb17-4"><a href="4-meteo.html#cb17-4"></a>midpoint &lt;-<span class="st"> </span><span class="cf">function</span>(interval) { <span class="kw">min</span>(interval)<span class="op">+</span>(<span class="kw">max</span>(interval)<span class="op">-</span><span class="kw">min</span>(interval))<span class="op">/</span><span class="dv">2</span> }; <span class="kw">midpoint</span>(r5)</span>
-<span id="cb17-5"><a href="4-meteo.html#cb17-5"></a></span>
-<span id="cb17-6"><a href="4-meteo.html#cb17-6"></a>(p_final &lt;-<span class="st"> </span><span class="co"># Agregar fenología y anotaciones varias</span></span>
-<span id="cb17-7"><a href="4-meteo.html#cb17-7"></a><span class="st">    </span>p2 <span class="op">+</span></span>
-<span id="cb17-8"><a href="4-meteo.html#cb17-8"></a><span class="st">    </span><span class="co"># barras de floración y llenado</span></span>
-<span id="cb17-9"><a href="4-meteo.html#cb17-9"></a><span class="st">    </span><span class="kw">annotate</span>(<span class="st">&quot;rect&quot;</span>, <span class="dt">xmin=</span> <span class="kw">c</span>(<span class="kw">min</span>(r5), <span class="kw">min</span>(r6)), <span class="dt">xmax=</span><span class="kw">c</span>(<span class="kw">max</span>(r5),<span class="kw">max</span>(r6)), <span class="dt">ymin=</span><span class="dv">0</span>, <span class="dt">ymax=</span><span class="dv">30</span>, <span class="dt">alpha=</span><span class="fl">0.2</span>, <span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;grey80&quot;</span>,<span class="st">&quot;grey60&quot;</span>))<span class="op">+</span></span>
-<span id="cb17-10"><a href="4-meteo.html#cb17-10"></a><span class="st">    </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="kw">midpoint</span>(r5), <span class="kw">midpoint</span>(r6)), <span class="dt">y=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">parse=</span><span class="ot">TRUE</span>, <span class="dt">size=</span><span class="dv">3</span>,</span>
-<span id="cb17-11"><a href="4-meteo.html#cb17-11"></a>             <span class="dt">label=</span><span class="kw">c</span>(<span class="st">&#39;bold(&quot;Floración&quot;)&#39;</span>,<span class="st">&#39;bold(&quot;Llenado&quot;)&#39;</span>)) <span class="op">+</span></span>
-<span id="cb17-12"><a href="4-meteo.html#cb17-12"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>,</span>
-<span id="cb17-13"><a href="4-meteo.html#cb17-13"></a>         <span class="dt">title =</span> <span class="st">&quot;Temperatura media diaria en Balcarce y estadíos reproductivos del girasol&quot;</span>,</span>
-<span id="cb17-14"><a href="4-meteo.html#cb17-14"></a>         <span class="dt">subtitle =</span> <span class="st">&quot;- Campaña 2018/19 (línea negra)</span><span class="ch">\n</span><span class="st">- Serie 1971-2017: rango 80% (banda interna) y medias extremas (bandas externas)&quot;</span>,</span>
-<span id="cb17-15"><a href="4-meteo.html#cb17-15"></a>         <span class="dt">caption =</span> <span class="st">&quot;Datos registrados en la estación meteorológica de la EEA INTA Balcarce&quot;</span>))</span></code></pre></div>
+<span id="cb16-6"><a href="4-meteo.html#cb16-6"></a>(p_final &lt;-<span class="st"> </span><span class="co"># Agregar fenología y anotaciones varias</span></span>
+<span id="cb16-7"><a href="4-meteo.html#cb16-7"></a><span class="st">    </span>p2 <span class="op">+</span></span>
+<span id="cb16-8"><a href="4-meteo.html#cb16-8"></a><span class="st">    </span><span class="co"># barras de floración y llenado</span></span>
+<span id="cb16-9"><a href="4-meteo.html#cb16-9"></a><span class="st">    </span><span class="kw">annotate</span>(<span class="st">&quot;rect&quot;</span>, <span class="dt">xmin=</span> <span class="kw">c</span>(<span class="kw">min</span>(r5), <span class="kw">min</span>(r6)), <span class="dt">xmax=</span><span class="kw">c</span>(<span class="kw">max</span>(r5),<span class="kw">max</span>(r6)), <span class="dt">ymin=</span><span class="dv">0</span>, <span class="dt">ymax=</span><span class="dv">30</span>, <span class="dt">alpha=</span><span class="fl">0.2</span>, <span class="dt">fill=</span><span class="kw">c</span>(<span class="st">&quot;grey80&quot;</span>,<span class="st">&quot;grey60&quot;</span>))<span class="op">+</span></span>
+<span id="cb16-10"><a href="4-meteo.html#cb16-10"></a><span class="st">    </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="kw">midpoint</span>(r5), <span class="kw">midpoint</span>(r6)), <span class="dt">y=</span><span class="dv">3</span>,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">parse=</span><span class="ot">TRUE</span>, <span class="dt">size=</span><span class="dv">3</span>,</span>
+<span id="cb16-11"><a href="4-meteo.html#cb16-11"></a>             <span class="dt">label=</span><span class="kw">c</span>(<span class="st">&#39;bold(&quot;Floración&quot;)&#39;</span>,<span class="st">&#39;bold(&quot;Llenado&quot;)&#39;</span>)) <span class="op">+</span></span>
+<span id="cb16-12"><a href="4-meteo.html#cb16-12"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="ot">NULL</span>, <span class="dt">y=</span><span class="ot">NULL</span>,</span>
+<span id="cb16-13"><a href="4-meteo.html#cb16-13"></a>         <span class="dt">title =</span> <span class="st">&quot;Temperatura media diaria en Balcarce y estadíos reproductivos del girasol&quot;</span>,</span>
+<span id="cb16-14"><a href="4-meteo.html#cb16-14"></a>         <span class="dt">subtitle =</span> <span class="st">&quot;- Campaña 2018/19 (línea negra)</span><span class="ch">\n</span><span class="st">- Serie 1971-2017: rango 80% (banda interna) y medias extremas (bandas externas)&quot;</span>,</span>
+<span id="cb16-15"><a href="4-meteo.html#cb16-15"></a>         <span class="dt">caption =</span> <span class="st">&quot;Datos registrados en la estación meteorológica de la EEA INTA Balcarce&quot;</span>))</span></code></pre></div>
 
 </div>
 </div>

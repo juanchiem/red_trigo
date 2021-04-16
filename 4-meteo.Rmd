@@ -55,18 +55,10 @@ c2020 <- # Para la reciente campaña
          month = month(date)) %>%
   group_by(year) %>%
   mutate(decada = row_number()) %>%
-  filter(date > '2020-05-01', date < '2020-12-31')
-
-```
-
-```{r}
-c2020 <- # fusionar ambos datasets (serie + campaña)
-  c2020 %>%
+  filter(date > '2020-05-01', date < '2020-12-31') %>% 
   left_join(serie20, by = c("decada")) %>%
   mutate(date = as.Date(date))
-
-# print(bce_18_19, n=Inf) # Check
-# print(bce_serie, n=Inf) # Check
+ # fusionar ambos datasets (serie + campaña)
 
 ```
 
@@ -99,8 +91,11 @@ c2020 %>%
   group_by(month.y) %>% 
   summarise(
     cs = sum(rain_acum_season),
-    cs_med = sum(med))
+    cs_med = sum(med), 
+    bal = cs - cs_med)
 ```
+
+> agosto, septiembre noviembre y diciembre llovio menos que lo normal 2020-2019
 
 ```{r}
 # 5 - Fenología del cultivo
