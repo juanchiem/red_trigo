@@ -100,10 +100,23 @@ ggplot()+
 
 ```
 
+## Meteo data
+
+
+```{r}
+eea <- gs4_get(gs4_find("meteo_eea_serie")$id)
+# eea %>% sheet_names()
+
+serie <- seq(2000,2020,1) %>% as.character() %>% 
+  map_df(~ read_sheet(eea, sheet = .)) %>%
+  bind_rows()
+```
+
 
 ```{r, eval=FALSE}
 # dat %>% write_sheet(ss=nova_ceb, sheet = "clean")
-save(dat_full, dat, cosecha, file = "data/nova_trigo.Rdata")
+save(dat_full, dat, cosecha, serie, file = "data/nova_trigo.Rdata")
+# load("data/nova_trigo.Rdata")
 ```
 
 

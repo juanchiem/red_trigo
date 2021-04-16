@@ -10,3 +10,6 @@ rendimiento
 condiciones-meteorológicas
 temperaturas
 precipitaciones
+meteo-data
+cálculos-resumen-y-visualización-gráfica-de-las-precipitaciones-acumuladas-por-década
+calcular-80-percentil-de-tmean-diarias-y-valores-maximos-y-minimos-observados-en-la-serie-histórica
