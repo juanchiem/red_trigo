@@ -1,0 +1,100 @@
+```{r, eval=FALSE}
+source('_global_setting.R')
+id_trial="2019_tr_mad"
+```
+
+```{r}
+ensayos <- metadata %>% filter(id_ensayo == id_trial) 
+```
+
+```{r}
+condiciones <- ensayos %>% 
+  select(contains("&")) %>% 
+  rename_all(list(~str_replace(., "&", "")))
+```
+
+```{r}
+crono <- ensayos %>% 
+  select(contains("@")) %>% 
+  pivot_longer(everything(), names_to = "evento", values_to = "fecha") %>% 
+  mutate(evento = gsub(".*@","", evento), 
+         fecha = lubridate::dmy(fecha),
+         dd_siembra = interval(min(fecha), fecha) %/% days(1)) %>%
+  mutate(
+dd_spray1=interval(((.)%>% filter(evento=="A1")%>%pull(fecha)),fecha) %/% days(1),
+dd_spray2=interval(((.)%>% filter(evento=="A2")%>%pull(fecha)),fecha) %/% days(1))%>%   arrange(fecha)
+
+feno  <- crono %>% 
+  filter(str_detect(evento, 'Z')) %>% 
+  mutate(evento = recode(evento, 
+                         "Z0"="Siembra",
+                         "Z99"="Cosecha"))
+```
+
+```{r}
+dis_press0 <- ensayos %>% 
+  select(contains("_")) %>% 
+  pivot_longer(-id_ensayo, 
+               names_to = "var", values_to = "incidencia") %>% 
+  separate(var, c("evento", "pato", "estrato")) %>% 
+  pivot_wider(names_from = pato, values_from = incidencia)
+
+dis_press <-  dis_press0 %>% 
+  left_join(crono, by="evento") %>% 
+  pivot_longer(MA:RH, names_to = "pato", values_to = "inc") %>% 
+  mutate(leg_label = paste0(pato, "(",estrato,")"))
+  
+dis_press
+```
+
+```{r}
+# pretty_max = function(x) unique( floor(pretty(seq(0, (max(x) + 1) * 1.1))))
+fecha_antesis <- filter(feno, evento == "Z65") %>% pull(fecha)
+
+geom_feno <- function(){
+  list(
+    annotate("rect", alpha=0.2, fill=c("grey80"),
+             xmin= fecha_antesis-20, 
+             xmax= fecha_antesis+10, 
+             ymin=0, ymax=Inf), 
+    geom_text(data=feno, aes(x=fecha, y=Inf, label=evento), size=2.5, hjust=1.5,
+              angle = 90), 
+    geom_vline(xintercept= (feno %>% 
+                               filter(evento %in% c("Siembra", "Cosecha")) %>% 
+                               pull(fecha))+3, linetype = 2) )    
+}
+```
+
+```{r}
+p_dis <- dis_press %>% 
+  ggplot(aes(fecha, inc))+
+  geom_point(aes(col = pato))+
+  geom_feno()+
+  geom_text(data=.%>%filter(evento %in% c("A1", "A2")), 
+            aes(x=fecha, y=0, label=evento), vjust=1.5, size=3) +
+  geom_text(aes(x=fecha, y=-4, label=dd_spray1), vjust=1.5, size=3)+
+  expand_limits(y = c(-7, 50))+
+  scale_x_date(date_breaks="1 month", date_labels="%b")+
+  labs(x="", y="%", color="Enfermedad", 
+       title='Presión de enfermedad', 
+       caption = "Eventos: Aplicaciones (A1 y A2)\nEstrato de evaluación: planta entera (PE) y estrato superior (ES)")+
+  geom_hline(yintercept=0, col="gray70")+
+  theme(legend.position = "top")
+p_dis
+
+presion_enfermedad <- p_dis + gridExtra::tableGrob(dis_press0%>% select(-id_ensayo))
+```
+
+```{r}
+library(leaflet)
+map_trials <- leaflet(ensayos) %>% 
+  addTiles()  %>% 
+  addMarkers(~lon, ~lat) %>% 
+  setView(lng = ensayos$lon, lat = ensayos$lat, zoom = 9)   
+```
+
+
+```{r}
+save(list=ls(), 
+     file=here::here("ensayos", paste0(`id_trial`, "_metadata.Rda")))
+```

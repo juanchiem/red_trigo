@@ -1,0 +1,114 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r 0, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+pacman::p_load(tidyverse, lmerTest, emmeans, stargazer)
+```
+
+
+```{r 1, include=FALSE}
+googlesheets4::sheets_deauth()
+yield_raw <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1nsT3H48FPiIlpOAloXiV8BbhfIf4-oaf3fQPtIPT_qY/edit?usp=sharing", 
+                                 sheet="trigo_rto",
+                                 col_types="cccddd")
+```
+
+
+```{r 3}
+yieldat <- yield_raw %>% 
+  mutate(pos=str_sub(par, 2, 3)) %>% 
+  # mutate(x=as.numeric(pos)*3, y=as.numeric(bq)*6) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  dplyr::select(par, pos, everything())  
+```
+
+Heatmap de rendimiento a campo
+
+```{r 4}
+heatmap <- yieldat %>% summary(yieldat$rto_14) 
+  # filter(trt %in% red) %>% 
+  ggplot(aes(pos, bq, fill= rto_14)) + 
+  geom_tile() +
+  geom_text(
+    # aes(label = paste(trt, "\n", round(hum,1), "%")), 
+    aes(label = rto_14), col = "white", size = 3) +
+  viridis::scale_fill_viridis(discrete=FALSE, direction = -1)+
+  labs(x="Parcela", 
+       y="Bloque", 
+       fill = "Rendimiento\n(kg/ha)")
+```
+
+```{r 5}
+trat_ab <- c("Test", "AzCip_500", "Oxo_1000", "Oxo_2000", "AzCip_500\nOxo_1000")
+
+yieldat %>%
+  ggplot(aes(x=trt, y=rto_14)) +
+  stat_summary(fun = mean, fun.min = mean, width=0.8, 
+               fun.max = mean, geom = "bar", 
+               alpha=0.9, fill="steelblue")+
+  stat_summary(fun.data = mean_se, geom = "errorbar", width=0.1)+
+  geom_text(data=. %>% group_by(trt) %>% summarise(rto_14=mean(rto_14) %>% round(0)), aes(label=rto_14), vjust=1.6, color="white", size=3.5)+
+  labs(x="", y="Kg/ha (aj.14%)", title= "Rendimiento", color = "Bloque")+  scale_x_discrete(labels= trat_ab)+
+  theme(axis.text.x=element_text(color = "black", size=11, angle=30, vjust=.8, hjust=0.8)) 
+
+```
+
+```{r 6}
+mod_yield <- lmer(rto_14 ~ trt + (1|bq), data=yieldat)
+anova(mod_yield)
+summary(mod_yield)
+```
+
+Medias estimadas por el modelo y comparaciones multiples: Tukey (todos contra todos) 
+
+
+```{r 7}
+pred_yield = emmeans(mod_yield, ~ trt, type = "response")
+
+multcomp::cld(pred_yield, type = "response", reverse=T) %>% 
+  as_tibble() %>% 
+  dplyr::select(trt, rinde = emmean, lim.inferior=lower.CL, 
+                lim.superior=upper.CL) %>% 
+  mutate("5% sign."= 
+           CLD(pred_yield, level=0.05,Letter=letters)$.group) %>% 
+  mutate("10% sign."= 
+           CLD(pred_yield, alpha=0.1,Letter=letters)$.group) %>% 
+  # Calcular el cambio relativo de cada trt respecto a trt 1 (Control)
+  mutate(respuesta = ((rinde-first(rinde))/first(rinde)*100) %>% round(1) %>% 
+           paste0(., "%"))%>%
+  # Expresar en % con un decimal
+  mutate_if(is.double, list(~round(.,1)))
+```
+
+```{r}
+yieldat %>%
+  pivot_longer(p1000:PH, names_to = "var", values_to = "val") %>%
+  mutate(var=factor(var)) %>% 
+  ggplot(aes(x=trt, y=val)) +
+  facet_wrap(.~var, scales = "free")+
+  # facet_grid(.~trt,labeller = labeller(trt = trat_ab)) +
+
+  stat_summary(fun = mean, fun.min = mean, width=0.8, 
+               fun.max = mean, geom = "bar", 
+               alpha=0.9, fill="steelblue")+
+  stat_summary(fun.data = mean_se, geom = "errorbar", width=0.1)+
+  geom_text(data=. %>% group_by(trt, var) %>% summarise(val=mean(val) %>% round(0)), aes(label=val), vjust=1.6, color="white", size=3.5)+
+  labs(x="", y="g", title= "")+  
+  scale_x_discrete(labels= trat_ab)+
+  theme(axis.text.x=element_text(color = "black", size=11, angle=30, vjust=.8, hjust=0.8))
+```
+
+```{r}
+mod_p1000 <- lmer(p1000 ~ trt + (1|bq), data=yieldat)
+anova(mod_p1000)
+summary(mod_p1000)
+```
+
+
+```{r 10}
+# save(list=ls(), file="yield_report.Rda")
+```
+

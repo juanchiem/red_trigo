@@ -1,0 +1,57 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+load("data/red_todos_20.RData")
+red20 %>% count(trt)
+source(here::here("themes.R"))
+# raw %>%filter(id_ensayo == "2020_INTA_BCE")
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+dat <- red20 %>% 
+  filter(trt %in% c("test", "rub_Z32", "rub_Z39", "orq_Z32", "orq_Z39", "rub_Z32_orq_Z39", "rub_Z32_carbFMC_Z39")) 
+
+dat %>% 
+  group_by(ensayo, trt) %>% 
+  summarise(kg_ha = mean(kg_ha, na.rm = T)) %>% 
+  # ungroup() %>% 
+  filter(trt %in% c("test")) %>% 
+  pivot_wider(names_from = trt, values_from = kg_ha) %>% 
+  rename(rinde_test = test)->sum
+# sum %>%filter(id_ensayo == "2020_INTA_BCE")
+
+dat %>% 
+  group_by(ensayo, trt) %>% 
+  summarise(kg_ha = mean(kg_ha, na.rm = T)) %>%  
+  left_join(sum, by = "ensayo") %>% 
+  rowwise() %>% 
+  mutate(dif_test = kg_ha -rinde_test) ->dat_mean
+# dat_mean %>%filter(id_ensayo == "2020_INTA_BCE")
+
+# load(here::here("data/data.Rdata"))
+```
+
+```{r}
+dat %>% 
+  mutate(trt = fct_relevel(trt, c("test", "rub_Z32", "orq_Z32", "rub_Z39", "orq_Z39", "rub_Z32_orq_Z39", "rub_Z32_carbFMC_Z39"))) %>% 
+  ggplot()+
+  aes(trt, kg_ha)+
+  geom_point()+
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.5)+
+  facet_grid(.~ensayo)+
+  stat_summary(data = dat_mean,
+               aes(x=trt, y=kg_ha, label=dif_test %>% round), 
+               fun=mean, geom="text", size=4,vjust = -0.5)+
+  geom_vline(xintercept = c(1.5,3.5,5.5), linetype = "dashed")+
+  coord_flip()+
+  theme_dens1
+```

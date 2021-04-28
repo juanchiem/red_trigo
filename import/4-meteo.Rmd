@@ -1,0 +1,193 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Condiciones meteorológicas 
+
+## Precipitaciones 
+
+```{r, eval=FALSE}
+pacman::p_load(tidyverse, lubridate, googledrive)
+load("../trial_analysis/data/nova_trigo.Rdata")
+source(here::here('0 themes.R'))
+```
+
+- Cálculos Serie
+
+```{r, eval=FALSE}
+serie20 <- serie %>%
+  filter(year!=2020) %>%
+  group_by(date=if_else(day(date) >= 30,
+                        floor_date(date, "20 days"),
+                        floor_date(date, "10 days"))) %>%
+  summarize(rain_acum = sum(rain),
+            days = n()) %>%
+  mutate(year = year(date),
+         month = month(date)) %>%
+  ungroup %>%
+  group_by(year) %>%
+  mutate(decada = row_number()) %>%
+  ungroup %>%
+  group_by(decada) %>%
+  summarise(month = first(month),
+            med = quantile(rain_acum, .5, na.rm = T),
+            lower_80=quantile(rain_acum, .2, na.rm = T), # Rango 80% de los años
+            upper_80=quantile(rain_acum, .8, na.rm = T)) 
+serie20
+```
+
+- Cálculos reciente campaña
+
+```{r, eval=FALSE}
+c2020 <-
+  serie %>%
+  group_by(date = if_else(day(date) >= 30,
+                          floor_date(date, "20 days"),
+                          floor_date(date, "10 days"))) %>%
+  summarize(rain_acum_season = sum(rain)) %>% #, days=n()) %>%
+  mutate(year = year(date),
+         month = month(date)) %>%
+  group_by(year) %>%
+  mutate(decada = row_number()) %>%
+  filter(date > '2020-04-21', date < '2020-12-22') %>% 
+  left_join(serie20, by = c("decada")) %>%
+  mutate(date = as.Date(date))
+```
+
+- Calendario de aplicación y evaluaciones
+
+```{r, eval=FALSE}
+feno <- tibble::tribble(
+                ~Eval,  ~date, ~DDA,
+                   1L, "2020-10-31",   0L,
+                   2L, "2020-11-14",  10L,
+                   3L, "2020-12-04",  35L
+                )
+```
+
+- Balance relativo a la serie
+
+```{r, eval=FALSE}
+bal <- c2020 %>% 
+    group_by(month.y) %>% 
+    summarise( 
+      date = first(date),
+      cs = sum(rain_acum_season) %>% round,
+      cs_med = sum(med)%>% round, 
+      bal = cs - cs_med%>% round) %>% 
+  mutate(lab = paste0(cs, " (",bal,")"))
+bal
+```
+
+- Gráfico de precipitaciones
+
+```{r, eval=FALSE}
+c2020 %>%
+  ggplot(aes(x=date)) +
+  geom_pointrange(aes(y=med, ymin=lower_80, ymax=upper_80), fill='white', color='deepskyblue',
+                  shape=21, fatten=.7, size=3, position=(p5=position_nudge(x = 5)))+
+  geom_point(aes(y=rain_acum_season), col ="brown1",
+             position=p5) +
+  geom_line(aes(y=rain_acum_season, group=1), col ="brown1", linetype="dashed", position=p5)+
+  # scale_y_continuous(limits=c(0, 100), expand=c(0.05, 0))+
+  scale_x_date(date_breaks="1 month", date_labels="%b", expand=expansion(0,0), 
+               limits = as.Date(c('2020-05-01','2020-12-31')))+    
+  labs(x=NULL, y="ml",
+       title = "Precipitaciones en Balcarce (decádicas)",
+       subtitle = "- Campaña 2020 (en puntos rojos)\n- Serie 2000-2019: mediana (puntos blancos) y rango 80% (barras azules)",
+       # "mm acumulados por períodos de 10 días",
+       caption = "Datos de la estación meteorológica de la EEA INTA Balcarce\ni) Días desde la aplicación (en negritas)\nii) En itálicas: mm acumulados mensual 2020 y diferencia con la serie 2000-19 (entre paréntesis)")+
+  geom_text(data = feno, aes(x = as.Date(date), y=0, label = DDA), 
+            angle = 90, hjust = 0, fontface = "bold", size=3)+
+  geom_rug(data = feno, aes(x = as.Date(date)))+
+  geom_text(data = bal, aes(x = as.Date(date), y=Inf, label = lab), 
+            vjust = 2, hjust = -.5, fontface = "italic", size=3)+
+  theme_dens
+
+ggsave(file = "adama/lluvias.png", w=80, h=50, units="mm", dpi=300, scale=2)
+drive_upload(path = as_dribble("fina_2020/ADAMA"), "adama/lluvias.png", overwrite = FALSE)
+
+```
+
+![](plots/lluvias.png)
+
+> agosto, septiembre noviembre y diciembre llovio menos que lo normal 2020-2019
+
+## Temperaturas
+
+- Serie
+
+```{r, eval=FALSE}
+bce_serie <-
+  serie %>% 
+  filter(year!=2020) %>%
+  group_by(julian) %>%
+  summarise(
+    month = first(month),
+    avg = mean(tmean, .2, na.rm = T),
+    # Rango 80% de los años (rango interno)
+    lower_80=quantile(tmean, .2, na.rm = T),
+    upper_80=quantile(tmean, .8, na.rm = T),
+    # Min y max de tmean (rango externo)
+    lower_tmean=min(tmean, na.rm = T),
+    upper_tmean=max(tmean, na.rm = T)) %>%
+  ungroup()
+
+```
+
+- Campaña reciente
+
+```{r, eval=FALSE}
+camp <- # Fusionar serie con campaña 18/19
+  serie %>%
+  filter(date > '2020-05-01', date < '2020-12-30') %>%
+  left_join(bce_serie, by = c("julian", "month")) %>%
+  mutate(date = as.Date(date)) %>%
+  droplevels()
+```
+
+- Balance campaña - serie
+
+```{r, eval=FALSE}
+bal_t <- camp %>% 
+  group_by(month) %>% 
+  summarize(date = first(date),
+            n_days = n(),
+            d_frios = sum(tmean < avg),
+            p_frios = paste0(round(d_frios/n_days*100),"%"),
+            d_calidos = sum(tmean > avg),
+            p_calidos = paste0(round(d_calidos/n_days*100), "%"),
+            )
+```
+
+- Grafico Temp
+
+```{r, eval=FALSE}
+camp %>% 
+  ggplot(aes(date)) +  
+  geom_ribbon(aes(ymin = tmean, ymax = pmin(tmean, avg), fill = "+cálido"),alpha=0.5 ) +
+  geom_ribbon(aes(ymin = avg, ymax = pmin(tmean, avg), fill = "+frío"), alpha=0.5) +
+  geom_line(aes(date, avg, linetype = "media 2000-2019 ")) +
+  geom_line(aes(date, tmean, linetype = "campaña 2020")) +
+  scale_fill_brewer(palette = "Set1", direction = 1)+
+  # scale_x_date(date_breaks="1 month", date_labels="%b", expand=expansion(0.01,0))+
+  scale_x_date(date_breaks="1 month", date_labels="%b", expand=expansion(0,0), 
+               limits = as.Date(c('2020-05-01','2020-12-31')))+    
+  geom_text(data = feno, aes(x = as.Date(date), y=0, label = DDA), 
+            angle = 90, hjust = 0, fontface = "bold", size=3)+
+  geom_rug(data = feno, aes(x = as.Date(date)))+
+  geom_text(data = bal_t, aes(x = as.Date(date), y=Inf, label = p_calidos),
+            col = "red3", vjust = 2, hjust = -1, fontface = "italic", size=3)+
+  geom_text(data = bal_t, aes(x = as.Date(date), y=-Inf, label = p_frios), 
+            vjust = -3, hjust = -1, fontface = "italic", size=3, col ="steelblue")+  
+  labs(fill="", linetype="", x ="", y ="T°", title = "Temperatura media", 
+       caption = "Datos de la estación meteorológica de la EEA INTA Balcarce\ni) Días desde la aplicación (en negritas)\nii) Proporción de días mas calidos/frios que la media de la serie por mes (en colores)")+
+       # \niii)*Fecha de antesis")+
+  # annotate('text', x = as.Date("2020-11-18"), y = 8, label='"*"', parse=FALSE, size = 7) +
+  theme_dens
+ggsave(file = "adama/temp.png", w=70, h=50, units="mm", dpi=300, scale=2)
+drive_upload(path = as_dribble("fina_2020/ADAMA"), "adama/temp.png", overwrite = FALSE)
+```
+
+![](plots/temp.png)

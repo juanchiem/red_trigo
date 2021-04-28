@@ -1,0 +1,94 @@
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, results= "asis")
+pacman::p_load(kableExtra)
+```
+
+# Metadata ensayo 
+
+Experimento ID: *2019_tr_mad*
+
+### Tratamientos 
+
+```{r}
+trats <- tibble::tribble(
+  ~Trt_id,        ~Z32,        ~Z39,
+  1L,         ".",         ".",
+  2L,     "T + E",         ".",
+  3L,         ".",     "T + E",
+  4L,     "T + E",     "T + E",
+  5L, "T + E + C",         ".",
+  6L,         ".", "T + E + C",
+  7L, "T + E + C", "T + E + C",
+  8L,     "T + E", "T + E + C",
+  9L,       "Oxo",         ".",
+  10L,         ".",       "Oxo",
+  11L,       "Oxo",       "Oxo"
+)  
+
+kable(trats, align = "c") %>% 
+  kableExtra::kable_styling(full_width = F) %>%
+  footnote(number = c("T + E: Rubric Max 0,5 l/ha	(epoxiconazole 10% ~ 50 g/ha +  azoxistrobina 20% ~ 100 g/ha)",
+                      "T + E + C: Orquesta Ultra 1,2 l/ha (epoxiconazole 5% ~ 60 g/ha + pyraclostrobin 8,1% ~ 97 g/ha +	fluxapyroxad 5% ~ 60 g/ha)",
+                      "Oxo:	Oxocat 0,5% + Agro Turbo 0,1%"))
+
+```
+
+```{r }
+meta_url <- "https://docs.google.com/spreadsheets/d/1-eCU4YfOiGz5Ox6RHX8CXDaQSUsmImEM_lQHAWtWybs/edit?usp=sharing"
+
+metadata <- gsheet::gsheet2tbl(meta_url)  
+id_trial <- "2019_tr_mad"
+ensayos <- metadata %>% filter(id_ensayo == id_trial) 
+```
+
+### Localización de experimento
+
+```{r }
+library(leaflet)
+leaflet(ensayos) %>% 
+  addTiles()  %>% 
+  addMarkers(~lon, ~lat) %>% 
+  setView(lng = ensayos$lon, lat = ensayos$lat, zoom = 9)  
+```
+
+### Diseño experimental:
+
+DBCA - 3 repeticiones 
+
+### Condiciones sitio experimental 
+
+```{r }
+ensayos %>% 
+  select(contains("&")) %>% 
+  rename_all(funs(str_replace(., "&", ""))) %>% 
+  kable() %>% kableExtra::kable_styling(full_width = F)
+```
+
+### Cronologia: fenologia y actividades 
+
+```{r }
+crono <- ensayos %>% select(contains("@")) %>% 
+  pivot_longer(everything(), names_to = "evento", values_to = "fecha") %>% 
+  mutate(evento= gsub(".*@","", evento), 
+         date = lubridate::parse_date_time(fecha, '%d/%m', exact = TRUE)) %>% 
+  arrange(date)
+library(lubridate)
+crono %>%  
+  mutate(dd_siembra = abs(interval(date, min(date))%/% days(1))) %>%
+  select(-date) %>% 
+  kable() %>% kableExtra::kable_styling(full_width = F)
+```
+
+### Presión de enfermedad
+
+```{r }
+ensayos %>% 
+  select(contains("_")) %>% 
+  pivot_longer(-id_ensayo, 
+               names_to = "var", values_to = "Incidencia") %>% 
+  separate(var, c("Fenologia", "pato")) %>% 
+  pivot_wider(names_from = pato, values_from = Incidencia) %>% 
+  kable() %>% kableExtra::kable_styling(full_width = F) %>% 
+  kableExtra::footnote(
+    general = "Los valores presentados son Incidencia a nivel de parcela")
+```

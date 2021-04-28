@@ -1,0 +1,217 @@
+---
+title: "Reporte de resultados - 2019"
+author: "Juan Edwards (Ing. Agr., PhD)"
+output:
+  html_document:
+    theme: readable
+    toc: yes
+    toc_float:
+      collapsed: yes
+      smooth_scroll: no
+  pdf_document: 
+    toc: yes
+---
+
+```{r compilación informe, include=FALSE}
+source('_global_setting_compi.R')
+#https://www.andrewheiss.com/blog/2020/01/01/flexdashboard-dynamic-data/
+```
+
+# Metadata ensayo
+
+Experimento ID: `2019_tr_mad` 
+
+```{r}
+source('~/Dropbox/5_Lineas_juan/Trigo/red/red_codes/ensayos/trat_mada.R')
+id_trial <- "2019_tr_mad"
+```
+
+### Condiciones del cultivo
+
+```{r}
+load("data/metadata.Rda")
+```
+
+### Tratamientos 
+
+```{r}
+kable(trats, align = "c") %>% 
+  kableExtra::kable_styling(full_width = F) %>%
+  kableExtra::footnote(number = c(
+    "T + E: Rubric Max 0,5 l/ha	(epoxiconazole 10% ~ 50 g/ha +  azoxistrobina 20% ~ 100 g/ha)",
+    "T + E + C: Orquesta Ultra 1,2 l/ha (epoxiconazole 5% ~ 60 g/ha + pyraclostrobin 8,1% ~ 97 g/ha +	fluxapyroxad 5% ~ 60 g/ha)",
+    "Oxo:	Oxocat 0,5% + Agro Turbo 0,1%"))
+```
+
+### Localización de experimento
+
+```{r }
+map_trials
+```
+
+### Diseño experimental:
+
+DBCA - 3 repeticiones 
+
+### Condiciones sitio experimental 
+
+```{r }
+kable(condiciones) %>% kableExtra::kable_styling(full_width = F)
+```
+
+### Cronologia: fenologia y actividades 
+
+```{r }
+kable(crono) %>% kableExtra::kable_styling(full_width = F)
+```
+
+### Presión de enfermedad
+
+```{r }
+presion_enfermedad
+```
+
+## Condiciones meteorológicas 
+
+```{r}
+load("data/meteo.Rda")
+```
+
+```{r, eval=FALSE}
+lluvias
+```
+
+```{r, eval=FALSE}
+fototermal
+```
+
+# Sanidad 
+
+```{r}
+load("sanidad.Rda")
+```
+
+## Manchas foliares 
+
+```{r}
+manchas_foliares
+```
+
+- Incidencia
+
+```{r}
+anova(mod_inc1)
+emmeans(mod_inc1, ~ trt, type = "response")
+```
+
+- Severidad 
+
+```{r}
+anova(mod_sev1)
+emmeans(mod_sev1, ~ trt, type = "response")
+```
+
+## Roya estriada 
+
+```{r}
+roya_estriada
+```
+
+- Incidencia 
+
+```{r}
+anova(mod_inc2)
+emmeans(mod_inc2, ~ trt, type = "response")
+```
+
+- Severidad 
+
+```{r}
+anova(mod_sev2)
+emmeans(mod_sev2, ~ trt, type = "response")
+```
+
+## Roya de la hoja 
+
+
+```{r}
+roya_anaranjada
+```
+
+- Incidencia 
+
+```{r}
+anova(mod_inc3)
+emmeans(mod_inc3, ~ trt, type = "response")
+```
+
+- Severidad 
+
+```{r}
+anova(mod_sev3)
+emmeans(mod_sev3, ~ trt, type = "response")
+```
+
+## Retencion foliar en estrato inferior hojas B-3 y B-4
+
+"Cuantas hojas persistieron verde abajo de la hoja bandera-3" 
+
+(puede que no sea un dato revelador, ya que esta comprobado que los granos se llenan con la fotosintesis de los organos superiores: espiga y hojas B y B-1 principalmente)
+
+
+```{r}
+p_af
+```
+
+
+# Rendimiento
+
+```{r}
+load("yield.Rda")
+```
+
+Heatmap de rendimiento a campo
+
+```{r}
+heatmap
+```
+
+```{r}
+p_mada
+```
+
+```{r}
+anova(mod_yield)
+# plot(mod)
+```
+
+* Medias estimadas por el modelo
+
+```{r}
+pred_yield %>% as.data.frame() %>% 
+  arrange(-emmean) %>% 
+  select(-df,-SE, rend_aj_13=emmean) %>% 
+  mutate_if(is.numeric, list(~round(.,0))) %>% 
+  kable() %>% 
+  kableExtra::kable_styling(full_width = F) 
+
+```
+
+* Comparaciones multiples: Tukey (todos contra todos) 
+
+```{r}
+pwpp(pred_yield, type = "response", reversed = T)
+```
+
+* Comparaciones multiples: Dunnet (todos contra el testigo) 
+
+```{r}
+pwpp(pred_yield, method = "trt.vs.ctrl1", type = "response", side = ">")
+```
+
+# Datos originales
+
+```{r}
+kable(foliar_dat) %>% kableExtra::kable_styling(full_width = F)
+```
+

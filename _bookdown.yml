@@ -1,12 +1,13 @@
-book_filename: "Analisis_de_ensayos"
+book_filename: "Red_ensayos_de_proteccion"
 output_dir: "docs"
 new_session: false
 delete_merged_file: true
 
 rmd_files: [
   "index.Rmd",
-  "1-import.Rmd",
-  "2-control.Rmd",
-  "3-rinde.Rmd",
-  "4-meteo.Rmd"
+  "1-2020_sanidad.Rmd",
+  "2-2020_rinde.Rmd"
+  # "2-control.Rmd",
+  # "3-rinde.Rmd",
+  # "4-meteo.Rmd"
   ]

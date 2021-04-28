@@ -1,0 +1,182 @@
+---
+title: "Ensayos fungicidas en fina - Laprida 2020"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+# library("googlesheets4")
+library("tidyverse")
+```
+
+```{r googlesheet, eval=FALSE}
+laprida <- "https://docs.google.com/spreadsheets/d/1z7ws3MzQvRndccg4GUWJUxORlssr88timDs9Gqi_4Zw/edit#gid=2098888353"
+```
+
+```{r import data, eval=FALSE}
+gs4_auth(email = "edwardsmolina@gmail.com")
+
+protocolo <- gs4_get(laprida) %>% 
+  range_read(sheet = "info")
+
+cebada <- gs4_get(laprida) %>% 
+  range_read(sheet = "cebada_full") %>% 
+  left_join(protocolo, by = "trt")
+
+ceb_cosecha <- gs4_get(laprida) %>% 
+  range_read(sheet = "cebada_cosecha") %>% 
+  left_join(protocolo, by = "trt") %>% 
+  drop_na(trt)
+
+trigo <- gs4_get(laprida) %>% 
+  range_read(sheet = "trigo_full") %>% 
+  left_join(protocolo, by = "trt")
+
+trigo_cosecha <- gs4_get(laprida) %>% 
+  range_read(sheet = "trigo_cosecha") %>% 
+  left_join(protocolo, by = "trt") %>% 
+  drop_na(trt) %>% dplyr::filter(!col %in% 8:9) 
+
+# dfs<-Filter(function(x) is.data.frame(get(x)) , ls())
+# save(list=dfs, file="laprida.RData")
+```
+
+```{r load data}
+load("data/laprida.RData")
+```
+
+```{r}
+ceb_cosecha %>% 
+  ggplot(aes(col, fila, fill= rend_seco)) + 
+  geom_tile() +
+  geom_text(aes(label = paste(trt, "\n", "#", plot)), 
+            col = "white", size = 3) +
+ viridis::scale_fill_viridis(direction = -1,
+                        breaks=dput(range(ceb_cosecha$rend_seco)),
+                        labels=dput(floor(range(ceb_cosecha$rend_seco))),
+                        )+  
+  labs(x="Parcela", 
+       y="Bloque", 
+       fill = "Rendimiento \n(kg/ha)", 
+       title = "Cebada",
+       subtitle = "Aplicación simple en Z49"
+       ) +
+    theme_void()+
+  theme(plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
+
+```
+
+```{r}
+cebada %>% 
+  group_by(trt) %>% 
+  summarise(rend_seco = mean(rend_seco),
+            af_sana = mean(af_sana)) %>%
+  mutate(resp = ((rend_seco-first(rend_seco))/first(rend_seco)*100),
+         respuesta = resp %>% round(1) %>% 
+           paste0(ifelse(. >= 0, "+", ""), ., "%"), 
+  control = ((af_sana-first(af_sana))/first(af_sana)*100)) ->cebada_sum
+cebada_sum
+```
+
+```{r}
+cebada_sum %>% filter(!trt==9) %>% 
+  ggplot()+
+  aes(x=factor(trt), y=rend_seco)+
+  geom_bar(aes(fill=resp), stat = 'summary', fun = 'mean') +
+  scale_x_discrete(labels = unique(cebada$trat_id))+
+  # stat_summary(fun.data=mean_cl_boot, geom="errorbar", width = 0.1) + 
+  geom_point(data = cebada %>%filter(!trt==9), 
+             aes(x=factor(trt), y=rend_seco), 
+             alpha = 0.5)+
+  geom_hline(aes(yintercept = 
+                   cebada_sum %>% 
+                   dplyr::filter(trt==1) %>% 
+                   pull(rend_seco)),
+             linetype=2, col="gray30")+
+  theme_bw()+
+  geom_text(aes(label = respuesta, x = trt, y = 10),
+            angle = 90,  color = "white", hjust = 'left', size =3,
+            fontface="bold")+
+  labs(x = "", y = "kg/ha (seco)", fill = "Respuesta")+
+  viridis::scale_fill_viridis(direction = -1, 
+                              breaks=c(0,4,8,12),
+                              limits=c(0,15))+ 
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+```
+
+```{r, eval = F}
+cebada%>% 
+  ggplot()+
+  aes(x=af_sana, y=rend_seco)+
+  geom_point()+
+  geom_smooth()
+```
+
+```{r}
+trigo_cosecha %>% 
+  ggplot(aes(col, fila, fill= rend_seco)) + 
+  geom_tile() +
+  geom_text(aes(label = paste(trt, "\n", "#", plot)), 
+            col = "white", size = 3) +
+  viridis::scale_fill_viridis(direction = -1,
+                        breaks=dput(range(trigo_cosecha$rend_seco)),
+                        labels=dput(floor(range(trigo_cosecha$rend_seco))),
+                        )+
+  labs(fill = "Rendimiento \n(kg/ha)" ,
+       title = "Trigo (Laprida)") +
+  theme_void()+
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```{r}
+trigo_cosecha %>%
+ filter(!col %in% 8:9) %>% 
+  group_by(trt) %>% 
+  summarise(n=n(),
+            rend_seco = mean(rend_seco)
+            # af_sana = mean(af_sana)
+            ) %>%
+  mutate(resp = ((rend_seco-first(rend_seco))/first(rend_seco)*100),
+         respuesta = resp %>% round(1) %>% 
+           paste0(ifelse(. >= 0, "+", ""), ., "%") 
+  # control = ((af_sana-first(af_sana))/first(af_sana)*100)
+  ) ->trigo_sum
+trigo_sum
+```
+
+```{r}
+trigo_sum %>% 
+  # filter(!trt==9) %>%
+  ggplot()+
+  aes(x=factor(trt), y=rend_seco)+
+  geom_bar(aes(fill=resp), stat = 'summary', fun = 'mean') +
+  scale_x_discrete(labels = unique(cebada$trat_id))+
+  geom_point(data = trigo_cosecha, 
+               # filter(!col %in% 8:9), %>%
+               # filter(!trt==9),
+             aes(x=factor(trt), y=rend_seco), 
+             alpha = 0.5)+
+  geom_hline(aes(yintercept = 
+                   trigo_sum %>% 
+                   dplyr::filter(trt==1) %>% 
+                   pull(rend_seco)),
+             linetype=2, col="gray30")+
+
+  geom_text(aes(label = respuesta, x = trt, y = 10),
+            angle = 90,  color = "white", hjust = 'left', size =4,
+            fontface="bold")+
+  geom_text(aes(label = floor(rend_seco), x = trt, y = rend_seco),
+            vjust = -1.5, angle = 90, hjust = 1, color = "white", size =3)+
+  labs(x = "", y = "kg/ha (seco)", fill = "Respuesta%", 
+       title = "Trigo (Laprida)",
+       subtitle = "Aplicación simple Z39")+
+  viridis::scale_fill_viridis(direction = -1 
+                              # breaks=c(0,4,8,12),
+                              # limits=c(0,15)
+  )+ 
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+```

@@ -1,0 +1,236 @@
+---
+title: "Sanidad red"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+pacman::p_load(tidyverse, googlesheets4)
+source(here::here("0 themes.R"))
+# raw %>%filter(id_ensayo == "2020_INTA_BCE")
+```
+
+
+```{r}
+pacman::p_load(tidyverse, googlesheets4, googledrive)
+gs4_auth(email = "edwardsmolina@gmail.com")
+googledrive::drive_auth(email = "edwardsmolina@gmail.com")
+red_sani <- gs4_get(gs4_find("sanidad red - 2020")$id)
+```
+
+> Interesante que se trata de un dataset con 2 filas de encabezados
+
+La primer fila es una inclusión extra para faciltar el proceso.
+
+Fila 2 y 3 contienen la info de nuestro interés, y debemos fusionar. 
+
+```{r eval=FALSE}
+data_head <- read_sheet(red_sani, sheet="full", n_max = 2) 
+
+new_names <- data_head %>%
+  t() %>% 
+  as_tibble() %>% 
+  unite(., col = "name",  V2, V1,  na.rm=TRUE, sep = "_") %>% 
+  pull(name)
+```
+
+Luego, leemos el cuerpo del dataset, pero indicamos los nuevos nombres
+
+```{r, eval=FALSE}
+dat_full <- read_sheet(red_sani, sheet="full", skip = 3, col_names = new_names) %>% 
+  drop_na(verdor)
+
+dat_full <- dat_full %>%
+  rename_all(
+    list(
+      ~stringr::str_to_lower(.) %>%
+        stringr::str_replace_all(., 'e1', 'MA') %>% 
+        stringr::str_replace_all(., 'e2', 'RE') %>% 
+        stringr::str_replace_all(., 'e3', 'RH')
+    )
+  )   %>% 
+  mutate(ensayo = case_when(
+    eval == 1 ~ "LP",
+    eval == 2 ~ "PA")) %>% 
+  select(ensayo, everything(), -id, -eval, -matches("e4|e5")) %>% 
+  replace(is.na(.), 0)
+dat_full
+```
+
+
+```{r}
+UPA <- read_sheet(red_sani, sheet="red_UPA", skip = 0) %>% 
+  mutate(ensayo = "UPA") %>% 
+  replace(is.na(.), 0)
+
+EEA <- read_sheet(red_sani, sheet="red_EEA", skip = 0) %>% 
+  mutate(ensayo = "EEA")%>% 
+  replace(is.na(.), 0)
+```
+
+
+```{r}
+dat <- bind_rows(dat_full, UPA, EEA) %>% 
+  mutate(trat = factor(case_when(
+    trt ==1 ~ "test", 
+    trt ==2 ~"rub_Z32", 
+    trt ==3 ~"rub_Z39", 
+    trt ==4 ~"orq_Z32", 
+    trt ==5 ~"orq_Z39", 
+    trt ==6 ~"rub_Z32_orq_Z39", 
+    trt ==7 ~"rub_Z32_carbFMC_Z39"))) %>% 
+    mutate(MA_int = MA_inc/100*MA_sev) %>%   
+    mutate(RE_int = RE_inc/100*RE_sev)  %>% 
+    mutate(RH_int = RH_inc/100*RH_sev)  %>% 
+    filter(!trt ==14) 
+dat
+```
+
+* Verificamos la presión de enfermedades (% incidencia en los testigos) 
+
+```{r}
+dat %>% 
+  filter(trt == 1) %>% 
+  group_by(ensayo) %>%
+  summarise(across(matches("inc|sev"), ~ mean(.x, na.rm = TRUE)))
+
+
+dis_press <- dat %>% 
+  filter(trt == 1) %>% 
+  group_by(ensayo) %>%
+  summarise(across(c("verdor", matches("int")), ~ mean(.x, na.rm = TRUE)))
+  # write_sheet(ss=nova_tr, sheet = "dis_press")
+dis_press
+```
+
+```{r}
+fmc <- c("test", "rub_Z32", "orq_Z32", "rub_Z39", "orq_Z39", "rub_Z32_orq_Z39", "rub_Z32_carbFMC_Z39")
+```
+
+
+```{r}
+fmc_test <- dat %>% 
+  filter(trat %in% c("test")) %>% 
+  group_by(ensayo, trat) %>% 
+  summarise(
+    MA_test = mean(MA_int, na.rm = T),
+    RE_test = mean(RE_int, na.rm = T),
+    RH_test = mean(RH_int, na.rm = T)) %>% 
+  select(-trat)
+
+mean_fmc <- 
+  dat %>% 
+  mutate(MA_int = MA_inc/100*MA_sev) %>% 
+  mutate(RE_int = RE_inc/100*RE_sev) %>% 
+  mutate(RH_int = RH_inc/100*RH_sev) %>% 
+  group_by(ensayo, trat) %>% 
+  summarise(
+    MA_int = mean(MA_int, na.rm = T),
+    RE_int = mean(RE_int, na.rm = T),
+    RH_int = mean(RH_int, na.rm = T)
+    ) %>%  
+  left_join(fmc_test, by = "ensayo") %>% 
+  rowwise() %>% 
+  mutate(
+    control_MA=(1-(MA_int)/MA_test)*100, 
+    control_MA_lab = paste0(control_MA %>% round, "%")) %>% 
+   mutate(
+    control_RE=(1-(RE_int)/RE_test)*100, 
+    control_RE_lab = paste0(control_RE %>% round, "%")) %>% 
+   mutate(
+    control_RH=(1-(RH_int)/RH_test)*100, 
+    control_RH_lab = paste0(control_RH %>% round, "%"))
+
+mean_fmc
+```
+
+# Mancha
+
+```{r}
+dat %>% 
+  semi_join(by = "ensayo", dis_press %>% filter(MA_int >4.99)) %>% 
+  # filter(trat %in% fmc) %>%  
+  mutate(trat = fct_relevel(trat, fmc)) %>%
+  ggplot()+
+  aes(trat, MA_int)+
+  geom_hline(data=(mean_fmc %>%
+                 semi_join(by = "ensayo", dis_press %>% filter(MA_int >4.99)) %>% 
+               filter(trat=="test")), 
+               aes(yintercept = MA_test), 
+             col="red")+
+  geom_point()+
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.5)+
+  facet_grid(.~ensayo)+
+  stat_summary(data = mean_fmc %>%
+                 semi_join(by = "ensayo", dis_press %>% filter(MA_int >4.99)),                aes(x=trat, y=MA_int, label=control_MA_lab),
+               fun=mean, geom="text", size=4, vjust = -0.5, hjust=-0.005)+
+  geom_vline(xintercept = c(1.5,3.5,5.5), linetype = "dashed")+
+  coord_flip()+
+  scale_y_continuous(breaks=scales::pretty_breaks())+
+  labs(x="", y = "Severidad media (%)", title = "Mancha amarilla")+
+  theme_bw()
+
+ggsave(last_plot(), file = "plots/MA_control.png", w=5, h=4)
+ ```
+
+
+# Roya estriada
+
+```{r}
+dat %>% 
+  semi_join(by = "ensayo", dis_press %>% filter(RE_int >4.99)) %>% 
+  # filter(trat %in% fmc) %>%  
+  mutate(trat = fct_relevel(trat, fmc)) %>%
+  ggplot()+
+  aes(trat, RE_int)+
+  geom_point()+
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.5)+
+  facet_grid(.~ensayo)+
+  stat_summary(data = mean_fmc %>%
+                 semi_join(by = "ensayo", dis_press %>% filter(RE_int >4.99)),                aes(x=trat, y=RE_int, label=control_RE_lab),
+               fun=mean, geom="text", size=4, vjust = -0.5, hjust=-0.005)+
+  geom_vline(xintercept = c(1.5,3.5,5.5), linetype = "dashed")+
+  geom_hline(data=(mean_fmc %>%
+                 semi_join(by = "ensayo", dis_press %>% filter(RE_int >4.99)) %>% 
+               filter(trat=="test")), 
+               aes(yintercept = RE_test), 
+             col="red")+
+  coord_flip()+
+  scale_y_continuous(breaks=scales::pretty_breaks())+
+  labs(x="", y = "Severidad media (%)", title = "Roya estriada")+
+  theme_bw()
+
+ggsave(last_plot(), file = "plots/RE_control.png", w=5, h=4)
+```
+
+
+# Roya de la hoja
+
+```{r}
+dat %>% 
+  semi_join(by = "ensayo", dis_press %>% filter(RH_int >4.99)) %>% 
+  # filter(trat %in% fmc) %>%  
+  mutate(trat = fct_relevel(trat, fmc)) %>%
+  ggplot()+
+  aes(trat, RH_int)+
+  geom_point()+
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.5)+
+  facet_grid(.~ensayo)+
+  stat_summary(data = mean_fmc %>%
+                 semi_join(by = "ensayo", dis_press %>% filter(RH_int >4.99)),                aes(x=trat, y=RH_int, label=control_RH_lab),
+               fun=mean, geom="text", size=4, vjust = -0.5, hjust=-0.005)+
+  geom_vline(xintercept = c(1.5,3.5,5.5), linetype = "dashed")+
+  geom_hline(data=(mean_fmc %>%
+                 semi_join(by = "ensayo", dis_press %>% filter(RH_int >4.99)) %>% 
+               filter(trat=="test")), 
+               aes(yintercept = RH_test), 
+             col="red")+
+  coord_flip()+
+  scale_y_continuous(breaks=scales::pretty_breaks())+
+  labs(x="", y = "Severidad media (%)", title = "Roya de la hoja")+
+  theme_bw()
+
+ggsave(last_plot(), file = "plots/RH_control.png", w=5, h=4)
+```
+

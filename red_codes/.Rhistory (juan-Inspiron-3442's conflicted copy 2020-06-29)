@@ -1,0 +1,512 @@
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",       2L,       4L,       10L,       15L,
+"roya_anaranjada",       6L,       8L,       20L,       24L,
+"roya_tallo",       8L,      12L,       19L,       22L,
+"mancha_amarilla",      28L,      32L,       18L,       28L,
+"septoriosis",      72L,      96L,       15L,       20L,
+"mancha_marron",      13L,      17L,       20L,       25L
+) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2) +
+mutate(true_or_false = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ .$true_or_false
+))
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",       2L,       4L,       10L,       15L,
+"roya_anaranjada",       6L,       8L,       20L,       24L,
+"roya_tallo",       8L,      12L,       19L,       22L,
+"mancha_amarilla",      28L,      32L,       18L,       28L,
+"septoriosis",      72L,      96L,       15L,       20L,
+"mancha_marron",      13L,      17L,       20L,       25L
+) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2) +
+mutate(col = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",       2L,       4L,       10L,       15L,
+"roya_anaranjada",       6L,       8L,       20L,       24L,
+"roya_tallo",       8L,      12L,       19L,       22L,
+"mancha_amarilla",      28L,      32L,       18L,       28L,
+"septoriosis",      72L,      96L,       15L,       20L,
+"mancha_marron",      13L,      17L,       20L,       25L
+) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2) +
+mutate(
+color = case_when(
+str_detect(.$patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",       2L,       4L,       10L,       15L,
+"roya_anaranjada",       6L,       8L,       20L,       24L,
+"roya_tallo",       8L,      12L,       19L,       22L,
+"mancha_amarilla",      28L,      32L,       18L,       28L,
+"septoriosis",      72L,      96L,       15L,       20L,
+"mancha_marron",      13L,      17L,       20L,       25L
+) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2) %>%
+mutate(
+color = case_when(
+str_detect($patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",       2L,       4L,       10L,       15L,
+"roya_anaranjada",       6L,       8L,       20L,       24L,
+"roya_tallo",       8L,      12L,       19L,       22L,
+"mancha_amarilla",      28L,      32L,       18L,       28L,
+"septoriosis",      72L,      96L,       15L,       20L,
+"mancha_marron",      13L,      17L,       20L,       25L
+) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2) %>%
+mutate(
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = 2, b = 4, angle = 0, col = color)) +
+geom_ellipse() +
+geom_text(aes(x = temp, y = hum, label = patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = 2, b = 4, angle = 0, col = color)) +
+geom_ellipse() +
+geom_text(aes(x = temp, y = hum, label = patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,       4L,       10L,15L,
+"roya_anaranjada",6L,       8L,       20L,       24L,
+"roya_tallo",8L,      12L,       19L,       22L,
+"mancha_amarilla",28L,      32L,       18L,       28L,
+"septoriosis",72L,96L,       15L,       20L,
+"mancha_marron",      13L,      17L,       20L,       25L
+) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min) %>%
+mutate(
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a, b = b, angle = 0, col = color)) +
+geom_ellipse() +
+geom_text(aes(x = temp, y = hum, label = patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b/2, angle = 0, col = color)) +
+geom_ellipse() +
+geom_text(aes(x = temp, y = hum, label = patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 8L,20L,24L,
+"roya_tallo",8L,12L,19L,22L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L,
+"mancha_marron",13L,17L,20L,25L
+) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min) %>%
+mutate(
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b/2, angle = 0, col = color)) +
+geom_ellipse() +
+geom_text(aes(x = temp, y = hum, label = patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b/2, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 8L,20L,24L,
+"roya_tallo",8L,12L,19L,22L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L,
+"mancha_marron",13L,17L,20L,25L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 8L,20L,24L,
+"roya_tallo",8L,12L,19L,22L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L,
+"mancha_marron",13L,17L,20L,25L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b/2, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,19L,22L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L,
+"mancha_marron",13L,17L,20L,25L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b/2, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,18L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L,
+"mancha_marron",13L,17L,20L,25L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L,
+"mancha_marron",13L,17L,20L,25L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue"))
+ggplot(dat,
+aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L,
+"mancha_marron",13L,17L,20L,25L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+dat <- tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",2L,4L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",3L,6L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno, fontface="bold"))+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",3L,6L,10L,15L,
+"roya_anaranjada",6L, 10L,20L,24L,
+"roya_tallo",8L,12L,20L,28L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno), fontface="bold")+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+ggsave("~/Dropbox/4_Eventos/extension/seminario_virtual_fina/foliares.png",
+width = 6, height = 4)
+tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",3L,6L,8L,13L,
+"roya_anaranjada",6L, 10L,18L,25L,
+"roya_tallo",8L,12L,20L,30L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno), fontface="bold")+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+tibble::tribble(
+~patogeno, ~hum_min, ~hum_max, ~temp_min, ~temp_max,
+"roya_amarilla",3L,6L,8L,14L,
+"roya_anaranjada",6L,10L,18L,25L,
+"roya_tallo",8L,12L,20L,30L,
+"mancha_amarilla",28L,32L,18L,28L,
+"septoriosis",72L,96L,10L,15L) %>%
+mutate(hum = (hum_min+hum_max)/2,
+temp = (temp_min+temp_max)/2,
+a =temp_max -  temp_min,
+b = hum_max - hum_min,
+color = case_when(
+str_detect(patogeno, "roya") ~ "red",
+TRUE ~ "blue")) %>%
+ggplot(aes(x0 = temp, y0 = hum,
+a = a/2, b = b, angle = 0, col=factor(color))) +
+geom_ellipse() +
+geom_text(aes(x = temp, y=hum, label=patogeno), fontface="bold")+
+cowplot::theme_minimal_grid() +
+labs(x = "Temperatura (°C)", y = "Humedad (horas de mojado)")+
+guides(col = F)
+ggsave("~/Dropbox/4_Eventos/extension/seminario_virtual_fina/foliares.png",
+width = 6, height = 4)

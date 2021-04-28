@@ -1,0 +1,181 @@
+```{r, eval=FALSE}
+source('_global_setting.R')
+load("data/metadata.Rda")
+```
+
+```{r, eval=FALSE}
+# Importar dataset ( correr por unica vez)
+nasa <- nasapower::get_power(
+  community = "AG",
+  lonlat = c(ensayos$lon, ensayos$lat),
+  pars = c( "T2M_MIN", "T2M_MAX","ALLSKY_SFC_SW_DWN", "PRECTOT"),
+  dates = c("2000-01-01", "2019-12-31"),
+  temporal_average = "DAILY"
+)
+saveRDS(nasa, here::here("meteo", paste0(id_trial,"_nasa.rds")))
+
+```
+
+```{r}
+nasa <- readRDS(here::here("meteo", paste0(id_trial,"_nasa.rds")))
+
+fototerm <- nasa %>%  
+  filter(ALLSKY_SFC_SW_DWN>0, 
+         MM %in% 5:12) %>% 
+  mutate(rad = ALLSKY_SFC_SW_DWN*0.5,
+         julian= yday(YYYYMMDD),  
+         tmean =  (T2M_MAX + T2M_MIN)/2,
+         pq = rad/(tmean-4.5)) 
+```
+
+```{r,eval=FALSE}
+fototerm %>%  
+  filter(YEAR!=2019) %>% 
+  ggplot(aes(
+    x = as.Date(julian, origin = as.Date("2019-01-01")), 
+    y =rad))+
+    geom_quantile(quantiles=0.5, method = "rqss", aes(col="2000-2018"))+
+  geom_feno()
+```
+
+
+```{r}
+p1 <- fototerm %>%  
+  filter(YEAR!=2019) %>% 
+  ggplot(aes(
+    x = as.Date(julian, origin = as.Date("2019-01-01")), 
+    y =rad))+
+  geom_quantile(quantiles=0.5, method = "rqss", aes(col="2000-2018"))+
+  geom_quantile(data = fototerm %>% filter(YEAR==2019) , 
+                aes(
+                  x=as.Date(julian, origin = as.Date("2019-01-01")), 
+                  y=rad, col="2019"),
+                quantiles=0.5, method = "rqss")+
+  labs(x="", y="MJ/m²", color="", title = "Radiación")+
+  scale_x_date(date_breaks="1 month", date_labels="%b", expand=expand_scale(0.05,0))+
+  scale_y_continuous( breaks = pretty_max)+
+  geom_feno()
+p1
+```
+
+
+```{r}
+p2 <- fototerm %>%  
+  filter(YEAR!=2019) %>% 
+  ggplot(aes(
+    x = as.Date(julian, origin = as.Date("2019-01-01")), 
+    y =tmean))+
+  geom_quantile(quantiles=0.5, method = "rqss", aes(col="2000-2018"))+
+  geom_quantile(data = fototerm %>% filter(YEAR==2019) , 
+                aes(
+                  x = as.Date(julian, origin = as.Date("2019-01-01")), 
+                  y = tmean, col="2019"),
+                quantiles=0.5, method = "rqss")+
+  labs(x="", y="C°", color="", title = 'Temperatura')+
+  scale_x_date(date_breaks="1 month", date_labels="%b", expand=expand_scale(0.05,0))+
+  scale_y_continuous(breaks = pretty_max)+
+  geom_feno()
+p2
+```
+
+```{r}
+fototermal <- (p1 / p2 & theme(legend.position = "bottom")) + 
+  plot_layout(guides = "collect")
+
+```
+
+
+```{r, eval=FALSE}
+p3 <- fototerm %>%  
+  filter(YEAR!=2019) %>% 
+  ggplot(aes(
+    x = as.Date(julian, origin = as.Date("2019-01-01")), 
+    y = pq))+
+  geom_quantile(quantiles=0.5, method = "rqss", aes(col="2000-2018"))+
+  geom_quantile(data = fototerm %>% filter(YEAR==2019) , 
+                aes(
+                  x = as.Date(julian, origin = as.Date("2019-01-01")), 
+                  y=pq, col="2019"),
+                quantiles=0.5, method = "rqss")+
+  labs(x="", y="Mj/C°", color="", title='Cociente fototermal')+
+  geom_feno()+
+  scale_y_continuous(breaks = pretty_max)
+p3
+```
+
+```{r}
+rain_serie <- 
+  nasa %>%
+  filter(YEAR<2019, MM %in% 5:12) %>% 
+  group_by(date=if_else(day(YYYYMMDD) >= 30,
+                        floor_date(YYYYMMDD, "20 days"),
+                        floor_date(YYYYMMDD, "10 days"))) %>%
+  summarize(rain_acum = sum(PRECTOT),
+            days = n()) %>%
+  mutate(year = year(date),
+         month = month(date)) %>%
+  ungroup %>%
+  group_by(year) %>%
+  mutate(decada = row_number()) %>%
+  ungroup %>%
+  group_by(decada) %>%
+  summarise(month = first(month),
+            med = quantile(rain_acum, .5, na.rm = T),
+            lower_80=quantile(rain_acum, .2, na.rm = T), # Rango 80% de los años
+            upper_80=quantile(rain_acum, .8, na.rm = T))
+
+```
+
+```{r}
+rain_season <- 
+  nasa %>%
+  filter(YEAR==2019, MM %in% 5:12) %>% 
+  group_by(date=if_else(day(YYYYMMDD) >= 30,
+                        floor_date(YYYYMMDD, "20 days"),
+                        floor_date(YYYYMMDD, "10 days"))) %>%
+  summarize(rain_acum = sum(PRECTOT),
+            days = n()) %>% #, days=n()) %>%
+  mutate(year = year(date),
+         month = month(date)) %>%
+  group_by(year) %>%
+  mutate(decada = row_number()) 
+
+rain <- # fusionar ambos datasets (serie + campaña)
+  rain_season %>%
+  left_join(rain_serie, by = c("decada")) %>%
+  mutate(date = as.Date(date))
+```
+  
+```{r}
+lluvias <-  rain %>%
+  ggplot(aes(x=date)) +
+  geom_pointrange(aes(y=med, ymin=lower_80, ymax=upper_80), fill='white', color='steelblue', shape=21, fatten=.7, size=3, position=(pd5=position_nudge(x = 5)))+
+  geom_point(aes(y=rain_acum), col ="brown1",
+             position=pd5) +
+  geom_line(aes(y=rain_acum, group=1), col ="brown1", linetype="dashed", position=pd5)+
+  # scale_y_continuous( breaks = function(x) unique( floor(pretty(seq(0, (max(x) + 1) * 1.1)))))+
+  scale_x_date(date_breaks="1 month", date_labels="%b", expand=expand_scale(0.05,0))+
+  labs(x = "", y="mm", title="Precipitaciones decádicas",
+       caption = "- 2019 (en puntos rojos)\n- Serie 2000-2018: mediana (puntos blancos) y rango 80% (barras azules)")+
+  geom_feno()
+lluvias
+```
+  
+
+```{r, eval=FALSE}
+group_by(MM) %>%
+  # mutate(decada = row_number()) %>%
+  ggplot(aes(mes, rain_acum, fill=fuente))+ #rainy_days
+  geom_col(alpha=0.5) +
+  # facet_wrap(~fuente, ncol=1)+
+  scale_x_continuous(breaks=seq(1,36,by=1))+
+  scale_y_continuous( breaks = function(x) unique( floor(pretty(seq(0, (max(x) + 1) * 1.1)))))+
+  theme_bw()+
+  labs(y="lluvias acum (mm)")+
+  labs(y="dias con al menos 3 mm")+
+  guides(x = guide_axis(angle = 90))
+```
+
+```{r}
+save(list=ls(), file="meteo.Rda")
+```

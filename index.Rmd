@@ -1,8 +1,8 @@
 ---
-title: "Análisis de ensayo de protección"
+title: "Red de estrategias de protección de trigo en el Sudeste de Bs. As."
 author: "[Juan Edwards](https://github.com/juanchiem)"
 url: 'juanchiem.github.io/trial_analysis/'
-github-repo: "juanchiem/trial_analysis"
+github-repo: "juanchiem/red_trigo"
 link-citations: true
 site: bookdown::bookdown_site
 ---
@@ -19,17 +19,41 @@ opts_chunk$set(echo = TRUE,
 options(width = 90)
 ```
 
-Código para el análisis de tests de eficiencia de fungicidas en microparcelas. 
+# Introducción {-}
 
-Las variables registradas a campo son: 
+## Objetivos  {-}
 
-* Area foliar (nivel de hoja, muestras de 10 hj/plot ) 
-  - AF activa^[proporción de 1/tot, donde: 0:<50% verde; 1=50%< verde]
-  - Severidad de enfermedades presentes (de esta se desprenden incidencia y severidad media)
-  
-* Rendimiento (nivel de parcela)
-  - Peso de las parcelas (g) y su humedad
+- Verificar la eficiencia de control de diferentes estrategias de protección foliar de trigo
+- Estimar respuesta de rendimiento y su relación costo-beneficio
 
-:::{#box1 .green-box}
-La planilla excel asociada a este análisis esta en https://docs.google.com/spreadsheets/d/1t60Eq-h-c0n-eP0TBTzdX_aF_8qOIq5utb8lpSG6lwo/edit?usp=sharing
-:::
+## Protocolo {-}
+
+- DBCA, con al menos 3 repeticiones
+- Tratamientos: tipo de mezcla (doble o triple) x momento de aplicación (Z32 o Z39)
+
+
+| Trat | Z32       | Z39       | ID        |
+|------|-----------|-----------|-----------|
+| 1    | -         | -         | Check     |
+| 2    | T + E     | -         | MD32      |
+| 3    | -         | T + E     | MD39      |
+| 4    | T + E + C | -         | MT32      |
+| 5    | -         | T + E + C | MT39      |
+| 6    | T + E     | T + E + C | MD32_MT39 |
+
+
+| Mezcla   | T + E                      | T + E + C                   |
+|----------|----------------------------|-----------------------------|
+| producto | Rubric Max 0,5 l/ha        | Orquesta Ultra 1,2 l/ha     |
+| DMI      | epoxiconazole 10% 50 g/ha  | epoxiconazole 5% 60 g/ha    |
+| QoI      | azoxistrobina 20% 100 g/ha | pyraclostrobin 8,1% 97 g/ha |
+| SDHI     | -                          | fluxapyroxad 5%: 60 g/ha    |
+
+- Evaluación sanitaria:
+
+  - Al momento de cada aplicación (incidencia media de los testigos)
+  - Alrededor de antesis (incidencia y severidad de enfermedades presentes)
+
+- Rendimiento
+
+- Análisis económico

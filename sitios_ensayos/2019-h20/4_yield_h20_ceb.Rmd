@@ -1,0 +1,134 @@
+```{r 1, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+pacman::p_load(tidyverse, lmerTest, emmeans)
+options(gargle_oauth_email = "edwardsmolina@gmail.com")
+```
+
+```{r 2}
+# devtools::source_url("https://bit.ly/2P0pDB8")#rinde_aj
+rinde_aj2 <- function( # kg/ha
+  m_muestra, # m
+  dist_surcos, # cm
+  peso_h,     # g
+  peso_s,     # g
+  tara_s,       # g 
+  peso_tot,   # g
+  h_deseada   # %
+){ 
+  area_cosecha = m_muestra*dist_surcos/100
+  
+  h_muestra = (peso_h-(peso_s-tara_s))/peso_h
+  
+  contenido_h = peso_tot*h_muestra
+  
+  rinde_s = ((peso_tot-contenido_h)/area_cosecha)*10 
+  
+  rinde_aj = round(rinde_s/(1-(h_deseada/100)), 0) 
+  
+  bind_rows(setNames(c(h_muestra*100, rinde_aj), 
+                     c("hum", "rinde_aj")))
+  }
+```
+
+
+```{r 3}
+library(googlesheets4)
+sheets_deauth()
+yield_raw <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1nsT3H48FPiIlpOAloXiV8BbhfIf4-oaf3fQPtIPT_qY/edit?usp=sharing", 
+                                 sheet="ceb_rto",
+                                 col_types="cccddd")
+yieldat <- yield_raw %>% 
+  mutate(pos=str_sub(par, 2, 3)) %>% 
+  # mutate(x=as.numeric(pos)*3, y=as.numeric(bq)*6) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  dplyr::select(par, pos, everything())  
+# mada
+
+yieldat <- yieldat %>% 
+  filter(!(is.na(peso_tot))) %>%  # elimina parcelas perdidas 
+  rowwise() %>% 
+  mutate(hum_rinde=list(rinde_aj2(m_muestra = m_muestra,      # m
+                                  dist_surcos = 17.5, # cm
+                                  peso_h = peso_h,     # g
+                                  peso_s = peso_s,     # g
+                                  tara_s = 2,       # g
+                                  peso_tot = peso_tot,   # g
+                                  h_deseada = 13.5)))%>% # %
+  unnest(hum_rinde) %>% 
+  mutate(
+    area_cosecha = m_muestra*17.5/100,
+    rinde = (peso_tot/area_cosecha)*10)
+```
+
+Heatmap de rendimiento a campo
+
+```{r 4}
+heatmap <- yieldat %>% 
+  # filter(trt %in% red) %>% 
+  ggplot(aes(pos, bq, fill= rto_12)) + 
+  geom_tile() +
+  geom_text(
+    # aes(label = paste(trt, "\n", round(hum,1), "%")), 
+    aes(label = trt), 
+            col = "white", size = 3) +
+  viridis::scale_fill_viridis(discrete=FALSE, direction = -1)+
+  labs(x="Parcela", 
+       y="Bloque", 
+       fill = "Rendimiento\n(kg/ha)", 
+       title="Cebada"
+       )+
+  theme_bw() 
+```
+
+```{r 5}
+yieldat %>% 
+  group_by(trt) %>% 
+  summarise(yield = mean(rto_12), 
+            sd = sd(rto_12)) %>% 
+  arrange(yield) %>% 
+  # filter(trt %in% red) %>% 
+  ggplot(aes(x=fct_reorder(trt, yield, .desc = F), y=yield)) + 
+  stat_summary(fun = mean, fun.min = mean, fun.max = mean, 
+               geom = "crossbar", 
+               size = 0.1)+  
+  geom_pointrange(aes(ymin = yield-sd, ymax = yield+sd), size=.1)+
+  geom_point(data=yieldat %>% mutate(yield=rto_12), 
+             aes(x=trt, y=yield, col = bq))+
+  scale_y_continuous(breaks = seq(6000, 9000, by = 500)) +
+  labs(x="Tratamiento", y="Kg/ha (aj. 13,5%)", title= "Madariaga", color = "Bloque")+  
+  theme_bw() + 
+  coord_flip() -> p_yield
+```
+
+```{r 6}
+mod_yield <- lmer(rinde_aj ~ trt + (1|bq), data=yieldat)
+# anova(mod_yield)
+# plot(mod)
+```
+
+Medias estimadas por el modelo
+
+```{r 7}
+pred_yield = emmeans(mod_yield, ~ trt, type = "response")
+# pred_yield %>% as.data.frame() %>% 
+#   arrange(-emmean) %>% 
+#   select(-df,-SE, rend_aj_13=emmean) %>% 
+#   mutate_if(is.numeric, list(~round(.,0))) %>% 
+#   knitr::kable()
+```
+
+Comparaciones multiples: Tukey (todos contra todos) 
+
+```{r 8, eval=FALSE, include=FALSE}
+pwpp(pred_yield, type = "response", reversed = T)
+```
+
+Comparaciones multiples: Dunnet (todos contra el testigo) 
+
+```{r 9, eval=FALSE, include=FALSE}
+pwpp(pred_yield, method = "trt.vs.ctrl1", type = "response", side = ">")
+```
+```{r 10}
+save(list=ls(), file="yield_report.Rda")
+```
+

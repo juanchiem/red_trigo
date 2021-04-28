@@ -1,0 +1,125 @@
+# Rendimiento
+
+```{r include=FALSE}
+library(knitr)
+opts_chunk$set(echo = TRUE, 
+               warning = FALSE, 
+               message = FALSE, 
+               eval=FALSE, 
+               fig.width = 8,
+               fig.height = 6)
+
+options(width = 90)
+```
+
+```{r message=FALSE, warning=FALSE, eval=T}
+pacman::p_load(tidyverse, googlesheets4)
+source(here::here("0 themes.R"))
+
+load("data/red_todos_20.RData")
+# red20 %>% count(trt)
+# raw %>%filter(id_ensayo == "2020_INTA_BCE")
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=T}
+fmc <- c("test", "rub_Z32", "orq_Z32", "rub_Z39", "orq_Z39", "rub_Z32_orq_Z39", "rub_Z32_carbFMC_Z39")
+
+dat_fmc <- red20 %>% 
+  filter(trt %in% fmc) 
+
+sum_fmc <- dat_fmc %>% 
+  group_by(ensayo, trt) %>% 
+  summarise(kg_ha = mean(kg_ha, na.rm = T)) %>% 
+  filter(trt %in% c("test")) %>% 
+  pivot_wider(names_from = trt, values_from = kg_ha) %>% 
+  rename(rinde_test = test)
+
+mean_fmc <- dat_fmc %>% 
+  group_by(ensayo, trt) %>% 
+  summarise(kg_ha = mean(kg_ha, na.rm = T)) %>%  
+  left_join(sum_fmc, by = "ensayo") %>% 
+  rowwise() %>% 
+  mutate(dif_test = kg_ha -rinde_test)
+# dat_mean %>%filter(id_ensayo == "2020_INTA_BCE")
+
+# load(here::here("data/data.Rdata"))
+```
+
+```{r eval=T}
+dat_fmc %>% 
+  mutate(trt = fct_relevel(trt, fmc)) %>% 
+  ggplot()+
+  aes(trt, kg_ha)+
+  geom_point()+
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.5)+
+  facet_grid(.~ensayo)+
+  stat_summary(data = mean_fmc,
+               aes(x=trt, y=kg_ha, label=dif_test %>% round), 
+               fun=mean, geom="text", size=4,vjust = -0.5)+
+  geom_vline(xintercept = c(1.5,3.5,5.5), linetype = "dashed")+
+  coord_flip()+
+  labs(y="kg/ha", x = "")+
+  theme_dens1
+
+# ggsave(last_plot(), file = "plots/red_rinde.png", w=7, h=4)
+```
+
+```{r eval=T}
+dat_fmc %>% 
+  group_by(ensayo, trt) %>%
+  summarise(n = sum(!is.na(kg_ha)),
+            mean= mean(kg_ha, na.rm =T),
+            sd= sd(kg_ha, na.rm =T)) -> smr
+
+# smr %>% 
+#     write_sheet(ss=red, sheet = "summary_20")
+```
+
+```{r eval=T}
+pacman::p_load(lme4, emmeans, multcomp)
+```
+
+```{r eval=T}
+dat_fmc %>%
+  group_by(ensayo) %>%
+  group_modify(~ broom::tidy(car::Anova(lmer(kg_ha ~ trt +(1|bk), data = .x)))) %>%
+  mutate(p.value = scales::pvalue(p.value, add_p = TRUE))
+```
+
+
+```{r eval=T}
+# red <- gs4_get(gs4_find("red_trigo_data")$id)
+
+res <-  dat_fmc %>%
+  group_by(ensayo) %>%
+  group_modify(~ 
+                 lmer(kg_ha ~ trt + (1|bk), data = .x) %>%
+                 emmeans(., ~ trt, type = "response") %>%
+                 cld(., Letters = letters, alpha = .05,
+                     type = "response", reversed = T) %>%
+                 broom::tidy() %>% 
+                 rename(kg_ha = estimate) %>% 
+                 mutate_if(is.character, as.factor)
+               ) 
+# res %>% View
+res %>% 
+  group_by(ensayo) %>% 
+  mutate(test_kg_ha = kg_ha[trt == "test"]) %>% 
+  mutate(dif_kg = kg_ha- test_kg_ha,
+         `dif_%` = (kg_ha/test_kg_ha - 1) * 100,
+         range = conf.high - conf.low) %>% 
+  left_join(smr, by = c('ensayo', 'trt')) %>% 
+  purrr::modify_if(., ~is.numeric(.), ~round(., 0)) %>%
+  ungroup() %>%
+  group_by(trt) %>%
+  summarise(rinde_medio=mean(kg_ha),
+            resp_media=mean(`dif_%`)) %>%
+    arrange(desc(rinde_medio)) #%>%
+  # write_sheet(ss=red, sheet = "summary_20")
+  # write_sheet(ss=red, sheet = "emmeans_20_mix")
+```
+
+
+
+

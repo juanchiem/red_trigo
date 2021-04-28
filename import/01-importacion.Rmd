@@ -1,0 +1,98 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Importacion
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+pacman::p_load(tidyverse, googlesheets4)
+gs4_auth(email = "edwardsmolina@gmail.com")
+source(here::here("themes.R"))
+```
+
+
+```{r eval = F}
+red19 <- gs4_get(gs4_find("red_data_2019")$id)
+# red19 %>% sheet_names()  
+MADA <- read_sheet(red19, sheet = "MADA", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()  %>% select(trt, bk, kg_ha) #%>% 
+NECO <- read_sheet(red19, sheet = "NECO", guess_max = 10000) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>% 
+BARROW <- read_sheet(red19, sheet = "BARROW", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>% 
+TANDIL <- read_sheet(red19, sheet = "TANDIL", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>% 
+LOS_PINOS <- read_sheet(red19, sheet = "LOS_PINOS", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>% 
+MDP <- read_sheet(red19, sheet = "MDP", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>% 
+
+df19 <- bind_rows(tibble::lst(MADA,NECO,BARROW,TANDIL,LOS_PINOS,MDP), 
+                  .id="ensayo") %>% 
+  mutate_if(is.character, as.factor) %>% 
+  filter(trt %in% c("test", "rub_Z32", "rub_Z39", "orq_Z32", "orq_Z39", "rub_Z32_orq_Z39")) %>%
+  mutate(trt = fct_relevel(trt, c("test", "rub_Z32", "rub_Z39", "orq_Z32", "orq_Z39", "rub_Z32_orq_Z39")))
+
+red_data <- gs4_get(gs4_find("red_trigo_data")$id)
+df19 %>% write_sheet(ss=red_data, sheet = "2019")
+# dfs<-Filter(function(x) is.data.frame(get(x)) , ls())
+# save(list=dfs, file="data/red21.RData")
+```
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+red20 <- gs4_get(gs4_find("red_data_2020")$id)
+red20 %>% sheet_names()
+
+LOS_PINOS <- read_sheet(red20, sheet = "LP", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()  %>% select(trt, bk, kg_ha) #%>% 
+PABLO_ACOSTA <- read_sheet(red20, sheet = "PA", guess_max = 10000) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>% 
+UPA <- read_sheet(red20, sheet = "UPA", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>% 
+INTA_BCE <- read_sheet(red20, sheet = "INTA_BCE", guess_max = 10000, skip=0) %>% 
+  janitor::clean_names()%>% select(trt, bk, kg_ha) #%>%
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+df20 <- bind_rows(tibble::lst(LOS_PINOS,PABLO_ACOSTA,UPA,INTA_BCE), .id="ensayo") %>% 
+  mutate_if(is.character, as.factor) %>% 
+  filter(trt %in% c("test", "rub_Z32", "rub_Z39", "orq_Z32", "orq_Z39", "rub_Z32_orq_Z39")) %>%
+  mutate(trt = fct_relevel(trt, c("test", "rub_Z32", "rub_Z39", "orq_Z32", "orq_Z39", "rub_Z32_orq_Z39")))
+
+# red_data <- gs4_get(gs4_find("red_trigo_data")$id)
+df20 %>% write_sheet(ss=red_data, sheet = "2020")
+# dfs<-Filter(function(x) is.data.frame(get(x)) , ls())
+# save(list=dfs, file="data/red21.RData")
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+red20 <- bind_rows(tibble::lst(LOS_PINOS,PABLO_ACOSTA,UPA,INTA_BCE), .id="ensayo") %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(id_ensayo = paste0(year, "_", ensayo)) %>% 
+  select(id_ensayo, everything())
+
+save(red20, file="data/red_todos_20.RData")
+
+```
+
+
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+red_full <- gs4_get(gs4_find("red_trigo_data")$id)
+# gs4_browse(red_link)
+raw <- tibble(year = red_full %>% sheet_names() %>% .[. %in% c("2019", "2020")] )%>% 
+  mutate(data = map(year, ~read_sheet(red_full, sheet = .x))) %>% 
+  tidyr::unnest(cols = c(data)) %>% 
+  mutate(id_ensayo = paste0(year, "_", ensayo)) %>% 
+  select(id_ensayo, everything())
+raw %>% count(id_ensayo)
+raw %>% sheet_write(ss = red_full, sheet = "full")  
+# raw %>%filter(id_ensayo == "2020_INTA_BCE")
+# save(raw, file = "data/red.Rdata")
+
+```
+

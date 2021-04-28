@@ -1,0 +1,268 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+```{r, include=FALSE}
+pacman::p_load(googlesheets4, lmerTest, emmeans, patchwork)
+source('_global_setting.R')
+```
+
+```{r}
+url_dis <- "https://docs.google.com/spreadsheets/d/19UFhIkIWhRYS_hnQNGg4yKeNOpmMp0am3GUGfFTw6s0/edit?usp=sharing"
+id_trial="2019_tr_mad"
+
+mada <- googlesheets4::read_sheet(url_dis, sheet=id_trial,
+                                 col_types="ccccddddddddddddddddd")
+```
+
+```{r}
+u <- "https://docs.google.com/spreadsheets/d/19UFhIkIWhRYS_hnQNGg4yKeNOpmMp0am3GUGfFTw6s0/edit#gid=0"
+raw_dat <- gsheet::gsheet2tbl(u)
+```
+
+
+```{r}
+raw_dat %>%
+  pivot_longer(-(par:pl), 
+               names_to = "org_var", values_to = "y") %>% 
+  separate(org_var, c("org", "var")) %>% 
+  mutate_at(vars(trt:var), as.factor) %>% 
+  pivot_wider(names_from = var, values_from = y) %>% 
+  # filter(stringr::str_detect(org, "b")) %>% # elimina tallo
+  # filter(!(is.na(af))) %>%  # elimina hojas perdidas
+  mutate_if(is.numeric, ~replace(., is.na(.), 0)) %>% # rellena con 0
+  select(everything()) -> dat 
+```
+
+```{r}
+# Retencion foliar en estrato < HB-2
+dat %>%
+  group_by(trt, bq, org) %>% 
+    mutate(
+    af_p = case_when(
+    af == 0 ~ (25+0)/2,
+    af == 1 ~ (50+25)/2,
+    af == 2 ~ (75+50)/2,
+    af == 3 ~ (100+75)/2,
+    af = TRUE ~ af)) %>%
+  summarise(n = sum(!is.na(af)), 
+            af_p = mean(af, na.rm = TRUE)) -> foliar_dat
+```
+
+```{r}
+dat %>% 
+  select(-par, -af, -pl) %>% 
+  group_by(trt, bq, org) %>%
+  summarise_each(., funs( 
+    # incidencia media a nivel de parcela/órgano de cada enfermedad
+    inc = sum(.>0, na.rm = TRUE),
+    # severidad media a nivel de parcela/órgano de cada enfermedad
+    sev = round(mean(., na.rm = TRUE),1)), 
+    everything()) -> dis_dat
+
+# dat %>% select(-af) %>%
+#   group_by(trt, bq, org) %>% 
+#   summarise_if(is.numeric, 
+#                list(~round(mean(., na.rm = TRUE),1))) -> sev_dat
+
+## Unificar tablas
+foliar_dat <- foliar_dat %>%      # tabla con variables experimentales y af 
+  left_join(dis_dat, by = c("trt", "bq", "org")) %>% 
+  ungroup  
+  # mutate(af_a = af_p - rowSums(dplyr::select(., matches('sev'))), 
+  #        af_a = if_else(af_a < 0, 0, af_a), 
+  #        ma_int = (ma_inc/100) * (ma_sev/100),
+  #        re_int = (re_inc/100) * (re_sev/100)) 
+
+```
+
+```{r}
+# set de hojas 
+h012= c("b0","b1","b2") 
+```
+
+## Manchas foliares 
+
+```{r}
+sev_fin <- dat %>% 
+  filter(trt==1, org %in% h012) %>% 
+  select(-(trt:org),-af) %>% 
+  # group_by(org) %>% 
+  summarise_each(., funs(
+    # incidencia media a nivel de parcela/órgano de cada enfermedad
+    inc = mean(.>0, na.rm = TRUE)*100,
+    # severidad media a nivel de parcela/órgano de cada enfermedad
+    sev = round(mean(., na.rm = TRUE),1)), 
+    everything())
+```
+
+Incidencia
+
+```{r}
+position_jitterdodge(
+  jitter.width = 0.1,
+  jitter.height = 0,
+  dodge.width = 0.1,
+  seed = NA
+)
+
+p_inc1 <- foliar_dat %>% 
+  filter(org %in% h012) %>%  
+  ggplot(aes(x=trt, y=ma_inc/n*100))+
+  geom_point(aes(fill=org), alpha=0.5, size=2, 
+             pch = 21, position = position_jitterdodge())+
+  stat_summary(fun.data = "mean_cl_boot", colour = "grey30", 
+               size = 0.2)+
+  labs(title = "Incidencia", y = "%", x="", fill="Hojas")
+```
+
+```{r}
+mod_inc1 <- glmer(ma_inc/n ~ trt + (1|bq),
+                  weights=n, family="binomial", 
+                  data=foliar_dat, subset = org %in% h012)
+car::Anova(mod_inc1)
+emmeans(mod_inc1, ~ trt, type = "response")
+```
+
+```{r}
+manchas <- (p_inc1 / p_sev1 & theme(legend.position = "bottom")) + 
+  plot_layout(guides = "collect") 
+```
+
+Severidad 
+
+```{r}
+p_sev1 <- foliar_dat %>% 
+  filter(org %in% h012) %>% 
+  ggplot(aes(x=trt, y=ma_sev))+
+  geom_point(aes(fill=org), alpha=0.5, size=2, 
+             pch = 21, position = position_jitterdodge())+
+  stat_summary(fun.data = "mean_cl_boot", size = 0.2)+
+  labs(title = "Severidad", y = "%", x="Tratamientos", fill="Hojas")
+
+```
+
+```{r}
+tran <- make.tran("asin.sqrt", 100)
+mod_sev1 <- with(tran, 
+                 lmer(linkfun(ma_sev) ~ trt + (1|bq), 
+                      data=foliar_dat %>% filter(org %in% h012)))
+anova(mod_sev1)
+emmeans(mod_sev1, ~ trt, type = "response")
+```
+
+```{r}
+manchas_foliares <- (p_inc1 / p_sev1 & theme(legend.position = "bottom")) +
+  plot_annotation('Manchas foliares', caption = 'Evaluacion ')+ plot_layout(guides = "collect")
+evaluacion <- filter(crono, evento == "eval.sanitaria") %>% pull(fecha)
+```
+
+## Roya estriada 
+
+
+```{r}
+p_inc2 <- foliar_dat %>% 
+  filter(org %in% h012) %>% 
+  ggplot(aes(x=trt, y=re_inc/n*100))+
+  stat_summary(fun.data = "mean_cl_boot", colour = "grey30", size = 0.2)+
+  geom_point(aes(fill=org), alpha=0.5, size=2, 
+             pch = 21, position = position_jitterdodge())+  
+  labs(y ="%", x="Tratamientos", fill="Hojas", 
+       title = "Incidencia")
+
+p_sev2 <- foliar_dat %>% 
+  filter(org %in% h012) %>% 
+  ggplot(aes(x=trt, y=re_sev))+
+  stat_summary(fun.data = "mean_cl_boot", size = 0.2)+
+  geom_point(aes(fill=org), alpha=0.5, size=2, 
+             pch = 21, position = position_jitterdodge())+  
+  labs(y ="%", x="Tratamientos", fill="Hojas", 
+       title = "Severidad")
+
+roya_estriada <- (p_inc2 / p_sev2 & theme(legend.position = "bottom")) +
+  plot_annotation('Roya estriada', caption = 'made with patchwork')+ plot_layout(guides = "collect")
+
+```
+
+Incidencia 
+
+```{r}
+mod_inc2 <- glmer(re_inc/n ~ trt + (1|bq),
+                  weights=n, family="binomial", 
+                  data=foliar_dat, subset = org %in% h012)
+car::Anova(mod_inc2)
+emmeans(mod_inc2, ~ trt, type = "response")
+```
+
+Severidad 
+
+```{r}
+mod_sev2 <- with(tran, 
+                 lmer(linkfun(re_sev) ~ trt + (1|bq), 
+                      data=foliar_dat %>% filter(org %in% h012)))
+car::Anova(mod_sev2)
+CLD(emmeans(mod_sev2, ~ trt, type = "response"))
+```
+
+## Roya de la hoja 
+
+Incidencia 
+
+```{r}
+p_inc3 <- foliar_dat%>% 
+  filter(org %in% h012) %>% 
+  ggplot(aes(x=trt, y=rh_inc))+
+  stat_summary(fun.data = "mean_cl_boot", colour = "grey30", size = 0.2)+
+  geom_point(aes(fill=org), alpha=0.5, size=2, 
+             pch = 21, position = position_jitterdodge())+  
+  labs(y = "Incidencia %", x="Tratamientos", fill="Hojas")
+
+p_sev3 <- foliar_dat %>% 
+  filter(org %in% h012) %>% 
+  ggplot(aes(x=trt, y=rh_sev))+
+  stat_summary(fun.data = "mean_cl_boot", colour = "grey30", size = 0.2)+
+  geom_point(aes(fill=org), alpha=0.5, size=2, 
+             pch = 21, position = position_jitterdodge())+  
+  labs(y = "Severidad %", x="Tratamientos", col="Hojas")
+
+roya_anaranjada <- (p_inc3 / p_sev3 & theme(legend.position = "bottom")) +
+  plot_annotation('Roya estriada', caption = 'made with patchwork')+ plot_layout(guides = "collect")
+
+```
+
+```{r}
+mod_inc3 <- glmer(rh_inc/n ~ trt + (1|bq),
+                  weights=n, family="binomial", 
+                  data=foliar_dat, subset = org %in% h012)
+car::Anova(mod_inc3)
+emmeans(mod_inc3, ~ trt, type = "response")
+```
+
+```{r}
+mod_sev3 <- with(tran, 
+                 lmer(linkfun(rh_sev) ~ trt + (1|bq), 
+                      data=foliar_dat %>% filter(org %in% h012)))
+# anova(mod_sev3)
+# emmeans(mod_sev3, ~ trt, type = "response")
+```
+
+
+```{r,eval=FALSE}
+## Retencion foliar en estrato inferior hojas B-3 y B-4
+
+# "Cuantas hojas persistieron verde abajo de la hoja bandera-3" (puede que no sea un dato trascendental, ya que esta comprobado que los granos se llenan con la fotosintesis de los organos superiores: espiga y hojas B y B-1 principalmente)
+
+p_af <- foliar_dat %>% 
+  filter(org %in% "b3") %>% 
+  ggplot(aes(x=trt, y=af_p))+
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", 
+               size = 0.2)+
+  geom_jitter(alpha=0.5, width=0.1)+
+  labs(y = "Hojas verdes (media) ", x="Tratamientos")
+```
+
+```{r}
+save(list=ls(), file="sanidad.Rda")
+```
+

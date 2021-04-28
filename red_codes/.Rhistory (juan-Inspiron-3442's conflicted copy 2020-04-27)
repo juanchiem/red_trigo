@@ -1,0 +1,512 @@
+geom_boxplot(aes(fill = Species), color = "white")+
+fill_palette("jco")
+}
+ggplot(iris, aes(Species, Sepal.Length))+
+background_image(img)+
+geom_boxplot(aes(fill = Species), color = "white")+
+fill_palette("jco")
+pacman::p_load(ggpubr)
+if (FALSE) {
+install.packages("png")
+# Import the image
+img.file <- system.file(file.path("images", "background-image.png"),
+package = "ggpubr")
+img <- png::readPNG(img.file)
+# Plot with background image
+ggplot(iris, aes(Species, Sepal.Length))+
+background_image(img)+
+geom_boxplot(aes(fill = Species), color = "white")+
+fill_palette("jco")
+}
+ggplot(iris, aes(Species, Sepal.Length))+
+background_image(img)+
+geom_boxplot(aes(fill = Species), color = "white")+
+fill_palette("jco")
+# Import the image
+img.file <- system.file(file.path("images", "background-image.png"),
+package = "ggpubr")
+img <- png::readPNG(img.file)
+# Plot with background image
+ggplot(iris, aes(Species, Sepal.Length))+
+background_image(img)+
+geom_boxplot(aes(fill = Species), color = "white")+
+fill_palette("jco")
+plot_model(mod, sort.est = TRUE)
+plot_model(mod, type = "eff")
+plot_model(mod, type = "eff")
+red
+red <- dat %>%
+mutate_at(vars(sitio, trt), as.factor) %>%
+filter(trt %in% red_t) %>%
+left_join(id_trt, by="trt") %>%
+mutate_at(vars(sitio, trt, trat), as.factor)%>%
+dplyr::select(sitio, trt, trat, bq, rinde_aj, kg_trigo)
+dat
+dat %>%
+mutate_at(vars(sitio, trt), as.factor)
+dat %>%
+mutate_at(vars(sitio, trt), as.factor) %>%
+filter(trt %in% red_t)
+dat %>%
+mutate_at(vars(sitio, trt), as.factor) %>%
+filter(trt %in% red_t) %>%
+left_join(id_trt, by="trt")
+red <- dat %>%
+mutate_at(vars(sitio, trt), as.factor) %>%
+filter(trt %in% red_t) %>% droplevels() %>%
+left_join(id_trt, by="trt") %>%
+mutate_at(vars(sitio, trt, trat), as.factor)%>%
+dplyr::select(sitio, trt, trat, bq, rinde_aj, kg_trigo)
+red
+red_sum <- red %>%
+group_by(sitio, trat) %>%
+summarise(yield=mean(rinde_aj, na.rm = T)) %>%
+ungroup %>%
+spread(trat, yield) %>%
+gather(trat, yield, -`1.Check`, -sitio) %>%
+dplyr::select(-`1.Check`, everything()) %>%
+arrange(sitio, trat) %>%
+mutate(dif = yield - `1.Check`) %>%
+left_join(id_trt, by="trat")
+red_sum
+red_sum %>%
+# filter(Localidad!="Necochea") %>%
+ggplot(aes(x=fct_reorder(trat, as.numeric(trt), .desc = T), y =dif))+
+geom_point(aes(col=sitio))+
+geom_point(aes(x=factor(trat), y=kg_trigo), col="red", shape=3) +
+stat_summary(fun.y = mean, fun.ymin = mean, fun.ymax = mean,
+geom = "crossbar",
+size = 0.1)+
+coord_flip()+
+labs(title = "Respuesta absoluta de fungicidas en trigo",
+subtitle= "Sudeste de Buenos Aires - 2019",
+y ="Diferencia con el control (kg de trigo)",
+x = "Mezcla fungicida y \nestadio fenologico de aplicación",
+caption = paste(mezcla_doble,"\n",mezcla_triple))+
+# theme_juan(10,"right")+
+# geom_hline(yintercept =0, col="grey") +
+theme(plot.caption = element_text(hjust = 0, face= "italic"))
+red_sum %>%
+ggplot(aes(x=fct_reorder(trat, as.numeric(trt), .desc = T), y =dif-kg_trigo))+
+stat_summary(fun.y = mean, fun.ymin = mean, fun.ymax = mean,
+geom = "crossbar",
+size = 0.1)+
+geom_point(aes(col=sitio))+
+coord_flip()+
+labs(title = "Retorno neto de aplicación de fungicidas en trigo",
+subtitle= "Sudeste de Buenos Aires - 2019",
+y ="Retorno neto (kg de trigo)",
+x = "Mezcla fungicida y \nestadio fenologico de aplicación",
+caption = paste(mezcla_doble,"\n",mezcla_triple))+
+# theme_juan(10,"right")+
+geom_hline(yintercept =0, col="grey") +
+theme(plot.caption = element_text(hjust = 0, face= "italic"))
+pacman::p_load(lme4, sjPlot, effects)
+mod <- lmer(rinde_aj~ factor(trat) + (1|sitio/bq), data=red)
+red
+red <- dat %>%
+mutate_at(vars(sitio, trt), as.factor) %>%
+filter(trt %in% red_t) %>% droplevels() %>%
+left_join(id_trt, by="trt") %>%
+mutate_at(vars(sitio, trt, trat, bq), as.factor)%>%
+dplyr::select(sitio, trt, trat, bq, rinde_aj, kg_trigo)
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data=red)
+plot_model(mod, type = "eff")
+tmod <- tab_model(mod)
+tmod
+tmod$file
+sjp.setTheme(theme = "forest")
+pacman::p_load(lme4, sjPlot, effects)
+sjp.setTheme(theme = "forest")
+sjp.lmer(mod, type = "re")
+sjp.lmer(mod)
+sjPlot::sjp.lmer(mod)
+pacman::p_load(lme4, sjPlot, effects,sjmisc)
+sjPlot::sjp.lmer(mod)
+plot_model(mod, type = "re")
+pacman::p_load(lme4, sjPlot, effects,glmmTMB)
+pacman::p_load(lme4, sjPlot, effects, glmmTMB)
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data=red)
+plot_model(mod, type = "eff")
+plot_model(mod, type = "re")
+summary(mod)
+609614/(609614 + 10772)  # ~60 %
+plot_model(mod, type = "eff")
+plot_model(mod, type = "re")
+plot(mod)
+qqnorm(resid(mod))
+qqline(resid(mod))  # points fall nicely onto the line - good!
+pacman::p_load(lme4, sjPlot, ggpredict)
+install.packages("BiocManager")
+pacman::p_load(lme4, sjPlot, ggpredict)
+install.packages("sjlabelled")
+pacman::p_load(lme4, sjPlot, sjlabelled)
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod)  # this gives overall predictions for the model
+install.packages("ggeffects")
+pacman::p_load(lme4, sjPlot, ggeffects)
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod)  # this gives overall predictions for the model
+pred.mm
+ggpredict(mod)  # this gives overall predictions for the mode
+(ggplot(pred.mm) +
+geom_line(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data = red,                      # adding the raw data (scaled values)
+aes(x = trt,
+y = rend_aj))
+(ggplot(pred.mm) +
+geom_line(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5)) +  # error band
+geom_point(data = red,                      # adding the raw data (scaled values)
+aes(x = trt,
+y = rend_aj))
+pred.mm
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = trt)  # this gives overall predictions for the model
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = "1.Check")  # this gives overall predictions for the model
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = trt)  # this gives overall predictions for the model
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = "trt")  # this gives overall predictions for the model
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = "trat")  # this gives overall predictions for the model
+pred.mm
+(ggplot(pred.mm) +
+geom_line(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5))
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod)  # this gives overall predictions for the model
+(ggplot(pred.mm) +
+geom_line(aes(x = x, y = Predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = Predicted - SE,
+ymax = Predicted + SE)
+ggplot(pred.mm) +
+geom_line(aes(x = x, y = Predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = Predicted - SE,
+ymax = Predicted + SE),
+fill = "lightgrey", alpha = 0.5))
+ggplot(pred.mm) +
+geom_line(aes(x = x, y = Predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = Predicted - SE,
+ymax = Predicted + SE),
+fill = "lightgrey", alpha = 0.5)
+pred.mm
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = c("trat"))  # this gives overall predictions for the model
+ggplot(pred.mm) +
+geom_line(aes(x = x, y = Predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = Predicted - SE,
+ymax = Predicted + SE)
+)
+ggplot(pred.mm) +
+geom_line(aes(x = x, y = Predicted))
+pred.mm
+data.frame(pred.mm))
+data.frame(pred.mm)
+ggplot(data.frame(pred.mm) +
+geom_line(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5))
+data.frame(pred.mm) %>%
+ggplot()+
+geom_line(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5))
+data.frame(pred.mm) %>%
+ggplot()+
+geom_line(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5)
+data.frame(pred.mm) %>%
+ggplot()+
+# geom_line(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5)
+data.frame(pred.mm) %>%
+ggplot()+
+geom_point(aes(x = x, y = predicted)) +          # slope
+geom_ribbon(aes(x = x,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5)
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5)
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data = red,                      # adding the raw data (scaled values)
+aes(x = trt,
+y = rend_aj)) +
+labs(x = "Body Length (indexed)", y = "Test Score",
+title = "Body length does not affect intelligence in dragons") +
+theme_minimal()
+red_sum %>% rename(x = trat, predicted=rend_aj)
+red_sum
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data = red_sum %>% rename(x = trat, predicted=yield),                      # adding the raw data (scaled values)
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Body Length (indexed)", y = "Test Score",
+title = "Body length does not affect intelligence in dragons") +
+plot_model(mod, type = "eff")
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5)
+red_sum %>% rename(x = trat, predicted=yield)
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data = red_sum %>% rename(x = trat, predicted=yield),
+aes(x = x,
+y = predicted, col=sitio))
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data = red_sum %>% rename(x = trat, predicted=yield),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Body Length (indexed)", y = "Test Score",
+title = "Body length does not affect intelligence in dragons") +
+plot_model(mod, type = "eff")
+plot_model(mod, type = "eff")
+mod1 <- lmer(rinde_aj ~ trat*sitio+ (1|sitio:bq), data=red)
+AIC(mod0, mod)
+mod0 <- lmer(rinde_aj ~ trat*sitio+ (1|sitio:bq), data=red)
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data=red)
+AIC(mod0, mod)
+car::Anova(mod0)
+mod1 <- lmer(rinde_aj ~ trat+sitio+ (1|sitio:bq), data=red)
+car::Anova(mod0)
+car::Anova(mod1)
+red_sum
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Body Length (indexed)", y = "Test Score",
+title = "Body length does not affect intelligence in dragons")
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)) %>%
+rename(x=trat),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Body Length (indexed)", y = "Test Score",
+title = "Body length does not affect intelligence in dragons")
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)) %>%
+rename(x=trat),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Estrategia", y = "Rendimiento (kg/ha)",
+title = "")
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)) %>%
+rename(x=trat),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Estrategia", y = "Rendimiento (kg/ha)",
+title = "")
+mod0 <- lmer(rinde_aj ~ trat*sitio+ (1|sitio:bq), data=red %>% filter(sitio!=tan))
+mod0 <- lmer(rinde_aj ~ trat*sitio+ (1|sitio:bq), data=red %>% filter(sitio!="tan"))
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data=red, red %>% filter(sitio!="tan"))
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data= red %>% filter(sitio!="tan"))
+AIC(mod0, mod)
+mod0 <- lmer(rinde_aj ~ trat*sitio+ (1|sitio:bq), data=red %>% filter(sitio!="tan"))
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data= red %>% filter(sitio!="tan"))
+car::Anova(mod0)
+AIC(mod1, mod)
+mod1 <- lmer(rinde_aj ~ trat+sitio+ (1|sitio:bq), data=red)
+mod1 <- lmer(rinde_aj ~ trat+sitio+ (1|sitio:bq), data= red %>% filter(sitio!="tan"))
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data= red %>% filter(sitio!="tan"))
+AIC(mod1, mod)
+car::Anova(mod1)
+car::Anova(mod0)
+car::Anova(mod)
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = c("trat"))  # this gives overall predictions for the model
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)) %>%
+rename(x=trat),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Estrategia", y = "Rendimiento (kg/ha)",
+title = "")
+summary(mod)
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data= red)# %>% filter(sitio!="tan"))
+# Extract the prediction data frame
+pred.mm <- ggpredict(mod, terms = c("trat"))  # this gives overall predictions for the model
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)) %>%
+rename(x=trat),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Estrategia", y = "Rendimiento (kg/ha)",
+title = "")
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)) %>%
+rename(x=trat),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Estrategia", y = "Rendimiento (kg/ha)",
+title = "") +
+plot_model(mod, type = "eff")
+data.frame(pred.mm) %>%
+ggplot()+
+geom_pointrange(aes(x = x,
+y = predicted,
+ymin = predicted - std.error,
+ymax = predicted + std.error),
+fill = "lightgrey", alpha = 0.5) +  # error band
+geom_point(data =
+red %>% group_by(sitio, trat) %>%
+summarise(predicted=mean(rinde_aj, na.rm = T)) %>%
+rename(x=trat),
+aes(x = x,
+y = predicted, col=sitio)) +
+labs(x = "Estrategia", y = "Rendimiento (kg/ha)",
+title = "") +
+theme(axis.text.x=element_text(angle=60, hjust=1))
+car::Anova(mod)
+mod1 <- lmer(rinde_aj ~ trat+sitio+ (1|sitio:bq), data= red)# %>% filter(sitio!="tan"))
+mod <- lmer(rinde_aj~ trat + (1|sitio/bq), data= red)# %>% filter(sitio!="tan"))
+AIC(mod1, mod)
+car::Anova(mod)
+red_sum %>%
+# filter(Localidad!="Necochea") %>%
+ggplot(aes(x=fct_reorder(trat, as.numeric(trt), .desc = T), y =dif))+
+geom_point(aes(col=sitio))+
+geom_point(aes(x=factor(trat), y=kg_trigo), col="red", shape=3) +
+stat_summary(fun.y = mean, fun.ymin = mean, fun.ymax = mean,
+geom = "crossbar",
+size = 0.1)+
+coord_flip()+
+labs(title = "Respuesta absoluta de fungicidas en trigo",
+subtitle= "Sudeste de Buenos Aires - 2019",
+y ="Diferencia con el control (kg de trigo)",
+x = "Mezcla fungicida y \nestadio fenologico de aplicación",
+caption = paste(mezcla_doble,"\n",mezcla_triple))+
+# theme_juan(10,"right")+
+# geom_hline(yintercept =0, col="grey") +
+theme(plot.caption = element_text(hjust = 0, face= "italic"))
+red_sum %>%
+ggplot(aes(x=fct_reorder(trat, as.numeric(trt), .desc = T), y =dif-kg_trigo))+
+stat_summary(fun.y = mean, fun.ymin = mean, fun.ymax = mean,
+geom = "crossbar",
+size = 0.1)+
+geom_point(aes(col=sitio))+
+coord_flip()+
+labs(title = "Retorno neto de aplicación de fungicidas en trigo",
+subtitle= "Sudeste de Buenos Aires - 2019",
+y ="Retorno neto (kg de trigo)",
+x = "Mezcla fungicida y \nestadio fenologico de aplicación",
+caption = paste(mezcla_doble,"\n",mezcla_triple))+
+# theme_juan(10,"right")+
+geom_hline(yintercept =0, col="grey") +
+theme(plot.caption = element_text(hjust = 0, face= "italic"))
+dat

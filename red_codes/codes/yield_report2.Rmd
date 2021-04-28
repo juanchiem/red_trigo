@@ -1,0 +1,154 @@
+---
+title: "Rendimiento red estrategias trigo"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+pacman::p_load(tidyverse, lme4, emmeans,purrr, car)
+theme_j <- "https://github.com/juanchiem/R-sources/blob/master/theme_juan.R?raw=TRUE"
+devtools::source_url(theme_j)
+```
+
+```{r }
+load("red_harvest.RData")
+# red_t=c(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L)
+red <- red %>% mutate_at(vars(bq), as.factor)
+```
+
+```{r}
+red_sum <- red %>% 
+  group_by(id, Localidad, trat) %>% 
+  summarise(yield=mean(rinde_aj, na.rm = T)) %>% 
+  ungroup %>% 
+  spread(trat, yield) %>% 
+  gather(trat, yield, -`1.Check`, -id, -Localidad) %>% 
+  dplyr::select(-`1.Check`, everything()) %>% 
+  arrange(id, trat) %>% 
+  mutate(dif = yield - `1.Check`) %>% 
+  left_join(id_trt, by="trat") 
+```
+
+```{r}
+mezcla_doble <- "MD: Mezcla doble 0,5 l/ha - epoxiconazole + azoxistrobin"
+mezcla_triple <-"MT: Mezcla triple 1,2 l/ha - epoxiconazole + pyraclostrobin + fluxapyroxad"
+
+red %>% 
+  ggplot(aes(x=trat, y =rinde_aj))+
+  geom_boxplot(width=0.2)+
+  geom_jitter(width=0.2) + 
+  coord_flip() + 
+  facet_wrap("Localidad")+  
+  theme_bw() 
+
+red_sum %>% 
+  # filter(Localidad!="Necochea") %>% 
+  ggplot(aes(x=fct_reorder(trat, as.numeric(trt), .desc = T), y =dif))+
+  geom_point(aes(col=Localidad))+
+  geom_point(aes(x=factor(trat), y=kg_trigo), col="red", shape=3) + 
+  stat_summary(fun = mean, fun.min = mean, fun.max = mean, 
+               geom = "crossbar", 
+               size = 0.1)+  
+  coord_flip()+
+  labs(title = "Respuesta absoluta de fungicidas en trigo", 
+       subtitle= "Sudeste de Buenos Aires - 2019",  
+       y ="Diferencia con el control (kg de trigo)",
+       x = "Mezcla fungicida y \nestadio fenologico de aplicación",
+       caption = paste(mezcla_doble,"\n",mezcla_triple))+
+  theme_juan(10,"right")+
+  # geom_hline(yintercept =0, col="grey") + 
+  theme(plot.caption = element_text(hjust = 0, face= "italic"))  
+
+red_sum %>% 
+  ggplot(aes(x=fct_reorder(trat, as.numeric(trt), .desc = T), y =dif-kg_trigo))+
+  stat_summary(fun = mean, fun.min = mean, fun.max = mean, 
+               geom = "crossbar", 
+               size = 0.1)+  
+  geom_point(aes(col=Localidad))+
+  coord_flip()+
+  labs(title = "Retorno neto de aplicación de fungicidas en trigo", 
+       subtitle= "Sudeste de Buenos Aires - 2019",  
+       y ="Retorno neto (kg de trigo)",
+       x = "Mezcla fungicida y \nestadio fenologico de aplicación",
+       caption = paste(mezcla_doble,"\n",mezcla_triple))+
+  theme_juan(10,"right")+
+  geom_hline(yintercept =0, col="grey") + 
+  theme(plot.caption = element_text(hjust = 0, face= "italic"))  
+```
+
+## Anovas
+
+```{r}
+mixed_model <- function(.) {
+  lmer(rinde_aj ~ trat + (1|bq), data = .)
+}
+
+fits <- red %>% 
+  select(-c(id, trt)) %>%
+  nest(data = c(trat, bq, rinde_aj)) %>% 
+  mutate(model = map(data, mixed_model),
+         model_anova = map(data, ~Anova(lmer(rinde_aj ~ trat + (1|bq), .))))
+
+out_fits <- fits %>% 
+  mutate(tidy_model = map(model_anova, broom::tidy)) %>% #,
+         # model_qual = map(model, MuMIn::r.squaredGLMM)) %>% 
+  select(Localidad, tidy_model) %>%
+ unnest(c(tidy_model)) 
+
+out_fits
+```
+
+```{r}
+library(predictmeans)
+```
+
+## Los Pinos 
+
+```{r}
+# out_fits[[6]] [[1]]
+predictmeans(fits[[3]][[1]], "trat", adj="BH", level=0.1, plot=F)$LSD
+pred_lp = emmeans(fits[[3]][[1]], ~ trat, type = "response")
+pwpp(pred_lp, method = "trt.vs.ctrl1", type = "response", side = ">",
+     add.space = 1)
+```
+
+## Madariaga
+
+```{r}
+# out_fits[[6]] [[2]]
+predictmeans(fits[[3]][[2]], "trat", adj="BH", level=0.1, plot=F)$LSD
+
+pred_mada = emmeans(fits[[3]][[2]], ~ trat, type = "response")
+pwpp(pred_mada, method = "trt.vs.ctrl1", type = "response", side = ">",
+     add.space = 1)
+```
+
+## MdP 
+
+```{r}
+# out_fits[[6]] [[3]]
+predictmeans(fits[[3]][[3]], "trat", adj="BH", level=0.1, plot=F)$LSD
+
+pred_mdp = emmeans(fits[[3]][[3]], ~ trat, type = "response")
+pwpp(pred_mdp, method = "trt.vs.ctrl1", type = "response", side = ">",
+     add.space = 1)
+```
+
+## Necochea 
+```{r}
+# out_fits[[6]] [[4]]
+predictmeans(fits[[3]][[4]], "trat", adj="BH", level=0.1, plot=F)$LSD
+
+pred_nec = emmeans(fits[[3]][[4]], ~ trat, type = "response")
+pwpp(pred_nec, method = "trt.vs.ctrl1", type = "response", side = ">",
+     add.space = 1)
+```
+
+## Tandil 
+
+```{r}
+# out_fits[[6]] [[5]]
+predictmeans(fits[[3]][[5]], "trat", adj="BH", level=0.1, plot=F)$LSD
+pred_tan = emmeans(fits[[3]][[5]], ~ trat, type = "response")
+pwpp(pred_tan, method = "trt.vs.ctrl1", type = "response", side = ">", add.space = 1)
+```
