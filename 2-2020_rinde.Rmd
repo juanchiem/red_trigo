@@ -21,7 +21,6 @@ load("data/red_todos_20.RData")
 # raw %>%filter(id_ensayo == "2020_INTA_BCE")
 ```
 
-
 ```{r message=FALSE, warning=FALSE, eval=T}
 fmc <- c("test", "rub_Z32", "orq_Z32", "rub_Z39", "orq_Z39", "rub_Z32_orq_Z39", "rub_Z32_carbFMC_Z39")
 
@@ -119,7 +118,4 @@ res %>%
   # write_sheet(ss=red, sheet = "summary_20")
   # write_sheet(ss=red, sheet = "emmeans_20_mix")
 ```
-
-
-
 

@@ -9,12 +9,18 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 pacman::p_load(tidyverse, googlesheets4)
 gs4_auth(email = "edwardsmolina@gmail.com")
-source(here::here("themes.R"))
+googledrive::drive_auth(email = "edwardsmolina@gmail.com")
+source(here::here("0-themes.R"))
 ```
-
 
 ```{r eval = F}
 red19 <- gs4_get(gs4_find("red_data_2019")$id)
+gs4_browse(red19)
+```
+
+Data 2019
+
+```{r eval = F}
 # red19 %>% sheet_names()  
 MADA <- read_sheet(red19, sheet = "MADA", guess_max = 10000, skip=0) %>% 
   janitor::clean_names()  %>% select(trt, bk, kg_ha) #%>% 
@@ -35,16 +41,21 @@ df19 <- bind_rows(tibble::lst(MADA,NECO,BARROW,TANDIL,LOS_PINOS,MDP),
   filter(trt %in% c("test", "rub_Z32", "rub_Z39", "orq_Z32", "orq_Z39", "rub_Z32_orq_Z39")) %>%
   mutate(trt = fct_relevel(trt, c("test", "rub_Z32", "rub_Z39", "orq_Z32", "orq_Z39", "rub_Z32_orq_Z39")))
 
-red_data <- gs4_get(gs4_find("red_trigo_data")$id)
+red_data <- gs4_get(gs4_find("red_trigo_full")$id)
 df19 %>% write_sheet(ss=red_data, sheet = "2019")
 # dfs<-Filter(function(x) is.data.frame(get(x)) , ls())
 # save(list=dfs, file="data/red21.RData")
 ```
 
+Data 2020
+
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 red20 <- gs4_get(gs4_find("red_data_2020")$id)
+red20 %>% gs4_browse()
 red20 %>% sheet_names()
+```
 
+```{r message=FALSE, warning=FALSE, eval=FALSE}
 LOS_PINOS <- read_sheet(red20, sheet = "LP", guess_max = 10000, skip=0) %>% 
   janitor::clean_names()  %>% select(trt, bk, kg_ha) #%>% 
 PABLO_ACOSTA <- read_sheet(red20, sheet = "PA", guess_max = 10000) %>% 
@@ -54,7 +65,6 @@ UPA <- read_sheet(red20, sheet = "UPA", guess_max = 10000, skip=0) %>%
 INTA_BCE <- read_sheet(red20, sheet = "INTA_BCE", guess_max = 10000, skip=0) %>% 
   janitor::clean_names()%>% select(trt, bk, kg_ha) #%>%
 ```
-
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 df20 <- bind_rows(tibble::lst(LOS_PINOS,PABLO_ACOSTA,UPA,INTA_BCE), .id="ensayo") %>% 
@@ -68,7 +78,6 @@ df20 %>% write_sheet(ss=red_data, sheet = "2020")
 # save(list=dfs, file="data/red21.RData")
 ```
 
-
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 red20 <- bind_rows(tibble::lst(LOS_PINOS,PABLO_ACOSTA,UPA,INTA_BCE), .id="ensayo") %>% 
   mutate_if(is.character, as.factor) %>% 
@@ -76,14 +85,13 @@ red20 <- bind_rows(tibble::lst(LOS_PINOS,PABLO_ACOSTA,UPA,INTA_BCE), .id="ensayo
   select(id_ensayo, everything())
 
 save(red20, file="data/red_todos_20.RData")
-
 ```
 
 
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
-red_full <- gs4_get(gs4_find("red_trigo_data")$id)
-# gs4_browse(red_link)
+red_full <- gs4_get(gs4_find("red_trigo_full")$id)
+gs4_browse(red_full)
 raw <- tibble(year = red_full %>% sheet_names() %>% .[. %in% c("2019", "2020")] )%>% 
   mutate(data = map(year, ~read_sheet(red_full, sheet = .x))) %>% 
   tidyr::unnest(cols = c(data)) %>% 

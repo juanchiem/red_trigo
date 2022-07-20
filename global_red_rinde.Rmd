@@ -1,0 +1,177 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# setup 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse, googlesheets4)
+conflicted::conflict_prefer("filter", "dplyr")
+conflicted::conflict_prefer("select", "dplyr")
+source(here::here("0 themes.R"))
+```
+
+# sheet 
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+# gs4_deauth()
+# red_full <- gs4_get(gs4_find("red_trigo_data")$id)
+red_full <- "https://docs.google.com/spreadsheets/d/1HSoj5M--kcW-WioiwMbbngrqdkSC-bqpumeDIIlbx18/edit?usp=sharing"
+sheet_red <- gs4_get(red_full)
+# gs4_browse(red_full)
+orden_trt <- c("test", "rub_Z32", "orq_Z32", "rub_Z39", "orq_Z39", "rub_Z32_orq_Z39")
+```
+
+# info_dat
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+info_dat <- red_full %>% read_sheet(sheet = "info") 
+info_dat
+```
+
+# dat_raw
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+dat_raw <- red_full %>% read_sheet(sheet = "full")
+# raw %>% count(id_ensayo)
+# raw %>%filter(id_ensayo == "2020_INTA_BCE")
+# red_yd %>% write_sheet(ss=sheet_red, sheet = "2021")
+```
+
+# dat
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+dat <- dat_raw %>% 
+  group_by(id_ensayo, trt, bk) %>% 
+  summarise(kg_ha = mean(kg_ha, na.rm=T)) %>% 
+  ungroup %>% 
+  left_join(info_dat, by=c("id_ensayo")) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(trt = fct_relevel(trt, orden_trt))  
+dat
+```
+
+# dat sum
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+dat %>% 
+  group_by(id_ensayo, trt) %>% 
+  summarise(dis_press= first(dis_press),
+            ry=first(ry),
+            # kg_ha = mean(kg_ha, na.rm = T),
+            sd = sd(kg_ha, na.rm = T)) %>% 
+  pivot_wider(names_from = trt, values_from = sd) %>% 
+  ungroup -> sum_sd
+sum_sd %>%  write_sheet(ss=sheet_red, sheet = "sum_sd")
+
+dat %>% 
+  group_by(id_ensayo, trt) %>% 
+  summarise(
+    ry= first(ry),
+    dis_press= first(dis_press),
+            dis=first(dis_12),
+            kg_ha = mean(kg_ha, na.rm = T)) %>%
+  pivot_wider(names_from = trt, values_from = kg_ha) %>% 
+  ungroup-> sum
+
+# sum %>% write_sheet(ss=sheet_red, sheet = "sum")
+sum %>% count(dis_press)
+```
+
+# dat_mean
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+dat %>% 
+  group_by(id_ensayo, trt) %>% 
+  summarise(kg_ha = mean(kg_ha, na.rm = T)) %>%  
+  left_join(sum %>% select(id_ensayo, 
+                           rinde_test = test, 
+                           rinde_doble = rub_Z32_orq_Z39), 
+            by = "id_ensayo") %>% 
+  rowwise() %>% 
+  mutate(dif_test = round(kg_ha - rinde_test),  
+         dif_doble = rinde_doble - kg_ha
+  ) %>%
+  left_join(info_red, by = "id_ensayo") -> dat_mean
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+save(list=ls(pattern="dat"),
+     file=here::here("red_data/meta_data.Rdata"))
+```
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+load(here::here("red_data/meta_data.Rdata"))
+```
+
+# Plot raw
+
+```{r}
+dat %>%
+  ggplot()+
+  aes(trt, kg_ha)+
+  geom_point()+
+  stat_summary(fun.data = "mean_cl_boot", colour = "red", size = 0.5)+
+  facet_grid(.~id_ensayo, scales = "free")+
+  stat_summary(aes(label=round(..y..,0)),
+               fun=mean, geom="text", size=4, vjust = -0.5)+
+  coord_flip()+  
+  geom_hline(data = dat_mean %>% 
+               filter(trt == "test"), 
+             aes(yintercept = kg_ha), 
+             linetype = 2, col ="gray50") + 
+  theme_dens1
+```
+
+# Plot dif ry=0
+
+```{r}
+dat_mean %>% 
+  filter(!trt == "test") %>% 
+  mutate(col_bar = case_when(!str_detect(trt, "39") ~ "Z32", 
+                             !str_detect(trt, "32") ~ "Z39",
+                             TRUE ~ "doble")) %>%
+  filter(ry=="0") %>% 
+  droplevels %>% 
+  ggplot()+
+  aes(trt, dif_test, fill = col_bar)+
+  geom_col(size=2) +
+  # geom_point(size = 7.5, pch = 21, bg = 4, col = 1) +
+  geom_text(aes(label = dif_test), color = "white", size = 3, angle=90, vjust=1) +
+  geom_text(aes(label = dif_test), color = "white", size = 3, angle=90, vjust=-0.5) +
+  facet_grid(.~id_ensayo, scales = "free")+
+  coord_flip() + 
+  labs(y="Dif. test (kg/ha)", 
+       x="",
+       fill ="Momento de aplicaciòn") +
+  theme_dens1
+```
+
+# Plot dif ry=1
+
+```{r}
+dat_mean %>% 
+  filter(!trt == "test") %>% 
+  mutate(col_bar = case_when(!str_detect(trt, "39") ~ "Z32", 
+                             !str_detect(trt, "32") ~ "Z39",
+                             TRUE ~ "doble")) %>%
+  filter(ry=="1") %>% 
+  droplevels %>% 
+  ggplot()+
+  aes(trt, dif_test, fill = col_bar)+
+  geom_col(size=2) +
+  # geom_point(size = 7.5, pch = 21, bg = 4, col = 1) +
+  geom_text(aes(label = dif_test), color = "white", size = 3, angle=90, vjust=1) +
+  geom_text(aes(label = dif_test), color = "white", size = 3, angle=90, vjust=-0.5) +
+  facet_grid(.~id_ensayo, scales = "free")+
+  coord_flip() + 
+  labs(y="Dif. test (kg/ha)", 
+       x="",
+       fill ="Momento de aplicaciòn") +
+  theme_dens1
+```
+

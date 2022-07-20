@@ -1,0 +1,29 @@
+Cada campaña de ensayo tiene su propia planilla de datos 
+RAW ----
+- year
+- location
+- exp_site
+- trt_id
+- trt_abv
+- bk
+- LA
+- MA_inc
+- MA_sev
+- RE_inc
+- RE_sev
+- RH_inc
+- RH_sev
+- yield
+
+META -----
+Dis_press:
+ a - Decision making scenary (at least >10% incidence)
+ i. predominant disease at Z32-Z34 
+ ii.  predominant disease at Z39-Z43
+ b - Treatment efficacy control
+ iii. Mean severity > 5%
+ 
+ Data analysis -----
+· Control efficacy: Mean severity (inc * sevCond) ~ trt + bk
+· Yield response: yield ~ trt + bk
+· Cost-benefit analyisis: 

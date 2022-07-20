@@ -21,11 +21,9 @@ source(here::here("0-themes.R"))
 
 ```{r, eval=F}
 pacman::p_load(tidyverse, googlesheets4)
-# gs4_deauth()
 gs4_auth(email = "edwardsmolina@gmail.com")
 googledrive::drive_auth(email = "edwardsmolina@gmail.com")
-# red_sani <- gs4_get(gs4_find("sanidad red - 2020")$id)
-red_sani <- gs4_get("1LWld0SddWZP7N0_uEZvcY7zX9oB3CeB-kVNNwaCHCVs")
+red_sani <- gs4_get(gs4_find("sanidad red - 2020")$id)
 # gs4_browse(red_sani)
 ```
 
@@ -48,7 +46,6 @@ new_names <- data_head %>%
 Luego, leemos el cuerpo del dataset, pero indicamos los nuevos nombres
 
 ```{r, eval=FALSE}
-# dis_press <- read_sheet(red_sani, sheet="dis_press", skip = 0)
 dat_full <- read_sheet(red_sani, sheet="full", skip = 3, col_names = new_names) %>% 
   drop_na(verdor)
 
@@ -59,22 +56,21 @@ dat_full <- dat_full %>%
         stringr::str_replace_all(., 'e1', 'MA') %>% 
         stringr::str_replace_all(., 'e2', 'RE') %>% 
         stringr::str_replace_all(., 'e3', 'RH')
-    )) %>%
-  mutate(site = case_when(
+    )
+  )   %>% 
+  mutate(ensayo = case_when(
     trial == 1 ~ "LP",
-    trial == 2 ~ "PA")) %>%
-  select(site, everything(), -id, -matches("e4|e5")) %>% 
+    trial == 2 ~ "PA")) %>% 
+  select(ensayo, everything(), -id, -eval, -matches("e4|e5")) %>% 
   replace(is.na(.), 0)
-  
 dat_full
 ```
 
 ```{r}
 dat_full %>% 
-  janitor::tabyl(site, trt)
+  janitor::tabyl(ensayo, trt)
 ```
 
-# Esto no haria falta en 2021 si todos los ensayos se evaluan de la misma manera 
 
 ```{r, eval=F}
 UPA <- read_sheet(red_sani, sheet="red_UPA", skip = 0) %>% 
@@ -85,6 +81,7 @@ EEA <- read_sheet(red_sani, sheet="red_EEA", skip = 0) %>%
   mutate(ensayo = "EEA")%>% 
   replace(is.na(.), 0)
 ```
+
 
 
 ```{r, eval=F}
@@ -103,9 +100,6 @@ dat <- bind_rows(dat_full, UPA, EEA) %>%
     filter(!trt ==14) 
 dat
 ```
-
-
-
 
 ```{r, eval=T}
 dat %>% write_csv("data/dat_sani_20.csv")
@@ -170,7 +164,7 @@ Ensayos con menos de 5% de severidad media (incidencia * severidad condicional) 
 - Antes de plotear ordenamos los niveles 
 
 ```{r, eval=T}
-fmc <- c("test", "rub_Z32", "orq_Z32", "rub_Z39", "orq_Z39", "rub_Z32_orq_Z39", "rub_Z32_carbFMC_Z39")
+UFT <- c("test", "rub_Z32", "orq_Z32", "rub_Z39", "orq_Z39", "rub_Z32_orq_Z39")
 ```
 
 ## Mancha
@@ -208,8 +202,8 @@ dat %>%
 ```{r, eval=T}
 dat %>% 
   semi_join(by = "ensayo", dis_press %>% filter(RE_test >4.99)) %>% 
-  # filter(trat %in% fmc) %>%  
-  mutate(trat = fct_relevel(trat, fmc)) %>%
+  filter(trat %in% UTF) %>%
+  mutate(trat = fct_relevel(trat, UTF)) %>%
   ggplot()+
   aes(trat, RE_int)+
   geom_point()+
